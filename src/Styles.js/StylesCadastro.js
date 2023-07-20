@@ -1,10 +1,12 @@
 import { StyleSheet } from "react-native"
 
 
+
 export default StyleSheet.create({
     container:{
         flex:1,
-        marginTop:100,        
+        marginTop:100,
+              
 
     },
     containerFilho:{
@@ -14,6 +16,7 @@ export default StyleSheet.create({
     },
     descricao:{
         color: '#fff',
+        fontFamily: 'Inder_400Regular',
         padding:8,
         width:70,
         marginLeft:20,
@@ -24,6 +27,7 @@ export default StyleSheet.create({
     },
     descricaoGrande:{
             color: '#fff',
+            fontFamily: 'Inder_400Regular',
             padding:8,
             width:180,
             marginLeft:20,
@@ -53,6 +57,8 @@ export default StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         padding: 20,
+        fontFamily: 'Inder_400Regular',
+        
        
         
     },

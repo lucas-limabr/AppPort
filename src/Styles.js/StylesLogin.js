@@ -31,12 +31,14 @@ export default StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         padding: 35,
-        fontSize:25,     
+        fontSize:25,
+        fontFamily: 'Inder_400Regular',     
     },
     textBotaoPequeno:{
         color: '#fff',
         textAlign: 'center',
-        padding: 0,   
+        padding: 0,
+        fontFamily: 'Inder_400Regular',   
         
     },
     frase:{
@@ -45,6 +47,7 @@ export default StyleSheet.create({
         marginTop: 18,
         marginBottom: 18,
         fontSize:25,
+        fontFamily: 'Inder_400Regular',
 
     },
     gradient: {

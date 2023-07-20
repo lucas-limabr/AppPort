@@ -45,10 +45,11 @@ export default StyleSheet.create({
         color: '#fff',
         textAlign: 'center',
         fontSize:15,
+        fontFamily: 'Inder_400Regular',
     },
     input:{
         backgroundColor: '#EFEFFE',
-        padding:0,
+        padding:4,
         marginTop: 5,
         height:50,
         width:300,
@@ -59,6 +60,7 @@ export default StyleSheet.create({
     txtInput:{
         color: '#ff8c90',
         padding:2,
+        fontFamily: 'Inder_400Regular',
 
     }
 })

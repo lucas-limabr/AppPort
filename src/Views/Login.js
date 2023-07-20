@@ -2,9 +2,13 @@ import React from "react";
 import {View, Image, Text, TouchableOpacity } from 'react-native'
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLogin";
+import { Button } from "react-native";
 
 
-export default function Login() {
+
+export default function Login({navigation}) {
+    
+
     return (
         <LinearGradient colors={['#D5D4FB', '#9B98FC']}
         style={Styles.gradient} >
@@ -13,15 +17,16 @@ export default function Login() {
             <Image style = {Styles.imageNome} source={require('../Imagens/NomePortuguito.png')} />
 
             <View>
-            <TouchableOpacity style={Styles.botaoGrande}>
+            <TouchableOpacity style={Styles.botaoGrande} >
                 <Text style = {Styles.textBotao}>Login</Text>
             </TouchableOpacity>
             </View>
 
             <View style={Styles.containerFilho}>
-                <TouchableOpacity style={Styles.botaoPequeno}>
+                <TouchableOpacity style={Styles.botaoPequeno} onPress={() => navigation.navigate('Cadastro')} >
                     <Text style = {Styles.textBotaoPequeno}>Cadastrar</Text>
                 </TouchableOpacity>
+                    
 
             </View>
 

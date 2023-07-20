@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, Text, TouchableOpacity, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesMenu";
-import Descritores from "../Componentes/ComponentDescritores";
+import ButtonDescritores from "../Buttons/ButtonDescritores";
 
 export default function Menu(){
     return (
@@ -11,9 +11,9 @@ export default function Menu(){
 
         <View style={Styles.container}>
 
-           <Descritores/>
-           <Descritores/>
-           <Descritores/>
+           <ButtonDescritores titulo1="Procedimentos de leitura" titulo2='Implicações do gênero textual'/>
+           <ButtonDescritores titulo1="Relação entre textos" titulo2='Coerência e Coesão textuais'/>
+           <ButtonDescritores titulo1="Relações entre recursos expressivos e efeitos de sentido" titulo2='Variação Linguística'/>
 
         </View>
 

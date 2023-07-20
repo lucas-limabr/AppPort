@@ -1,16 +1,35 @@
-import React from "react";
-import { View, Image, Text, TouchableOpacity, TextInput } from "react-native";
+import React, { useState } from "react";
+import { View, Image, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesHome";
 
-export default function Home() {
+
+
+
+
+function logar(email,senha){
+  Alert.alert('Cadastro', `${email}, ${senha}`, [
+      {
+          text: 'ok',
+
+      }
+     
+  ])
+
+}
+
+export default function Home() { 
+  
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
       <View style={Styles.container}>
-        {/* <Image
+        <Image
           style={Styles.mascote}
-          source={require("")} // esperando o vinicius cortar o gif pra mim
-        /> */}
+          source={require("../Imagens/Levri_9Update4.gif")} 
+        />
 
         <Text style={Styles.frase}>Bem-vindo de volta</Text>
 
@@ -26,12 +45,13 @@ export default function Home() {
           <Text style={Styles.txtInput}>Senha:</Text>
           <TextInput
             style={Styles.input}
-            onChangeText={(senha) => setEmail(senha)}
+            onChangeText={(text) => setSenha(text)}
+            secureTextEntry={true}
           />
         </View>
 
         <View style={Styles.containerBotao}>
-          <TouchableOpacity style={Styles.botao}>
+          <TouchableOpacity style={Styles.botao} onPress={() => logar(email,senha)}>
             <Text style={Styles.txtBotao}>Login</Text>
           </TouchableOpacity>
         </View>

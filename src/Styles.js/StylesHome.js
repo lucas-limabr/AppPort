@@ -16,8 +16,8 @@ export default StyleSheet.create({
         marginTop: 40,
     },
     mascote:{
-        marginLeft:110 ,
-       marginTop:0,
+        marginLeft:70,
+       marginTop:-70,
        height:250,
        resizeMode:'repeat',
     },
@@ -32,6 +32,7 @@ export default StyleSheet.create({
     },
     txtInput:{
         color: '#fff',
+        fontFamily: 'Inder_400Regular',
         padding:6,
         width:63,
         marginLeft:20,
@@ -42,6 +43,7 @@ export default StyleSheet.create({
     },
     frase:{
         color: '#fff',
+        fontFamily: 'Inder_400Regular',
         textAlign:'center',
         marginTop: 18,
         marginBottom: 18,
@@ -56,8 +58,10 @@ export default StyleSheet.create({
     },
     txtBotao:{
         color: '#fff',
+        fontFamily: 'Inder_400Regular',
         textAlign: 'center',
         padding: 20,
         fontSize:25,
+        
     }
 })

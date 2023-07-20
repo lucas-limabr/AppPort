@@ -10,6 +10,13 @@ export default StyleSheet.create({
         alignItems: 'center',        
         
     },
+    containerFilho:{
+        flexDirection:'row',
+        marginTop: 30,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-around'
+    },
     containerBusca:{
         marginTop: 10,
         width: '100%',
@@ -39,6 +46,7 @@ export default StyleSheet.create({
         color: '#F54F59',
         fontSize: 70,
         
+        
     },
     containerList:{
         flexDirection:'row',
@@ -60,6 +68,7 @@ export default StyleSheet.create({
         position: 'absolute',
         bottom: 0,
         left: 40,
+        fontFamily: 'Inder_400Regular',
         
     },
     containerBotao:{

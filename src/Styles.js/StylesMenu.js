@@ -19,6 +19,7 @@ export default StyleSheet.create({
     },
     descritores:{
         backgroundColor:'#ff8c90',
+        padding: 3,
         width: 120,
         height: 100,
         borderRadius: 5,
@@ -29,6 +30,11 @@ export default StyleSheet.create({
     },
     txtDescritores:{
         color: '#fff',
+        fontSize:15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        fontFamily: 'Inder_400Regular',
 
     }
 })

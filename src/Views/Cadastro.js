@@ -1,11 +1,32 @@
-import React from 'react'
-import {View, TextInput, TouchableOpacity, Text} from 'react-native'
+import React, { useState } from 'react'
+import {View, TextInput, TouchableOpacity, Text, Alert} from 'react-native'
 import Styles from '../Styles.js/StylesCadastro'
 import { LinearGradient } from 'expo-linear-gradient'
 
 
-export default function Cadastro() {
+
+
+
+
+
+function cadastrar(nome,email,senha){
+        Alert.alert('Cadastro', `${nome}, ${email}, ${senha}`, [
+            {
+                text: 'ok',
+
+            }
+           
+        ])
     
+}
+
+
+export default function Cadastro() {
+    const [nome,setNome] = useState('')
+    const [email,setEmail] = useState('')
+    const[confimarEmail, setConfirmarEmail] = useState('')
+    const [senha,setSenha] = useState('')
+    const [confirmarSenha,setConfirmarSenha] = useState('')
     
     return  (
         
@@ -36,7 +57,7 @@ export default function Cadastro() {
                             <Text style ={Styles.descricaoGrande}>Confirmação do e-mail:</Text>
 
                             <TextInput style = {Styles.input} 
-                            onChangeText={(text) =>setEmail(text)}/>
+                            onChangeText={(text) =>setConfirmarEmail(text)}/>
 
                         </View>
 
@@ -46,7 +67,7 @@ export default function Cadastro() {
                             <Text style ={Styles.descricao}>Senha:</Text>
 
                             <TextInput style = {Styles.input} 
-                            onChangeText={(text) =>setSenha(text)}
+                            onChangeText={(text) =>setConfirmarSenha(text)}
                             secureTextEntry={true}/>
 
                         </View>
@@ -62,7 +83,7 @@ export default function Cadastro() {
 
                             <Text style={Styles.registrar}>BOTAO RADIO PROFESSOR ALUNO</Text>
 
-                            <TouchableOpacity style={Styles.botao}>
+                            <TouchableOpacity style={Styles.botao} onPress={() => cadastrar(nome,email,senha)}>
                                 <Text style = {Styles.textBotao}>CADASTRAR</Text>
                             </TouchableOpacity>
 

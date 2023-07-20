@@ -1,8 +1,8 @@
 import React from "react";
 import {createBottomTabNavigator} from'@react-navigation/bottom-tabs'
-import Menu from "../Views/Menu";
-import Perfil from "../Views/Perfil";
-import Listas from "../Views/Listas";
+import Menu from "../../Views/Menu";
+import Perfil from "../../Views/Perfil";
+import Listas from "../../Views/Listas";
 import { Ionicons } from '@expo/vector-icons'
 import { Feather, Entypo, FontAwesome5  } from '@expo/vector-icons';
 
@@ -13,51 +13,50 @@ export default props => (
     initialRouteName="Menu"
     screenOptions={{
         tabBarActiveTintColor: '#fff',
-        
+        tabBarActiveBackgroundColor: '#F54F59',
         tabBarShowLabel: false,
         tabBarStyle:{
             position: 'absolute',
-            backgroundColor: '#F54F59',
+            backgroundColor: '#ff8c90',
             borderTopWidth: 0,
 
-            bottom: 14,
-            left: 14,
-            right: 14,
+            
             elevation: 0,
             borderRadius: 4,
-            height: 60,
+            height: 80,
         }
 
     }}>
 
             <Tab.Screen name='Perfil' component={Perfil} options={{
                 headerShown:false,
-                tabBarIcon: ({color, size, focused}) => {
+                tabBarIcon: ({color, focused}) => {
                     if(focused) {
-                        return <Feather name="user" size={size} color={color} />
+                        return <Feather name="user" size={50} color={color} />
                     }
-                    return <Feather name="user" size={size} color='#000' />
+                    return <Feather name="user" size={50} color='#fff' />
                 }
                 }} 
                 />
+                
             <Tab.Screen name='Menu' component={Menu} options={{
                 headerShown:false,
-                tabBarIcon: ({color, size, focused}) => {
+                tabBarIcon: ({color, focused}) => {
                     if(focused) {
-                        return <Entypo name="home" size={size} color={color} />
+                        return <Entypo name="home" size={50} color={color} />
                     }
-                    return <Entypo name="home" size={size} color='#000' />
+                    return <Entypo name="home" size={50} color='#fff' />
                 }
                 }} 
                 
                   />
             <Tab.Screen name='Listas' component={Listas} options={{
                 headerShown:false,
-                tabBarIcon: ({color, size, focused}) => {
+                tabBarIcon: ({color, focused}) => {
                     if(focused) {
-                        return <FontAwesome5 name="clipboard-list" size={size} color={color} />
+                        return <FontAwesome5 name="clipboard-list" size={50} color={color} />
                     }
-                    return <FontAwesome5 name="clipboard-list" size={size} color='#000' />
+                    return <FontAwesome5 name="clipboard-list" size={50} color='#fff' />
                 }
                 }} 
 
