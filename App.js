@@ -6,6 +6,8 @@ import Listas from "./src/Views/Listas";
 import Login from "./src/Views/Login";
 import Menu from "./src/Views/Menu";
 import Perfil from "./src/Views/Perfil";
+import Navegacao from "./src/Navigation/StackNavigation"
+
 
 export default function App() {
     const [fontLoaded] = useFonts({
@@ -18,6 +20,6 @@ export default function App() {
 
 
     return (
-        <Perfil/>
+        <Navegacao/>
     )
 }
