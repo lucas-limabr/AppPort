@@ -2,7 +2,7 @@ import React from "react";
 import {View, Image, Text, TouchableOpacity, Alert } from 'react-native'
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLogin";
-import { Button } from "react-native";
+
 
 
 

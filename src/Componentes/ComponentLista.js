@@ -19,10 +19,17 @@ export const BotaoLista = ({ titulo }) => (
 );
 
 export default function Lista({ titulo1, titulo2 }) {
-  return (
+  if(!titulo2){
+    return (
     <View style = {Styles.containerFilho}>
         <BotaoLista titulo={titulo1} />
-        <BotaoLista titulo={titulo2} />
     </View>
+    )
+  }else 
+
+  return (
+      <BotaoLista titulo={titulo2} />
+      
+    
   );
 }
