@@ -39,10 +39,10 @@ export default function questoes() {
             <View style={styles.container}>
                 <View style={styles.enunciado}>
                     <View style={styles.backgroundImagem}>
-                    {/* <Image
+                    <Image
                     
-                    source={{ uri: Listinha[0].questoes[0].imagem}} 
-                    /> */}
+                    source={Listinha[0].questoes[0].imagem} 
+    />
                     </View>
                     <Text style={styles.txtEnunciado}>{Listinha[0].questoes[0].pergunta}</Text>
                 </View>
