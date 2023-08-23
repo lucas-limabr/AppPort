@@ -26,23 +26,53 @@ export default StyleSheet.create({
         height: 250,
         width: 250,
         marginTop: 8,
-        borderRadius: 10
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     txtEnunciado:{
-        fontSize: 20,
+        fontSize: 18,
         color: '#fff',
-        // fontFamily: 'Inder_400Regular', 
+        top: 10,
+        left: 5,
+        textAlign: 'left',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Inder_400Regular', 
     },
     containerResposta:{
         alignItems: 'flex-start',
-        
-        width: 260,
+        width: 300,
         marginTop: 50,
-        marginLeft: 15,
+       
     },
     resposta:{
         backgroundColor: '#ff8c90',
         marginTop: 10
+    },
+    imagem:{
+        height: 240,
+        width: 240,
+        borderRadius: 10,
+    },
+    alternativas:{
+        flexDirection: 'row-reverse',
+        backgroundColor:'#ffb9bd',
+        borderRadius: 50,
+        width: 300,
+        marginTop: 5,
+        height: 40,        
+    },
+    label:{
+        fontFamily: 'Inder_400Regular',
+        color: '#fff',
+        textAlign: "justify",
+        
+        
+    },
+    selectLabel:{
+        backgroundColor: '#F54F59'
     }
+    
 
 })

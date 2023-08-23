@@ -3,33 +3,13 @@ import {View,  TouchableOpacity, Text, SafeAreaView, Image} from 'react-native'
 import { LinearGradient } from "expo-linear-gradient";
 import styles from './styles';
 import Listinha from './Listinha';
-import RadioGroup from 'react-native-radio-buttons-group';
+import { RadioButton } from 'react-native-paper';
+
 
 export default function questoes() {
-    const radioButtons = useMemo(() => ([
-        {
-            id: '1',
-            label: Listinha[0].questoes[0].opcoes[0],
-            value: 'option1' 
-        }, 
-        {
-            id: '2',
-            label:  Listinha[0].questoes[0].opcoes[1],
-            value: 'option2'
-        },
-        {
-            id: '3',
-            label:  Listinha[0].questoes[0].opcoes[2],
-            value: 'option3'
-        },
-        {
-            id: '4',
-            label:  Listinha[0].questoes[0].opcoes[3],
-            value: 'option4'
-        }
-    ]), [])
+    const [value, setValue] = React.useState('first');
 
-    const [selectedId, setSelectedId] = useState()
+    
 
 
 
@@ -40,7 +20,7 @@ export default function questoes() {
                 <View style={styles.enunciado}>
                     <View style={styles.backgroundImagem}>
                     <Image
-                    
+                    style={styles.imagem}
                     source={Listinha[0].questoes[0].imagem} 
     />
                     </View>
@@ -48,14 +28,39 @@ export default function questoes() {
                 </View>
 
                 <View style={styles.containerResposta}>
-                    <Text>TESTE</Text>
-                    <RadioGroup
-                    radioButtons={radioButtons}
-                    onPress={setSelectedId}
-                    selectedId={selectedId}
-                    buttonTextStyle={styles.resposta}
-                    color={'#fff'}
-                     />
+                    
+                    <RadioButton.Group onValueChange={value => setValue(value)} value={value}>                       
+                    <RadioButton.Item label={Listinha[0].questoes[0].opcoes[0]} 
+                    value="first" 
+                    style={[styles.alternativas, value === 'first' && styles.selectLabel]}
+                    labelStyle={styles.label}
+                    uncheckedColor='#fff'
+                    color='#fff'/>  
+
+                    <RadioButton.Item label={Listinha[0].questoes[0].opcoes[1]} 
+                    value="second" 
+                    style={[styles.alternativas, value === 'second' && styles.selectLabel]}
+                    labelStyle={styles.label}
+                    uncheckedColor='#fff'
+                    color='#fff'/>
+
+                    <RadioButton.Item label={Listinha[0].questoes[0].opcoes[2]} 
+                    value="third" 
+                    style={[styles.alternativas, value === 'third' && styles.selectLabel]}
+                    labelStyle={styles.label}
+                    uncheckedColor='#fff'
+                    color='#fff'/>
+
+                    <RadioButton.Item label={Listinha[0].questoes[0].opcoes[3]}
+                    value="fourth"
+                    style={[styles.alternativas, value === 'fourth' && styles.selectLabel]} 
+                    labelStyle={styles.label}
+                    uncheckedColor='#fff'
+                    color='#fff'/>
+                    
+                    </RadioButton.Group>
+                    
+                    
                 </View>
 
 

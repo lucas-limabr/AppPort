@@ -16,7 +16,7 @@ export default function Login({navigation}) {
         <Image style = {Styles.imageNome} source={require('../Imagens/NomePortuguito.png')}/>
 
             <View>
-            <TouchableOpacity style={Styles.botaoGrande}>
+            <TouchableOpacity style={Styles.botaoGrande} onPress={() => {navigation.navigate('Home')}}>
                 <Text style = {Styles.textBotao}>Login</Text>
             </TouchableOpacity>
             </View>

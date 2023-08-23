@@ -94,6 +94,17 @@ export default StyleSheet.create({
         fontFamily: 'Inder_400Regular',
         color:'#fff',
         backgroundColor: '#FFB9BD'
+    },
+    containerProfessor:{
+        alignItems: 'center',
+        flexDirection: 'row',
+        left: 20
+    },
+    txtProfessor:{
+        fontFamily: 'Inder_400Regular',
+        color: '#fff',
+        fontSize: 15,
+        left: 20
     }
 
     

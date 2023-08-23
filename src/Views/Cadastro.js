@@ -2,7 +2,9 @@ import React, { useState, useMemo } from 'react'
 import {View, TextInput, TouchableOpacity, Text, Alert, ScrollView} from 'react-native'
 import Styles from '../Styles.js/StylesCadastro'
 import { LinearGradient } from 'expo-linear-gradient'
-import RadioGroup from 'react-native-radio-buttons-group';
+import { Switch } from 'react-native-gesture-handler'
+import styles from '../ListaDeListas/styles'
+
 
 
 
@@ -31,22 +33,11 @@ export default function Cadastro({navigation}) {
     const [senha,setSenha] = useState('')
     const [confirmarSenha,setConfirmarSenha] = useState('')
 
-    const radioButtons = useMemo(() => ([
-        {
-            id: '1',
-            label: 'Professor',
-            value: 'professor' 
-        }, 
-        {
-            id: '2',
-            label: 'Aluno',
-            value: 'aluno'
-        },
-        
-       
-    ]), [])
+   
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-    const [selectedId, setSelectedId] = useState()
+    
     
     return  (
         
@@ -104,8 +95,24 @@ export default function Cadastro({navigation}) {
 
                         </View>
 
-                        <RadioGroup radioButtons={radioButtons} onPress={setSelectedId} selectedId={selectedId} layout='row'
-                         />
+                        <View style={Styles.containerFilho}>
+
+                        <View style={Styles.containerProfessor}>
+                            <Switch trackColor={{false: '#767577', true: '#ffb9bd'}}
+                                    thumbColor={isEnabled ? '#ffb9bd' : '#f4f3f4'}
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={toggleSwitch}
+                                    value={isEnabled} 
+                                    />
+
+                            <Text style={Styles.txtProfessor}>SOU PROFESSOR</Text>
+
+                            
+
+                        </View>
+                        </View>
+
+                       
 
                             <TouchableOpacity style={Styles.botao} onPress={() => cadastrar(nome,email,senha, navigation)}>
                                 <Text style = {Styles.textBotao}>CADASTRAR</Text>
