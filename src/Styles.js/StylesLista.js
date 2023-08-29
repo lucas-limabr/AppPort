@@ -15,7 +15,8 @@ export default StyleSheet.create({
         marginTop: 30,
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        
     },
     containerBusca:{
         marginTop: 10,
@@ -45,29 +46,27 @@ export default StyleSheet.create({
     txtAdd:{
         color: '#F54F59',
         fontSize: 70,
-        
-        
     },
     containerList:{
         flexDirection:'row',
         marginTop: 10,
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        
     },
     lista:{
         backgroundColor:'#ff8c90',
-        width: 120,
-        height: 120,
+        width: 250,
+        height: 150,
         borderRadius: 5,
         elevation: 10,
+        
+        
 
     },
     txtLista:{
         color: '#fff',
-        position: 'absolute',
-        bottom: 0,
-        left: 40,
         fontFamily: 'Inder_400Regular',
         
     },
@@ -77,5 +76,11 @@ export default StyleSheet.create({
         justifyContent: 'space-between',
 
     },
+    txt:{
+        alignItems:'center',
+        justifyContent: 'flex-end',
+        height: 126
+
+    }
     
 })

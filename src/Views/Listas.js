@@ -18,9 +18,9 @@ export default function Listas() {
     const [listas, setListas] = useState([Listinha])
 
     function criarLista() {
-        // const newLista = `Lista${listas.length + 1}`
-        // setListas([...listas, newLista])
-        Listinha[0].questoes.map((questao) => {console.log(questao)})
+        const newLista = `Lista${listas.length + 1}`
+        setListas([...listas, newLista])
+        
     }
 
 
@@ -46,16 +46,16 @@ export default function Listas() {
                 <AntDesign name="plus" size={50} color="#F54F59" />
                 </TouchableOpacity>
 
-                <BotaoLista titulo='Lista1'/>
+              
                 
 
                 
 
             </View>
 
-                {/* {listas.map((titulo, index) => (
+                {listas.map((titulo, index) => (
                     <Lista key={index} titulo1={titulo} titulo2={`Lista${index + 2}`} />
-                ))} */}
+                ))}
                 
             
 

@@ -1,30 +1,9 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import {View, TextInput, TouchableOpacity, Text, Alert, ScrollView} from 'react-native'
 import Styles from '../Styles.js/StylesCadastro'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Switch } from 'react-native-gesture-handler'
-import styles from '../ListaDeListas/styles'
-
-
-
-
-
-
-
-
-function cadastrar(nome,email,senha, navigation){
-        Alert.alert('Cadastro', `${nome}, ${email}, ${senha}`, [
-            {
-                text: 'ok',
-
-            }
-            
-           
-        ])
-        navigation.navigate('Tab')
-    
-}
-
+import Custom from './TermosDeUso'
 
 export default function Cadastro({navigation}) {
     const [nome,setNome] = useState('')
@@ -32,11 +11,23 @@ export default function Cadastro({navigation}) {
     const[confimarEmail, setConfirmarEmail] = useState('')
     const [senha,setSenha] = useState('')
     const [confirmarSenha,setConfirmarSenha] = useState('')
-
-   
     const [isEnabled, setIsEnabled] = useState(false);
+    const [visible, setVisible] = useState(false)    
+    
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
+    
+    
+    
+    function cadastrar(){
+        if(email != confimarEmail || email == '' || senha != confirmarSenha || senha == '' || nome == ''){
+            Alert.alert('Dados incorretos')
+        } else{
+            // setVisible(true)
+            Alert.alert('tudo certo!!!!!')
+            // navigation.navigate('Tab')
+        }
+        
+    }
     
     
     return  (
@@ -114,10 +105,10 @@ export default function Cadastro({navigation}) {
 
                        
 
-                            <TouchableOpacity style={Styles.botao} onPress={() => cadastrar(nome,email,senha, navigation)}>
+                            <TouchableOpacity style={Styles.botao} onPress={() => setVisible(true)}>
                                 <Text style = {Styles.textBotao}>CADASTRAR</Text>
                             </TouchableOpacity>
-
+                            <Custom visible={visible}/>
                     </View>
                     </ScrollView>
             </LinearGradient>

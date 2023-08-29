@@ -14,7 +14,10 @@ export const BotaoLista = ({ titulo }) => (
       <EvilIcons name="close" size={30} color="#fff" />
       </TouchableOpacity>
     </View>
-    <Text style={Styles.txtLista}> {titulo} </Text>
+    <View style={Styles.txt}>
+      <Text style={Styles.txtLista}> {titulo} </Text>
+
+    </View>
   </TouchableOpacity>
 );
 

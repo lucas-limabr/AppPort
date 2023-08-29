@@ -4,7 +4,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import Descritores from "../Buttons/Descritores";
 import Styles from "../Styles.js/StylesDescritores";
 
-export default function DescritoresView() {
+export default function DescritorRelacoesEntreRecursosExpressivos() {
     
     return(
     <LinearGradient colors={['#D5D4FB', '#9B98FC']}

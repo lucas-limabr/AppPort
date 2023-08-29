@@ -26,10 +26,10 @@ export default function Home() {
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
       <View style={Styles.container}>
-        <Image
+        {/* <Image
           style={Styles.mascote}
           source={require("../Imagens/Levri_9Update4.gif")} 
-        />
+        /> */}
 
         <Text style={Styles.frase}>Bem-vindo de volta</Text>
 

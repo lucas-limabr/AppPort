@@ -36,5 +36,15 @@ export default StyleSheet.create({
         textAlign: 'center',
         fontFamily: 'Inder_400Regular',
 
+    },
+    descritoresGrande:{
+        backgroundColor:'#ff8c90',
+        padding: 3,
+        width: 250,
+        height: 100,
+        borderRadius: 5,
+        elevation: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
     }
 })
