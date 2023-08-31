@@ -4,6 +4,10 @@ import Styles from '../Styles.js/StylesCadastro'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Switch } from 'react-native-gesture-handler'
 import Custom from './TermosDeUso'
+import { FIREBASE_APP, FIREBASE_AUTH } from '../../FirebaseConfig'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import {addDoc, collection} from 'firebase/firestore'
+import { getFirestore } from 'firebase/firestore'
 
 export default function Cadastro({navigation}) {
     const [nome,setNome] = useState('')
@@ -11,20 +15,44 @@ export default function Cadastro({navigation}) {
     const[confimarEmail, setConfirmarEmail] = useState('')
     const [senha,setSenha] = useState('')
     const [confirmarSenha,setConfirmarSenha] = useState('')
-    const [isEnabled, setIsEnabled] = useState(false);
-    const [visible, setVisible] = useState(false)    
+    const [souProfessor, setSouProfessor] = useState(false);
+    const [urlImagemPerfil, setImagemPerfil] = useState('')
+
+    const [visible, setVisible] = useState(false)
+    const auth = FIREBASE_AUTH
+    const db = getFirestore(FIREBASE_APP)
+    const userCollectionRef = collection(db, 'users')   
     
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const toggleSwitch = () => setSouProfessor(previousState => !previousState);
     
     
-    
+    const signUp = async (auth,email, senha) => {
+        try{
+            const resposta = await createUserWithEmailAndPassword(auth, email, senha)
+            Alert.alert('Usuário Cadastrado')
+            cadastroBD(nome, email, souProfessor)
+
+        } catch(error){
+        Alert.alert('erro' + error.message)
+        }
+    }
+
+    async function cadastroBD() {
+        const user = await addDoc(userCollectionRef, {
+            nome,
+            email,
+            souProfessor,
+            urlImagemPerfil
+        })
+    }
+
     function cadastrar(){
         if(email != confimarEmail || email == '' || senha != confirmarSenha || senha == '' || nome == ''){
             Alert.alert('Dados incorretos')
         } else{
             // setVisible(true)
-            Alert.alert('tudo certo!!!!!')
-            // navigation.navigate('Tab')
+            signUp(auth, email, senha)
+            // navigation.navigate('Menu')
         }
         
     }
@@ -90,10 +118,10 @@ export default function Cadastro({navigation}) {
 
                         <View style={Styles.containerProfessor}>
                             <Switch trackColor={{false: '#767577', true: '#ffb9bd'}}
-                                    thumbColor={isEnabled ? '#ffb9bd' : '#f4f3f4'}
+                                    thumbColor={souProfessor ? '#ffb9bd' : '#f4f3f4'}
                                     ios_backgroundColor="#3e3e3e"
                                     onValueChange={toggleSwitch}
-                                    value={isEnabled} 
+                                    value={souProfessor} 
                                     />
 
                             <Text style={Styles.txtProfessor}>SOU PROFESSOR</Text>
@@ -105,7 +133,7 @@ export default function Cadastro({navigation}) {
 
                        
 
-                            <TouchableOpacity style={Styles.botao} onPress={() => setVisible(true)}>
+                            <TouchableOpacity style={Styles.botao} onPress={cadastrar}>
                                 <Text style = {Styles.textBotao}>CADASTRAR</Text>
                             </TouchableOpacity>
                             <Custom visible={visible}/>
