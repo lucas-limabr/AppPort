@@ -2,26 +2,31 @@ import React, { useState } from "react";
 import { View, Image, Text, TouchableOpacity, TextInput, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesHome";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
 
 
 
 
 
-function logar(email,senha){
-  Alert.alert('Cadastro', `${email}, ${senha}`, [
-      {
-          text: 'ok',
-
-      }
-     
-  ])
-
-}
 
 export default function Home() { 
   
+  const signIn = async (auth,email,senha) => {
+    try{
+      const resposta = await signInWithEmailAndPassword(auth, email, senha)
+      Alert.alert('Logado')
+    } catch(error){
+      Alert.alert('erro ' + error.message)
+    }
+  }
+
+
+
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
+
+  const auth = FIREBASE_AUTH
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
@@ -51,7 +56,7 @@ export default function Home() {
         </View>
 
         <View style={Styles.containerBotao}>
-          <TouchableOpacity style={Styles.botao} onPress={() => logar(email,senha)}>
+          <TouchableOpacity style={Styles.botao} onPress={() => signIn(auth,email,senha)}>
             <Text style={Styles.txtBotao}>Login</Text>
           </TouchableOpacity>
         </View>
