@@ -5,7 +5,7 @@ export default StyleSheet.create({
         backgroundColor:'rgba(177, 160, 254, 0.88)',        
         flex: 1,
         justifyContent: 'flex-end',
-        bottom: 30
+        
         
     },
     botao:{
@@ -14,6 +14,7 @@ export default StyleSheet.create({
         width: 130,
         borderRadius: 10,
         alignItems: 'center',
+        bottom: 10
 
     },
     switch: {

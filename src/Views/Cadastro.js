@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import {View, TextInput, TouchableOpacity, Text, Alert, ScrollView} from 'react-native'
+import {View, TextInput, TouchableOpacity, Text, Alert, ScrollView, Modal} from 'react-native'
 import Styles from '../Styles.js/StylesCadastro'
 import { LinearGradient } from 'expo-linear-gradient'
 import { Switch } from 'react-native-gesture-handler'
-import Custom from './TermosDeUso'
 import { FIREBASE_APP, FIREBASE_AUTH } from '../../FirebaseConfig'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import {addDoc, collection} from 'firebase/firestore'
 import { getFirestore } from 'firebase/firestore'
+import styles from '../Styles.js/StylesTermoDeUso'
 
 export default function Cadastro({navigation}) {
     const [nome,setNome] = useState('')
@@ -17,23 +17,78 @@ export default function Cadastro({navigation}) {
     const [confirmarSenha,setConfirmarSenha] = useState('')
     const [souProfessor, setSouProfessor] = useState(false);
     const [urlImagemPerfil, setImagemPerfil] = useState('')
+    const [aceitoTermo, setAceitoTermo] = useState(false)
 
     const [visible, setVisible] = useState(false)
     const auth = FIREBASE_AUTH
     const db = getFirestore(FIREBASE_APP)
-    const userCollectionRef = collection(db, 'users')   
+    const userCollectionRef = collection(db, 'users') 
     
-    const toggleSwitch = () => setSouProfessor(previousState => !previousState);
+    
+    
+    const aceitoProfessor = () => setSouProfessor(previousState => !previousState);
+    const switchProfessor = () => setAceitoTermo(previousState => !previousState);
+
+
+    function CustomModal() {
+
+        return(
+            <Modal animationType='slide' transparent={true} visible={visible}>
+                <View style={styles.container}>
+                    
+    
+                        <View style={styles.center}>
+    
+                            <View style={styles.telaDoTermo}>
+                            <ScrollView>
+                                <Text style={styles.termoDeUso}>What is Lorem Ipsum?
+                                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+    
+                                        Why do we use it?
+                                        It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
+                                        </Text>
+                            </ScrollView>
+                            </View>
+                        </View>
+    
+                        <View style={styles.switch}>
+    
+                            <Switch trackColor={{false: '#767577', true: '#FF8D94'}}
+                                    thumbColor={aceitoTermo ? '#FF8D94' : '#f4f3f4'}
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={switchProfessor}
+                                    value={aceitoTermo} 
+                                    />
+                            <Text style={styles.textoSwitch}>Li e aceito os termos</Text>
+                        </View>
+                        <View style={styles.containerBotao}>
+    
+                        <TouchableOpacity style={styles.botao} onPress={signUp}>
+                            <Text style={styles.textoBotao}>Continuar</Text>
+                        </TouchableOpacity>
+                        </View>
+                    
+                </View>
+            </Modal>
+        )
+
+    }
     
     
     const signUp = async (auth,email, senha) => {
-        try{
-            const resposta = await createUserWithEmailAndPassword(auth, email, senha)
-            Alert.alert('Usuário Cadastrado')
-            cadastroBD(nome, email, souProfessor)
+        if(aceitoTermo == true) {
+            try{
+                const resposta = await createUserWithEmailAndPassword(auth, email, senha)
+                Alert.alert('Usuário Cadastrado')
+                cadastroBD(nome, email, souProfessor)
+    
+            } catch(error){
+            Alert.alert('erro' + error.message)
+            setVisible(false)
+            }
 
-        } catch(error){
-        Alert.alert('erro' + error.message)
+        } else {
+            Alert.alert('É necessário aceitar os termos de uso para prosseguir')
         }
     }
 
@@ -50,9 +105,8 @@ export default function Cadastro({navigation}) {
         if(email != confimarEmail || email == '' || senha != confirmarSenha || senha == '' || nome == ''){
             Alert.alert('Dados incorretos')
         } else{
-            // setVisible(true)
-            signUp(auth, email, senha)
-            // navigation.navigate('Menu')
+            setVisible(true)
+            
         }
         
     }
@@ -120,7 +174,7 @@ export default function Cadastro({navigation}) {
                             <Switch trackColor={{false: '#767577', true: '#ffb9bd'}}
                                     thumbColor={souProfessor ? '#ffb9bd' : '#f4f3f4'}
                                     ios_backgroundColor="#3e3e3e"
-                                    onValueChange={toggleSwitch}
+                                    onValueChange={aceitoProfessor}
                                     value={souProfessor} 
                                     />
 
@@ -136,7 +190,7 @@ export default function Cadastro({navigation}) {
                             <TouchableOpacity style={Styles.botao} onPress={cadastrar}>
                                 <Text style = {Styles.textBotao}>CADASTRAR</Text>
                             </TouchableOpacity>
-                            <Custom visible={visible}/>
+                            <CustomModal/>
                     </View>
                     </ScrollView>
             </LinearGradient>
