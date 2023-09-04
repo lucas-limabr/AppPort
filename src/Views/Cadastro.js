@@ -17,8 +17,7 @@ export default function Cadastro({navigation}) {
     const [confirmarSenha,setConfirmarSenha] = useState('')
     const [souProfessor, setSouProfessor] = useState(false);
     const [urlImagemPerfil, setImagemPerfil] = useState('')
-    const [aceitoTermo, setAceitoTermo] = useState(false)
-
+    
     const [visible, setVisible] = useState(false)
     const auth = FIREBASE_AUTH
     const db = getFirestore(FIREBASE_APP)
@@ -27,10 +26,13 @@ export default function Cadastro({navigation}) {
     
     
     const aceitoProfessor = () => setSouProfessor(previousState => !previousState);
-    const switchProfessor = () => setAceitoTermo(previousState => !previousState);
-
-
+    
+    
+    
     function CustomModal() {
+        
+        const [aceitoTermo, setAceitoTermo] = useState(false)
+        const switchTermo = () => setAceitoTermo(previousState => !previousState);
 
         return(
             <Modal animationType='slide' transparent={true} visible={visible}>
@@ -56,14 +58,14 @@ export default function Cadastro({navigation}) {
                             <Switch trackColor={{false: '#767577', true: '#FF8D94'}}
                                     thumbColor={aceitoTermo ? '#FF8D94' : '#f4f3f4'}
                                     ios_backgroundColor="#3e3e3e"
-                                    onValueChange={switchProfessor}
+                                    onValueChange={switchTermo}
                                     value={aceitoTermo} 
                                     />
                             <Text style={styles.textoSwitch}>Li e aceito os termos</Text>
                         </View>
                         <View style={styles.containerBotao}>
     
-                        <TouchableOpacity style={styles.botao} onPress={signUp}>
+                        <TouchableOpacity style={[styles.botao, !aceitoTermo && {backgroundColor: "#767577"}]} disabled={!aceitoTermo} onPress={signUp}>
                             <Text style={styles.textoBotao}>Continuar</Text>
                         </TouchableOpacity>
                         </View>
