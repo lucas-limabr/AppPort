@@ -5,7 +5,6 @@ import Login from "../Views/Login"
 import Cadastro from "../Views/Cadastro"
 import Home from "../Views/Home";
 import Menu from "../Views/Menu";
-import TabNav from "./TabNav";
 import DescritoresProcedimentoLeitura from '../Views/DescritoresProcedimentoLeitura'
 import DescritorImplicacoesGeneroTextual from '../Views/DescritorImplicacoesGeneroTextual'
 import DescritorVariacaoLinguistica from '../Views/DescritorVariacaoLinguistica'
@@ -40,7 +39,7 @@ export function Inicio() {
           <Stack.Screen name='Cadastro' component={Cadastro} />
           <Stack.Screen name='Home' component={Home} />
           <Stack.Screen name='Menu' component={Menu} />
-          <Stack.Screen name='TabNav' component={TabNav} />
+
         </Stack.Navigator>
 
     </NavigationContainer>

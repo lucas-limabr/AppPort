@@ -63,6 +63,12 @@ export default function questoes() {
                     
                 </View>
 
+                <View style={styles.containerContinuar}>
+                    <TouchableOpacity style={styles.btnContinuar}>
+                        <Text style={styles.label}>Continuar</Text>
+                    </TouchableOpacity>
+                </View>
+
 
 
 
