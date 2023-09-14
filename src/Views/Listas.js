@@ -1,26 +1,33 @@
 import React, { useState } from "react";
-import { View, Image, Text, TouchableOpacity, TextInput, ScrollView } from "react-native";
+import { View, Image, Text, TouchableOpacity, TextInput, ScrollView, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLista";
 import Lista from "../Componentes/ComponentLista";
-import { BotaoLista } from "../Componentes/ComponentLista";
 import { AntDesign } from '@expo/vector-icons';
 import Listinha from "../ListaDeListas/Listinha";
 
 
-
-
-
-
-
-
 export default function Listas() {
     const [listas, setListas] = useState([Listinha])
+    const [visible, setVisible] = useState(false)
 
     function criarLista() {
+
+
         const newLista = `Lista${listas.length + 1}`
         setListas([...listas, newLista])
         
+    }
+
+    function ModalLista() {
+        return (
+            <Modal animationType='slide' transparent={true} visible={true}>
+
+            <View style={{backgroundColor:'#000'}}>
+
+            </View>
+            </Modal>
+        )
     }
 
 
@@ -62,6 +69,7 @@ export default function Listas() {
 
 
             </View>
+            <ModalLista/>
             </ScrollView>
         </LinearGradient>
     )

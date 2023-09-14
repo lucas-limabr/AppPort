@@ -72,6 +72,22 @@ export default StyleSheet.create({
     },
     selectLabel:{
         backgroundColor: '#F54F59'
+    },
+    btnContinuar:{
+        backgroundColor: '#F54F59',
+        width: 100,
+        height: 35,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+
+    },
+    containerContinuar:{
+        width: 300,
+        top: 20,
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
+        flexDirection: 'row'
     }
     
 
