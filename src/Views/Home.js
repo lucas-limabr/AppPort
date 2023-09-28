@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Image, Text, TouchableOpacity, TextInput, Alert } from "react-native";
+import { View, Image, Text, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesHome";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -29,12 +29,15 @@ export default function Home() {
   const auth = FIREBASE_AUTH
 
   return (
-    <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
+    <LinearGradient colors={["#D5D4FB", 
+    "#9B98FC"]} style={Styles.gradient}>
+      <ScrollView>
+
       <View style={Styles.container}>
-        {/* <Image
+        <Image
           style={Styles.mascote}
-          source={require("../Imagens/Levri_9Update4.gif")} 
-        /> */}
+          source={require("../Imagens/Levri1.gif")} 
+        />
 
         <Text style={Styles.frase}>Bem-vindo de volta</Text>
 
@@ -62,6 +65,7 @@ export default function Home() {
         </View>
 
       </View>
+      </ScrollView>
     </LinearGradient>
   );
 }

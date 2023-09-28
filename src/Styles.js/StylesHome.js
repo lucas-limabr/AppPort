@@ -17,8 +17,8 @@ export default StyleSheet.create({
     },
     mascote:{
         marginLeft:70,
-       marginTop:-70,
-       height:250,
+       marginTop:-60,
+       height:270,
        resizeMode:'repeat',
     },
     input:{

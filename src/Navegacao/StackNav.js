@@ -10,14 +10,15 @@ import DescritorImplicacoesGeneroTextual from '../Views/DescritorImplicacoesGene
 import DescritorVariacaoLinguistica from '../Views/DescritorVariacaoLinguistica'
 import DescritorRelacoesEntreRecursosExpressivos from '../Views/DescritorRelacoesEntreRecursosExpressivos'
 import DescritorCoerenciaCoesaoTextual from '../Views/DescritorCoerenciaCoesaoTextual'
-import { NavigationContainer } from "@react-navigation/native";
+import Questoes from '../ListaDeListas/index'
+
 
 const Stack = createStackNavigator()
 
 export default function StackNav(){
     
     return (
-        <Stack.Navigator initialRouteName="Menu" screenOptions={{}} >
+        <Stack.Navigator initialRouteName="Menu" screenOptions={{headerShown: false}} >
           <Stack.Screen name='Login' component={Login} />
           <Stack.Screen name='Cadastro' component={Cadastro} />
           <Stack.Screen name='Home' component={Home} />
@@ -27,21 +28,9 @@ export default function StackNav(){
           <Stack.Screen name='DescritorVariacaoLinguistica' component={DescritorVariacaoLinguistica} />
           <Stack.Screen name='DescritorRelacoesEntreRecursosExpressivos' component={DescritorRelacoesEntreRecursosExpressivos} />
           <Stack.Screen name='DescritorCoerenciaCoesaoTextual' component={DescritorCoerenciaCoesaoTextual} />
+          <Stack.Screen 
+          name='Questoes' component={Questoes} />
         </Stack.Navigator>
     )
 }
 
-export function Inicio() {
-  return (
-    <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login" screenOptions={{}} >
-          <Stack.Screen name='Login' component={Login} />
-          <Stack.Screen name='Cadastro' component={Cadastro} />
-          <Stack.Screen name='Home' component={Home} />
-          <Stack.Screen name='Menu' component={Menu} />
-
-        </Stack.Navigator>
-
-    </NavigationContainer>
-  )
-}
