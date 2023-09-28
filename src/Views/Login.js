@@ -33,9 +33,8 @@ export default function Login({navigation}) {
 
             </View>
 
+            <Image style = {Styles.imageLogo} source={require('../Imagens/Levri8Cortado.gif')} />
 
          </LinearGradient>
     )
 }
-
-<Image style = {Styles.imageLogo} source={require('../Imagens/Levri_8.gif')} />

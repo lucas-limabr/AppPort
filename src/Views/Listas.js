@@ -4,11 +4,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLista";
 import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from '@expo/vector-icons';
-import Listinha from "../ListaDeListas/Listinha";
+
 
 
 export default function Listas() {
-    const [listas, setListas] = useState([Listinha])
+    const [listas, setListas] = useState([])
     const [visible, setVisible] = useState(false)
 
     function criarLista() {
@@ -69,7 +69,7 @@ export default function Listas() {
 
 
             </View>
-            <ModalLista/>
+           {/*  <ModalLista/> */}
             </ScrollView>
         </LinearGradient>
     )

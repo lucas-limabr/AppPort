@@ -66,7 +66,7 @@ export default StyleSheet.create({
     label:{
         fontFamily: 'Inder_400Regular',
         color: '#fff',
-        textAlign: "justify",
+        textAlign: "auto",
         
         
     },

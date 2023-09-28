@@ -8,11 +8,12 @@ import { createUserWithEmailAndPassword } from 'firebase/auth'
 import {addDoc, collection} from 'firebase/firestore'
 import { getFirestore } from 'firebase/firestore'
 import styles from '../Styles.js/StylesTermoDeUso'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function Cadastro({navigation}) {
     const [nome,setNome] = useState('')
     const [email,setEmail] = useState('')
-    const[confimarEmail, setConfirmarEmail] = useState('')
+    const [confimarEmail, setConfirmarEmail] = useState('')
     const [senha,setSenha] = useState('')
     const [confirmarSenha,setConfirmarSenha] = useState('')
     const [souProfessor, setSouProfessor] = useState(false);
@@ -77,21 +78,37 @@ export default function Cadastro({navigation}) {
     }
     
     
-    const signUp = async (auth,email, senha) => {
-        if(aceitoTermo == true) {
+    const signUp = async () => {
+        
             try{
                 const resposta = await createUserWithEmailAndPassword(auth, email, senha)
                 Alert.alert('Usuário Cadastrado')
-                cadastroBD(nome, email, souProfessor)
+                cadastroBD()
     
             } catch(error){
             Alert.alert('erro' + error.message)
+            console.log(error)
             setVisible(false)
+            
             }
 
-        } else {
-            Alert.alert('É necessário aceitar os termos de uso para prosseguir')
+        
+    }
+
+    const localStorage = async (nome, email, urlImagemPerfil) => {
+        const usuarioAssincrono = {
+            nome: nome,
+            email: email,
+            urlImagemPerfil: urlImagemPerfil
         }
+        const usuarioString = JSON.stringify(usuarioAssincrono)
+        
+        await AsyncStorage.setItem('@portuguito2023', usuarioString)
+
+        console.log(usuarioString)
+
+        const teste = await AsyncStorage.getItem('@portuguito2023')
+        console.log(usuarioString === teste)
     }
 
     async function cadastroBD() {
@@ -101,6 +118,7 @@ export default function Cadastro({navigation}) {
             souProfessor,
             urlImagemPerfil
         })
+        localStorage(nome,email,urlImagemPerfil)
     }
 
     function cadastrar(){

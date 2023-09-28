@@ -56,7 +56,7 @@ export default StyleSheet.create({
     },
     imageNome:{
        marginLeft: -30,
-       marginTop: -50,
+       marginTop: -40,
        height:230,
        resizeMode: "repeat",
        
@@ -64,8 +64,8 @@ export default StyleSheet.create({
     },
     imageLogo:{
        marginLeft: 40,
-       marginTop: -240,
-       height:500,
+       bottom: 0,
+       height:250,
        resizeMode: "repeat",
     },
 
