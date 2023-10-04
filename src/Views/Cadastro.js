@@ -105,7 +105,7 @@ export default function Cadastro({navigation}) {
         
         await AsyncStorage.setItem('@portuguito2023', usuarioString)
 
-        console.log(usuarioString)
+        
 
         const teste = await AsyncStorage.getItem('@portuguito2023')
         console.log(usuarioString === teste)

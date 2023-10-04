@@ -25,7 +25,7 @@ export default function Menu({navigation}){
 
             <View style={Styles.containerFilho}>
                 <Botao titulo="Procedimentos de leitura" onPress={() => {navigation.navigate('DescritoresProcedimentoLeitura')}}/>
-                <Botao titulo="Implicações do gênero textual"  onPress={() => {navigation.navigate('DescritorImplicacoesGeneroTextual')}} />
+                <Botao titulo="Implicações do gênero textual"  onPress={() => {navigation.navigate('DescritorImplicacoesGeneroTextual'); }} />
             </View>
             <View style={Styles.containerFilho}>
                 <Botao titulo="Variação Linguística" onPress={() => {navigation.navigate('DescritorVariacaoLinguistica')}}  />

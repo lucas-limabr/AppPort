@@ -1,15 +1,18 @@
 import React from "react";
+import { useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import Styles from "../Styles.js/StylesDescritores";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 
-const Descritor = ({titulo}) => {
+const Descritor = ({titulo, onTabVisibleChange}) => {
 
     const navigation = useNavigation()
 
+    const [tabNavVisible, setTabNavVisible] = useState(true)
+
 return(
-    <TouchableOpacity style={Styles.botao} onPress={() => {navigation.navigate('Questoes')}}>
+    <TouchableOpacity style={Styles.botao} onPress={() => {navigation.navigate('Questoes'); setTabNavVisible(false)}}>
         <Text style={Styles.txtDescritor}>{titulo}</Text>
         <AntDesign name="caretright" size={40} color="#fff" />
     </TouchableOpacity>
