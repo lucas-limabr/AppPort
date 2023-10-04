@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import useEventCallback from "use-event-callback";
 import { useFonts, Inder_400Regular } from "@expo-google-fonts/inder"
 import Navegacao from "./src/Navegacao";
 import { UserProvider } from "./src/Contexts/auth";
@@ -10,7 +11,7 @@ export default function App() {
   });
 
   const [login, setLogin] = useState(false);
-  const [usuario, setUsuario] = useState(null);
+  const [usuario, setUsuario] = useState({});
   const [usuarioAtual, setUsuarioAtual] = useState(null);
 
   useEffect(() => {
@@ -27,13 +28,25 @@ export default function App() {
             const usuario = JSON.parse(usuarioString);
             setUsuario(usuario);
             setUsuarioAtual(usuario)
+            console.log("1")
+            
           }
         })
         .catch(error => {
           console.error("Erro ao obter usuário do AsyncStorage:", error);
         });
     }
-  }, [usuario]);
+  },[login]);
+
+  /* const handleLogin = useEventCallback(({ login }) => {
+    setLogin(!login)
+    console.log("2")
+    
+  }) */
+
+ /*  useEffect(() => {
+    handleLogin.emit({ login: !login })
+  }, [login]) */
 
   if (!fontLoaded) {
     return null;
@@ -41,7 +54,7 @@ export default function App() {
 
   return (
     <UserProvider value={{usuarioAtual}}>
-      <Navegacao/>
+      <Navegacao onLogin={() => handleLogin.triggerEvent}/>
     </UserProvider>
   );
 }

@@ -4,12 +4,17 @@ import Menu from "../Views/Menu";
 import Perfil from "../Views/Perfil";
 import Listas from "../Views/Listas";
 import StackNav from "./StackNav";
-import { Feather, Entypo, FontAwesome5 } from '@expo/vector-icons';
+import { Feather, FontAwesome5 } from '@expo/vector-icons';
 
 
 const Tab = createBottomTabNavigator()
 
 export default function TabNav() {
+
+    
+
+    
+
     return (
         <Tab.Navigator
             initialRouteName="StackNav"
@@ -47,9 +52,10 @@ export default function TabNav() {
                         return <Feather name="home" size={50} color={color} />
                     }
                     return <Feather name="home" size={50} color='#fff' />
-                }
+                },
+                 
             }}
-
+            
             />
 
             <Tab.Screen name='Listas' component={Listas} options={{

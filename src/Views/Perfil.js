@@ -15,6 +15,7 @@ const [email, setEmail] = useState('');
         {
             setNome(usuarioAtual.nome);
             setEmail(usuarioAtual.email);
+            console.log(nome + email)
     }
     }, [usuarioAtual]);
 
