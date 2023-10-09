@@ -9,10 +9,10 @@ const Descritor = ({titulo, onTabVisibleChange}) => {
 
     const navigation = useNavigation()
 
-    const [tabNavVisible, setTabNavVisible] = useState(true)
+    
 
 return(
-    <TouchableOpacity style={Styles.botao} onPress={() => {navigation.navigate('Questoes'); setTabNavVisible(false)}}>
+    <TouchableOpacity style={Styles.botao} onPress={() => {navigation.navigate('Questoes')}}>
         <Text style={Styles.txtDescritor}>{titulo}</Text>
         <AntDesign name="caretright" size={40} color="#fff" />
     </TouchableOpacity>
