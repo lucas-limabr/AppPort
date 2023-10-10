@@ -11,8 +11,8 @@ export default function DescritorRelacoesEntreRecursosExpressivos() {
     style={Styles.gradient} >
 
     <View style={Styles.container}>
-        <Descritores titulo='Identificação dos efeitos de ironia ou humor em textos variados'/>
-        <Descritores titulo='identificação do efeito de sentido decorrente do uso da pontuação'/>
+        <Descritores titulo='Identificação dos efeitos de ironia ou humor em textos variados' descritor='D13'/>
+        <Descritores titulo='identificação do efeito de sentido decorrente do uso da pontuação' descritor='D14'/>
         
         
     </View>
