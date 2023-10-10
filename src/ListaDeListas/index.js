@@ -5,6 +5,7 @@ import styles from './styles';
 import { RadioButton } from 'react-native-paper';
 import { getFirestore, query, where, collection, getDocs } from 'firebase/firestore';
 import { FIREBASE_APP } from '../../FirebaseConfig';
+import { useRoute } from '@react-navigation/native';    
 
 
 
@@ -16,16 +17,16 @@ export default function Questoes() {
     const [urlImagem, setUrlImagem] = useState(null)
     const [indice, setIndice] = useState(0)
     const [atualizarDados, setAtualizarDados] = useState(false)
+    const route = useRoute()    
 
     
-    const db = getFirestore(FIREBASE_APP)
-    
+    const db = getFirestore(FIREBASE_APP)  
 
     const collectionRef = collection(db, 'questoes')
 
     const descritor = 'descritor'
 
-    const valorDescritor = 'D7'
+    const valorDescritor = route.params.questaoDescritor
 
     const q = query(collectionRef, where(descritor, '==', valorDescritor))
 

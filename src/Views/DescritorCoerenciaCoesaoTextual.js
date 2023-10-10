@@ -11,10 +11,10 @@ export default function DescritorCoerenciaCoesaoTextual() {
     style={Styles.gradient} >
 
     <View style={Styles.container}>
-        <Descritores titulo='Estabelecimento de relações entre partes de um texto'/>
-        <Descritores titulo='Identificação do confilito gerador do enredo'/>
-        <Descritores titulo='Estabelecimento de relação entre partes do texto'/>
-        <Descritores titulo='Estabelecimento das relações lógico-discursivas'/>
+        <Descritores titulo='Estabelecimento de relações entre partes de um texto'  descritor='D2'/>
+        <Descritores titulo='Identificação do confilito gerador do enredo'  descritor='D7'/>
+        <Descritores titulo='Estabelecimento de relação entre partes do texto' descritor='D8'/>
+        <Descritores titulo='Estabelecimento das relações lógico-discursivas' descritor='D12'/>
         
         
     </View>

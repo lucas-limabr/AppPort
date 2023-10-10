@@ -11,7 +11,7 @@ export default function DescritorVariacaoLinguistica() {
     style={Styles.gradient} >
 
     <View style={Styles.container}>
-        <Descritores titulo='Identificação das marcas linguísticas que evidenciam o locutor e o interlocutor de um texto'/>
+        <Descritores titulo='Identificação das marcas linguísticas que evidenciam o locutor e o interlocutor de um texto'  descritor='D10'/>
         
         
     </View>

@@ -11,9 +11,9 @@ export default function DescritorImplicacoesGeneroTextual() {
     style={Styles.gradient} >
 
     <View style={Styles.container}>
-        <Descritores titulo='Interpretação de textos'/>
-        <Descritores titulo='Reconhecimento do gênero discursivo'/>
-        <Descritores titulo='Identifcacção da finalidade textual'/>
+        <Descritores titulo='Interpretação de textos' descritor='D5'/>
+        <Descritores titulo='Reconhecimento do gênero discursivo' descritor='D16'/>
+        <Descritores titulo='Identificação da finalidade textual'  descritor='D9'/>
         
         
     </View>

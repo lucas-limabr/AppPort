@@ -18,11 +18,11 @@ export default function DescritoresProcedimentoLeitura() {
     style={Styles.gradient} >
 
     <View style={Styles.container}>
-        <Descritores titulo='Localização de informações explícitas'/>
-        <Descritores titulo='Inferência de sentido'/>
-        <Descritores titulo='Inferência de informação implícita'/>
-        <Descritores titulo='Identificação do tema do texto'/>
-        <Descritores titulo='Distinção entre fato e opinião'/>
+        <Descritores titulo='Localização de informações explícitas' descritor='D1'/>
+        <Descritores titulo='Inferência de sentido' descritor='D3'/>
+        <Descritores titulo='Inferência de informação implícita' descritor='D4'/>
+        <Descritores titulo='Identificação do tema do texto' descritor='D6'/>
+        <Descritores titulo='Distinção entre fato e opinião' descritor='D11'/>
         
     </View>
 
