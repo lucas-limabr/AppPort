@@ -1,25 +1,83 @@
-import React, { useState } from "react";
-import { View, Image, Text, TouchableOpacity, TextInput, ScrollView, Modal } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View,  Text, TouchableOpacity, TextInput,  Modal, Alert, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLista";
 import style from "../Styles.js/StylesModalLista"
 import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from '@expo/vector-icons';
+import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
+import { getFirestore } from "firebase/firestore";
+import {addDoc, collection, query, getDocs} from 'firebase/firestore'
+
 
 
 
 export default function Listas() {
-    const [listas, setListas] = useState([])
+
+    const db = getFirestore(FIREBASE_APP)
+    const auth = FIREBASE_AUTH
+    const collectionRef = collection(db, 'listas')
+    
     const [visible, setVisible] = useState(false)
+
+    const [listas, setListas] = useState([]);
+    
+    const criador = auth.currentUser.uid;
+
+
+
+    useEffect(() => {
+        
+        async function carregarListas() {
+            
+            const listasDoFirestore = await buscarListasDoFirestore();
+            setListas(listasDoFirestore);
+        }
+
+        carregarListas();
+    }, []);
     
 
-    function criarLista() {
+
+    async function buscarListasDoFirestore() {
+        const listasCollection = collection(db, 'listas');
+        const listasQuery = query(listasCollection);
+      
+        const listasSnapshot = await getDocs(listasQuery);
+      
+        const listas = [];
+      
+        listasSnapshot.forEach((doc) => {
+          const listaData = doc.data();
+          listas.push(listaData);
+        });
+      
+        return listas;
+      }
 
 
-        const newLista = `Lista${listas.length + 1}`
-        setListas([...listas, newLista])
+
+
+    async function criarLista(nomeLista) {
         
-    }
+
+        const novaLista ={
+            criador,
+            nomeLista,
+            idQuestao: []
+        }
+
+        const listaCriada = await addDoc(collectionRef, novaLista)
+
+
+        setListas([...listas, novaLista])
+
+
+        setVisible(false)
+        Alert.alert('Lista criado com sucesso')
+        setNomeLista('')
+      
+      }
 
     function ModalLista() {
         const [nomeLista, setNomeLista] = useState('')
@@ -41,9 +99,12 @@ export default function Listas() {
                         <TextInput style={style.input} onChangeText={(text) => setNomeLista(text)}></TextInput>
                         
                     </View>
-                    <View style={{alignItems: 'center'}}>
-                        <TouchableOpacity style={style.botao} >
+                    <View style={{display: "flex", flexDirection: "row", justifyContent: 'space-around'}}>
+                        <TouchableOpacity style={style.botao} onPress={() => criarLista(nomeLista)} >
                                     <Text style = {style.txtBotao}>SALVAR</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={style.botao} onPress={() => setVisible(false)} >
+                                    <Text style = {style.txtBotao}>CANCELAR</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -58,7 +119,7 @@ export default function Listas() {
     return (
         <LinearGradient colors={['#D5D4FB', '#9B98FC']}
         style={Styles.gradient} >
-            <ScrollView>
+            
 
              <ModalLista/>
             
@@ -84,9 +145,16 @@ export default function Listas() {
 
             </View>
 
-                {listas.map((titulo, index) => (
-                    <Lista key={index} titulo1={titulo} titulo2={`Lista${index + 2}`} />
-                ))}
+                
+                <FlatList data={listas}
+          keyExtractor={(item) => item.id} // Use uma chave única, como o ID
+          renderItem={({ item }) => (
+            <Lista key={item.id} titulo1={item.nomeLista} />
+          )} />
+                
+                
+                
+                
                 
             
 
@@ -94,7 +162,7 @@ export default function Listas() {
 
             </View>
            
-            </ScrollView>
+            
         </LinearGradient>
     )
 
