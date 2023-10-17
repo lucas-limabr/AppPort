@@ -21,18 +21,14 @@ export const BotaoLista = ({ titulo }) => (
   </TouchableOpacity>
 );
 
-export default function Lista({ titulo1, titulo2 }) {
-  if(!titulo2){
+export default function Lista({ titulo1 }) {
+  
     return (
     <View style = {Styles.containerFilho}>
         <BotaoLista titulo={titulo1} />
     </View>
     )
-  }else 
+  }
 
-  return (
-      <BotaoLista titulo={titulo2} />
-      
-    
-  );
-}
+  
+
