@@ -17,7 +17,9 @@ export default function Questoes() {
     const [urlImagem, setUrlImagem] = useState(null)
     const [indice, setIndice] = useState(0)
     const [atualizarDados, setAtualizarDados] = useState(false)
-    const route = useRoute()    
+    const route = useRoute()   
+    
+    const [questaoSelecionadas, setQuestaoSelecionadas] = useState([])
 
     
     const db = getFirestore(FIREBASE_APP)  
@@ -44,13 +46,32 @@ export default function Questoes() {
                 pergunta: data.pergunta,
                 respostaCorreta: data.respostaCorreta,
                 respostas: data.respostas,
-                urlImagem: data.urlImagem
+                urlImagem: data.urlImagem, 
+                
 
             }
         }
         return null;
 
        
+    }
+
+    const selecionarQuestao = () => {
+        
+        const questaoAtual ={
+            pergunta: pergunta,
+            respostaCorreta: respostaCorreta,
+            respostas: resposta,
+            urlImagem: urlImagem,
+            
+        }
+
+        
+
+        setQuestaoSelecionadas([...questaoSelecionadas, questaoAtual])
+        
+        console.log(questaoSelecionadas)
+        
     }
 
     function continuar() {
@@ -74,6 +95,7 @@ export default function Questoes() {
             setRespostaCorreta(result.respostaCorreta)
             setResposta(result.respostas)
             setUrlImagem(result.urlImagem)
+            
         })
     }, [atualizarDados])
     
@@ -84,10 +106,10 @@ export default function Questoes() {
             <View style={styles.container}>
                 <View style={styles.enunciado}>
                     <View style={styles.backgroundImagem}>
-                    <Image
-                    style={styles.imagem}
-                    source={{uri: urlImagem}} 
-    />
+                        <Image
+                        style={styles.imagem}
+                        source={{uri: urlImagem}} 
+                        resizeMode='contain'/>
                     </View>
                     <Text style={styles.txtEnunciado}>{pergunta}</Text>
                 </View>
@@ -131,6 +153,9 @@ export default function Questoes() {
                 <View style={styles.containerContinuar}>
                     <TouchableOpacity style={styles.btnContinuar} onPress={voltar}>
                         <Text style={styles.label}>Voltar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnContinuar} onPress={() => selecionarQuestao()}>
+                        <Text style={styles.label}>Selecionar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btnContinuar} onPress={continuar}>
                         <Text style={styles.label}>Continuar</Text>

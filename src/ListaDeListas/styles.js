@@ -9,17 +9,17 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 25,
-        alignItems: 'center'
+        alignItems: 'center',
        
     },
     enunciado:{
         backgroundColor: '#ff8c90',
-        height: 350,
+        height: 'auto',
         width: 300,
         marginTop : 20,
         borderRadius: 10,
-        alignItems: 'center'
-        
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     backgroundImagem:{
         backgroundColor: '#F54F59',
@@ -31,19 +31,19 @@ export default StyleSheet.create({
         justifyContent: 'center'
     },
     txtEnunciado:{
-        fontSize: 18,
+        fontSize: 16,
         color: '#fff',
-        top: 10,
+        top: 0,
+        width: '90%',
         left: 5,
+        padding: 10,
         textAlign: 'left',
-        alignItems: 'center',
-        justifyContent: 'center',
         fontFamily: 'Inder_400Regular', 
     },
     containerResposta:{
         alignItems: 'flex-start',
         width: 300,
-        marginTop: 50,
+        marginTop: 10,
        
     },
     resposta:{
@@ -61,7 +61,7 @@ export default StyleSheet.create({
         borderRadius: 50,
         width: 300,
         marginTop: 5,
-        height: 40,        
+        height: 'auto',        
     },
     label:{
         fontFamily: 'Inder_400Regular',
@@ -83,11 +83,12 @@ export default StyleSheet.create({
 
     },
     containerContinuar:{
-        width: 300,
-        top: 20,
+        width: '100%',
+        bottom: 5,
         alignItems: 'flex-end',
-        justifyContent: 'space-between',
-        flexDirection: 'row'
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
+        flex: 1
     }
     
 
