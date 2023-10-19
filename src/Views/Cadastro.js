@@ -82,7 +82,6 @@ export default function Cadastro({navigation}) {
         
             try{
                 const resposta = await createUserWithEmailAndPassword(auth, email, senha)
-                Alert.alert('Usuário Cadastrado')
                 cadastroBD()
     
             } catch(error){
