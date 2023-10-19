@@ -15,7 +15,7 @@ export default function Home() {
   const signIn = async (auth,email,senha) => {
     try{
       const resposta = await signInWithEmailAndPassword(auth, email, senha)
-      Alert.alert('Logado')
+      
     } catch(error){
       Alert.alert('erro ' + error.message)
     }

@@ -16,7 +16,7 @@ export default StyleSheet.create({
         backgroundColor: '#ff8c90',
         height: 'auto',
         width: 300,
-        marginTop : 20,
+        marginTop : 0,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center'
@@ -89,6 +89,24 @@ export default StyleSheet.create({
         justifyContent: 'space-evenly',
         flexDirection: 'row',
         flex: 1
+    },
+    btnSalvar:{
+        backgroundColor: '#F54F59',
+        width: 100,
+        height: 35,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 10,
+    },
+    containerSalvar:{
+        width: '100%',
+        right: 30,
+        bottom: 5,
+        alignItems: 'flex-end',
+        justifyContent: 'flex-end',
+        flexDirection: 'row',
+        flex: 1,
+        
     }
     
 
