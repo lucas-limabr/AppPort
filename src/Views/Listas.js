@@ -130,7 +130,7 @@ export default function Listas() {
           </TouchableOpacity>
         </View>
 
-        <FlatList
+        <FlatList style={Styles.flatlist}
           data={listas}
           keyExtractor={(item) => item.id} 
           renderItem={({ item }) => (
