@@ -14,6 +14,7 @@ import {
 } from "firebase/firestore";
 import { FIREBASE_APP } from "../../FirebaseConfig";
 import { useRoute } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function Questoes() {
   const [value, setValue] = React.useState("first");
@@ -96,6 +97,7 @@ export default function Questoes() {
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
+      
       <View style={styles.container}>
         <View style={styles.containerSalvar}>
         <TouchableOpacity style={styles.btnSalvar} onPress={() => salvar(questaoSelecionadas)}>
@@ -114,7 +116,9 @@ export default function Questoes() {
         </View>
 
         <View style={styles.containerResposta}>
-          <RadioButton.Group
+          
+        <ScrollView style={styles.scroll}>
+        <RadioButton.Group
             onValueChange={(value) => setValue(value)}
             value={value}
           >
@@ -166,6 +170,9 @@ export default function Questoes() {
               color="#fff"
             />
           </RadioButton.Group>
+        </ScrollView>
+          
+          
         </View>
 
         <View style={styles.containerContinuar}>

@@ -88,7 +88,8 @@ export default StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'space-evenly',
         flexDirection: 'row',
-        flex: 1
+        flex: 1,
+        position: "relative"
     },
     btnSalvar:{
         backgroundColor: '#F54F59',
@@ -107,7 +108,12 @@ export default StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         
+    },
+    scroll:{
+        height: 250
+        
     }
+    
     
 
 })

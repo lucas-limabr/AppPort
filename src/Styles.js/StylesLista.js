@@ -34,7 +34,7 @@ export default StyleSheet.create({
     },
     addLista:{
         backgroundColor:'transparent',
-        width: 120,
+        width: 250,
         height: 120,
         alignItems: 'center',
         justifyContent:'center',
@@ -81,6 +81,11 @@ export default StyleSheet.create({
         justifyContent: 'flex-end',
         height: 126
 
+    },
+    flatlist:{
+        position: 'absolute',
+        bottom: 90,
+        top: 150
     }
     
 })
