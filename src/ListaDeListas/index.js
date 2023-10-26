@@ -18,7 +18,6 @@ import { ScrollView } from "react-native-gesture-handler";
 
 export default function Questoes() {
   const [value, setValue] = React.useState("first");
-  const [id, setId] = useState(null)
   const [pergunta, setPergunta] = useState(null);
   const [respostaCorreta, setRespostaCorreta] = useState(null);
   const [resposta, setResposta] = useState([]);
@@ -58,16 +57,39 @@ export default function Questoes() {
     return null;
   }
 
-  const selecionarQuestao = (questaoId) => {
-    const questaoAtual = questaoId 
-
-    setQuestaoSelecionadas((prevQuestao) => {
-      const novoArray = [...prevQuestao, questaoAtual];
-      console.log(novoArray); 
-      return novoArray;
-    })
+  const selecionarQuestao = () => {
     
+
+    const questaoAtual ={
+      pergunta: pergunta,
+      respostaCorreta: respostaCorreta,
+      respostas: resposta,
+      urlImagem: urlImagem,
+
+  }
+
+
+  setQuestaoSelecionadas((prevQuestao) => {
+    const questaoIndex = prevQuestao.findIndex((q) => q.pergunta === questaoAtual.pergunta);
+
+    if (questaoIndex !== -1) {
+      // A questão já está no array, então vamos removê-la
+      const novoArray = [...prevQuestao];
+      novoArray.splice(questaoIndex, 1);
+      console.log(novoArray)
+      return novoArray;
+    } else {
+      // A questão não está no array, então vamos adicioná-la
+      const novoArray = [...prevQuestao, questaoAtual]
+      console.log(novoArray)
+      return novoArray
+    }
+  })  
   };
+
+  const verificarArray = () => {
+    return questaoSelecionadas.some((q) => q.pergunta === pergunta)
+  }
 
   const salvar = (questoesSelecionadas) => {
       
@@ -91,7 +113,7 @@ export default function Questoes() {
       setRespostaCorreta(result.respostaCorreta);
       setResposta(result.respostas);
       setUrlImagem(result.urlImagem);
-      setId(result.id)
+      
     });
   }, [atualizarDados]);
 
@@ -100,8 +122,8 @@ export default function Questoes() {
       
       <View style={styles.container}>
         <View style={styles.containerSalvar}>
-        <TouchableOpacity style={styles.btnSalvar} onPress={() => salvar(questaoSelecionadas)}>
-            <Text style={styles.label}>Salvar</Text>
+        <TouchableOpacity style={styles.btnSalvar} onPress={() => selecionarQuestao()}>
+            <Text style={styles.label}>{verificarArray() ? "Excluir" : "Incluir"}</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.enunciado}>
@@ -118,58 +140,19 @@ export default function Questoes() {
         <View style={styles.containerResposta}>
           
         <ScrollView style={styles.scroll}>
-        <RadioButton.Group
-            onValueChange={(value) => setValue(value)}
-            value={value}
-          >
-            <RadioButton.Item
-              label={resposta[0]}
-              value="first"
-              style={[
-                styles.alternativas,
-                value === "first" && styles.selectLabel,
-              ]}
-              labelStyle={styles.label}
-              uncheckedColor="#fff"
-              color="#fff"
-            />
-
-            <RadioButton.Item
-              label={resposta[1]}
-              value="second"
-              style={[
-                styles.alternativas,
-                value === "second" && styles.selectLabel,
-              ]}
-              labelStyle={styles.label}
-              uncheckedColor="#fff"
-              color="#fff"
-            />
-
-            <RadioButton.Item
-              label={resposta[2]}
-              value="third"
-              style={[
-                styles.alternativas,
-                value === "third" && styles.selectLabel,
-              ]}
-              labelStyle={styles.label}
-              uncheckedColor="#fff"
-              color="#fff"
-            />
-
-            <RadioButton.Item
-              label={resposta[3]}
-              value="fourth"
-              style={[
-                styles.alternativas,
-                value === "fourth" && styles.selectLabel,
-              ]}
-              labelStyle={styles.label}
-              uncheckedColor="#fff"
-              color="#fff"
-            />
-          </RadioButton.Group>
+          <TouchableOpacity style={[resposta[0] === respostaCorreta ? [ styles.alternativas, styles.selectLabel] : styles.alternativas]}>
+            <Text style={styles.txtEnunciado}>{resposta[0]}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[resposta[1] === respostaCorreta ? [ styles.alternativas, styles.selectLabel] : styles.alternativas]}>
+            <Text style={styles.txtEnunciado}>{resposta[1]}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[resposta[2] === respostaCorreta ? [ styles.alternativas, styles.selectLabel] : styles.alternativas]}>
+            <Text style={styles.txtEnunciado}>{resposta[2]}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={[resposta[3] === respostaCorreta ? [ styles.alternativas, styles.selectLabel] : styles.alternativas]}>
+            <Text style={styles.txtEnunciado}>{resposta[3]}</Text>
+          </TouchableOpacity>
+        
         </ScrollView>
           
           
@@ -178,12 +161,6 @@ export default function Questoes() {
         <View style={styles.containerContinuar}>
           <TouchableOpacity style={styles.btnContinuar} onPress={voltar}>
             <Text style={styles.label}>Voltar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.btnContinuar}
-            onPress={() => selecionarQuestao(id)}
-          >
-            <Text style={styles.label}>Selecionar</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.btnContinuar} onPress={continuar}>
             <Text style={styles.label}>Continuar</Text>
