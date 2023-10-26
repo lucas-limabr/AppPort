@@ -16,6 +16,8 @@ import { FIREBASE_APP } from "../../FirebaseConfig";
 import { useRoute } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 
+import {adicionarQuestao} from "../Views/Listas"
+
 export default function Questoes() {
   const [value, setValue] = React.useState("first");
   const [pergunta, setPergunta] = useState(null);
@@ -72,16 +74,15 @@ export default function Questoes() {
   setQuestaoSelecionadas((prevQuestao) => {
     const questaoIndex = prevQuestao.findIndex((q) => q.pergunta === questaoAtual.pergunta);
 
-    if (questaoIndex !== -1) {
-      // A questão já está no array, então vamos removê-la
+    if (questaoIndex !== -1) {    
       const novoArray = [...prevQuestao];
       novoArray.splice(questaoIndex, 1);
       console.log(novoArray)
       return novoArray;
-    } else {
-      // A questão não está no array, então vamos adicioná-la
+    } else {     
       const novoArray = [...prevQuestao, questaoAtual]
       console.log(novoArray)
+      adicionarQuestao("lMBtIK39WFUcJWX2EC3Y", novoArray)
       return novoArray
     }
   })  
