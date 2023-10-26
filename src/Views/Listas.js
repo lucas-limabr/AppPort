@@ -17,6 +17,7 @@ import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { getFirestore } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 
+
 export default function Listas() {
   const db = getFirestore(FIREBASE_APP);
   const auth = FIREBASE_AUTH;
@@ -57,16 +58,25 @@ export default function Listas() {
     const novaLista = {
       criador,
       nomeLista,
-      idQuestao: [],
+      questoes: [],
     };
 
     const listaCriada = await addDoc(collectionRef, novaLista);
+    const listaId = docRef.id
 
-    setListas([...listas, novaLista]);
+    setListas([...listas,{...listas, novaLista}]);
 
     setVisible(false);
     Alert.alert("Lista criado com sucesso");
     setNomeLista("");
+  }
+
+  const adicionarQuestao = (listaId, questao) => {
+    const listaEncontrada = listas.find(lista => lista.id === listaId)
+
+
+    listas.questoes.push(questao)
+    console.log(listas)
   }
 
   function ModalLista() {
