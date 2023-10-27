@@ -9,6 +9,7 @@ export default StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         
+        
     },
     botao:{
         backgroundColor: '#FFB9BD',
@@ -30,5 +31,13 @@ export default StyleSheet.create({
         fontSize: 16
         
         
-    }
+    },
+    voltar:{
+        position: 'absolute',
+        top: 50,
+        height: 50,
+        width: '100%',
+        left: 30
+        
+    },
 })
