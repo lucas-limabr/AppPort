@@ -71,22 +71,22 @@ export default function Questoes() {
   }
 
 
-  setQuestaoSelecionadas((prevQuestao) => {
-    const questaoIndex = prevQuestao.findIndex((q) => q.pergunta === questaoAtual.pergunta);
+  // setQuestaoSelecionadas((prevQuestao) => {
+  //   const questaoIndex = prevQuestao.findIndex((q) => q.pergunta === questaoAtual.pergunta);
 
-    if (questaoIndex !== -1) {    
-      const novoArray = [...prevQuestao];
-      novoArray.splice(questaoIndex, 1);
-      console.log(novoArray)
-      return novoArray;
-    } else {     
-      const novoArray = [...prevQuestao, questaoAtual]
-      console.log(novoArray)
-      adicionarQuestao("lMBtIK39WFUcJWX2EC3Y", novoArray)
-      return novoArray
-    }
-  })  
-  };
+  //   if (questaoIndex !== -1) {    
+  //     const novoArray = [...prevQuestao];
+  //     novoArray.splice(questaoIndex, 1);
+  //     console.log(novoArray)
+  //     return novoArray;
+  //   } else {     
+  //     const novoArray = [...prevQuestao, questaoAtual]
+  //     console.log(novoArray)
+  //     adicionarQuestao("lMBtIK39WFUcJWX2EC3Y", novoArray)
+  //     return novoArray
+  //   }
+  // })  
+  // };
 
   const verificarArray = () => {
     return questaoSelecionadas.some((q) => q.pergunta === pergunta)
@@ -170,4 +170,5 @@ export default function Questoes() {
       </View>
     </LinearGradient>
   );
+}
 }
