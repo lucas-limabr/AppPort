@@ -16,9 +16,9 @@ export default StyleSheet.create({
         marginTop: 40,
     },
     mascote:{
-        marginLeft:70,
-       marginTop:-60,
-       height:270,
+        marginLeft:50,
+       marginTop:-100,
+       height:320,
        resizeMode:'repeat',
     },
     input:{
@@ -45,7 +45,7 @@ export default StyleSheet.create({
         color: '#fff',
         fontFamily: 'Inder_400Regular',
         textAlign:'center',
-        marginTop: 18,
+        marginTop: 10,
         marginBottom: 18,
         fontSize:25,
 

@@ -34,10 +34,11 @@ export default StyleSheet.create({
     },
     voltar:{
         position: 'absolute',
-        top: 50,
+        top: 30,
         height: 50,
-        width: '100%',
-        left: 30
+        width: 50,
+        left: 30,
+        zIndex: 1,
         
     },
 })
