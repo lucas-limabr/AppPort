@@ -9,12 +9,15 @@ export default StyleSheet.create({
     },
     containerFilho:{
         alignItems: 'flex-end',
+        top: -190,
+        zIndex: 1
     },
     botaoGrande:{
         backgroundColor:'#FFB9BD',
         marginLeft:30,
         marginRight: 30,
         borderRadius:10,   
+        top: -180
     },
     botaoPequeno:{
         backgroundColor:'#ff8c90',
@@ -26,6 +29,7 @@ export default StyleSheet.create({
         marginTop: 30,
         marginRight: 30,
         borderRadius:10,
+        
     },
     textBotao:{
         color: '#fff',
@@ -44,7 +48,7 @@ export default StyleSheet.create({
     frase:{
         color: '#fff',
         textAlign:'center',
-        marginTop: 18,
+        marginTop: -140,
         marginBottom: 18,
         fontSize:25,
         fontFamily: 'Inder_400Regular',
@@ -55,18 +59,21 @@ export default StyleSheet.create({
         
     },
     imageNome:{
-       marginLeft: -30,
-       marginTop: -40,
-       height:230,
-       resizeMode: "repeat",
-       
-
+        marginLeft: 0,
+        marginTop: -250,
+        width: '100%', // Largura como 50% da tela
+        height: '100%', // Altura como 50% da tela
+        resizeMode: 'contain',
     },
+
     imageLogo:{
-       marginLeft: 40,
-       bottom: 0,
-       height:250,
-       resizeMode: "repeat",
+        position: 'absolute',
+        bottom: -22,
+        width: '100%', 
+        height: '50%',
+       resizeMode: "contain",
+       
+       
     },
 
     
