@@ -14,7 +14,7 @@ import style from "../Styles.js/StylesModalLista";
 import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
-import { getFirestore } from "firebase/firestore";
+import { doc, getFirestore } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 
 
@@ -28,15 +28,9 @@ export default function Listas() {
   const [listas, setListas] = useState([]);
 
   const criador = auth.currentUser.uid;
+  const referenciaCriador = doc(db, 'users', criador)
 
-  useEffect(() => {
-    async function carregarListas() {
-      const listasDoFirestore = await buscarListasDoFirestore();
-      setListas(listasDoFirestore);
-    }
-
-    carregarListas();
-  }, []);
+  
 
   async function buscarListasDoFirestore() {
     const listasCollection = collection(db, "listas");
@@ -56,7 +50,7 @@ export default function Listas() {
 
   async function criarLista(nomeLista) {
     const novaLista = {
-      criador,
+      criador: referenciaCriador,
       nomeLista,
       questoes: [],
     };
@@ -70,14 +64,16 @@ export default function Listas() {
     Alert.alert("Lista criado com sucesso");
     setNomeLista("");
   }
+  
+  useEffect(() => {
+    async function carregarListas() {
+      const listasDoFirestore = await buscarListasDoFirestore();
+      setListas(listasDoFirestore);
+    }
 
-  const adicionarQuestao = (listaId, questao) => {
-    const listaEncontrada = listas.find(lista => lista.id === listaId)
+    carregarListas();
+  }, []);
 
-
-    listas.questoes.push(questao)
-    console.log(listas)
-  }
 
   function ModalLista() {
     const [nomeLista, setNomeLista] = useState("");
