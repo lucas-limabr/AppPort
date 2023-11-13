@@ -19,6 +19,7 @@ import { addDoc, collection, query, getDocs } from "firebase/firestore";
 
 
 export default function Listas() {
+  const [atualizarDados, setAtualizarDados] = useState()
   const db = getFirestore(FIREBASE_APP);
   const auth = FIREBASE_AUTH;
   const collectionRef = collection(db, "listas");
@@ -49,6 +50,10 @@ export default function Listas() {
   }
 
   async function criarLista(nomeLista) {
+    setAtualizarDados(!atualizarDados)
+    setVisible(false);
+
+
     const novaLista = {
       criador: referenciaCriador,
       nomeLista,
@@ -59,10 +64,8 @@ export default function Listas() {
     const listaId = docRef.id
 
     setListas([...listas,{...listas, novaLista}]);
-
-    setVisible(false);
     Alert.alert("Lista criado com sucesso");
-    setNomeLista("");
+    
   }
   
   useEffect(() => {
@@ -72,7 +75,7 @@ export default function Listas() {
     }
 
     carregarListas();
-  }, []);
+  }, [atualizarDados]);
 
 
   function ModalLista() {
