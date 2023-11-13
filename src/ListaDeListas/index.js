@@ -22,6 +22,7 @@ export default function Questoes() {
   const [value, setValue] = React.useState("first");
   const [pergunta, setPergunta] = useState(null);
   const [respostaCorreta, setRespostaCorreta] = useState(null);
+  const [id, setId] = useState(null)
   const [resposta, setResposta] = useState([]);
   const [urlImagem, setUrlImagem] = useState(null);
   const [indice, setIndice] = useState(0);
@@ -61,62 +62,34 @@ export default function Questoes() {
     return null;
   }
 
-  const selecionarQuestao = () => {
-    const questaoAtual = {
-      pergunta: pergunta,
-      respostaCorreta: respostaCorreta,
-      respostas: resposta,
-      urlImagem: urlImagem,
-    };
-
+  const selecionarQuestao = (questaoId) => {
     setQuestaoSelecionadas((prevQuestao) => {
-      const questaoIndex = prevQuestao.findIndex(
-        (q) => q.pergunta === questaoAtual.pergunta
-      );
-
+      const questaoIndex = prevQuestao.indexOf(questaoId);
+  
       if (questaoIndex !== -1) {
-        
+        // Se a questão já está no array, remove ela
         const novoArray = [...prevQuestao];
         novoArray.splice(questaoIndex, 1);
-        console.log(novoArray)
+        console.log(novoArray);
         return novoArray;
       } else {
-        
-        const novoArray = [...prevQuestao, questaoAtual];
-        console.log(novoArray)
+        // Se a questão não está no array, adiciona ela
+        const novoArray = [...prevQuestao, questaoId];
+        console.log(novoArray);
         return novoArray;
       }
     });
-
-
-    // setQuestaoSelecionadas((prevQuestao) => {
-    //   const questaoIndex = prevQuestao.findIndex((q) => q.pergunta === questaoAtual.pergunta);
-
-    //   if (questaoIndex !== -1) {
-    //     const novoArray = [...prevQuestao];
-    //     novoArray.splice(questaoIndex, 1);
-    //     console.log(novoArray)
-    //     return novoArray;
-    //   } else {
-    //     const novoArray = [...prevQuestao, questaoAtual]
-    //     console.log(novoArray)
-    //     adicionarQuestao("lMBtIK39WFUcJWX2EC3Y", novoArray)
-    //     return novoArray
-    //   }
-    // })
-    // };
-
-  }
+  };
     const verificarArray = () => {
-      return questaoSelecionadas.some((q) => q.pergunta === pergunta);
+      return questaoSelecionadas.includes(id)
     };
 
-    const salvar = (questoesSelecionadas) => {};
+    
 
     function continuar() {
       setIndice(indice + 1);
       setAtualizarDados(!atualizarDados);
-      console.log(indice)
+      
     }
 
     function voltar() {
@@ -133,6 +106,7 @@ export default function Questoes() {
         setRespostaCorreta(result.respostaCorreta);
         setResposta(result.respostas);
         setUrlImagem(result.urlImagem);
+        setId(result.id);
         
       });
     }, [atualizarDados]);
@@ -149,7 +123,7 @@ export default function Questoes() {
           <View style={styles.containerSalvar}>
             <TouchableOpacity
               style={styles.btnSalvar}
-              onPress={() => selecionarQuestao()}
+              onPress={() => selecionarQuestao(id)}
             >
               <Text style={styles.label}>
                 {verificarArray() ? "Excluir" : "Incluir"}
