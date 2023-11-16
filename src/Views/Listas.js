@@ -17,6 +17,11 @@ import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getFirestore } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 
+import { nanoid } from "nanoid";
+import 'react-native-get-random-values'
+
+
+
 
 export default function Listas() {
   const [atualizarDados, setAtualizarDados] = useState()
@@ -31,7 +36,9 @@ export default function Listas() {
   const criador = auth.currentUser.uid;
   const referenciaCriador = doc(db, 'users', criador)
 
-  
+  const codigo = nanoid(6)
+  console.log(codigo)
+
 
   async function buscarListasDoFirestore() {
     const listasCollection = collection(db, "listas");
@@ -53,13 +60,17 @@ export default function Listas() {
     setAtualizarDados(!atualizarDados)
     setVisible(false);
 
+    
+
 
     const novaLista = {
       criador: referenciaCriador,
+      codigo: codigo,
       nomeLista,
       questoes: [],
     };
 
+    console.log(novaLista)
     const listaCriada = await addDoc(collectionRef, novaLista);
     const listaId = docRef.id
 
