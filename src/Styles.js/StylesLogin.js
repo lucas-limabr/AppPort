@@ -1,4 +1,5 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet } from "react-native" // aqui voce tem que importar so o stylesheet do react-native pra poder criar os estilos, o nome das propriedades são bem parecidos com os do css, porem no lugar de usar um - pra separar quando o nome é composto, usa-se a letra maiuscula pra isso.
+// as vezes eu faço muita gambiarra pra conseguir que os elementos fiquem na posição correta kkk
 
 
 export default StyleSheet.create({
@@ -61,8 +62,8 @@ export default StyleSheet.create({
     imageNome:{
         marginLeft: 0,
         marginTop: -250,
-        width: '100%', // Largura como 50% da tela
-        height: '100%', // Altura como 50% da tela
+        width: '100%', 
+        height: '100%', 
         resizeMode: 'contain',
     },
 
