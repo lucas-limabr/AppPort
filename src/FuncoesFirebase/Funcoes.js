@@ -7,8 +7,6 @@ export const fetchIdList = async (campo, colecao, item) => {
     const db = getFirestore(FIREBASE_APP);
     const collectionRef = collection(db, colecao);
     
-
-    
   
     try {
       
