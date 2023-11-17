@@ -7,10 +7,18 @@ import {fetchIdList} from '../FuncoesFirebase/Funcoes'
 
 export const BotaoLista = ({ titulo }) => {
   const navigation = useNavigation()
+
+  const handlePress = async () => {
+    const idDoDocumento = await fetchIdList('nomeLista', 'listas', titulo);
+
+    
+      navigation.navigate('StackNav', { screen: 'Menu', params: { idDoDocumento } });
+    
+  };
   
   return(
   
-  <TouchableOpacity style={Styles.lista} onPress={() => fetchIdList('nomeLista', 'listas', titulo)}>
+  <TouchableOpacity style={Styles.lista}onPress={handlePress} >
     <View style={Styles.containerBotao}>
       <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}}>
       <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />
