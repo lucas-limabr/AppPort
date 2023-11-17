@@ -23,6 +23,7 @@ import 'react-native-get-random-values'
 
 
 
+
 export default function Listas() {
   const [atualizarDados, setAtualizarDados] = useState()
   const db = getFirestore(FIREBASE_APP);
@@ -37,8 +38,8 @@ export default function Listas() {
   const referenciaCriador = doc(db, 'users', criador)
 
   const codigo = nanoid(6)
-  console.log(codigo)
-
+  
+  
 
   async function buscarListasDoFirestore() {
     const listasCollection = collection(db, "listas");
@@ -154,7 +155,7 @@ export default function Listas() {
           data={listas}
           keyExtractor={(item) => item.id} 
           renderItem={({ item }) => (
-            <Lista key={item.id} titulo1={item.nomeLista} />
+            <Lista key={item.id} titulo1={item.nomeLista}/>
           )}
         />
       </View>
