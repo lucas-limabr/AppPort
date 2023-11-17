@@ -17,7 +17,7 @@ export default function TabNav() {
 
     return (
         <Tab.Navigator
-            initialRouteName="StackNav"
+            initialRouteName="Listas"
             screenOptions={{
                 tabBarActiveTintColor: '#fff',
                 tabBarActiveBackgroundColor: '#F54F59',
@@ -46,6 +46,7 @@ export default function TabNav() {
             />
 
             <Tab.Screen name='StackNav' component={StackNav} options={{
+                 tabBarButton: () => null,
                 headerShown: false,
                 tabBarIcon: ({ color, focused }) => {
                     if (focused) {

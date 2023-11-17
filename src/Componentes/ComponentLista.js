@@ -2,9 +2,14 @@ import React from "react";
 import { View, Image, Text, TouchableOpacity, TextInput } from "react-native";
 import Styles from "../Styles.js/StylesLista";
 import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
 
-export const BotaoLista = ({ titulo }) => (
-  <TouchableOpacity style={Styles.lista}>
+export const BotaoLista = ({ titulo }) => {
+  const navigation = useNavigation()
+  
+  return(
+  
+  <TouchableOpacity style={Styles.lista} onPress={() => navigation.navigate('StackNav', { screen: 'Menu' })}>
     <View style={Styles.containerBotao}>
       <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}}>
       <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />
@@ -19,7 +24,7 @@ export const BotaoLista = ({ titulo }) => (
 
     </View>
   </TouchableOpacity>
-);
+);}
 
 export default function Lista({ titulo1 }) {
   
