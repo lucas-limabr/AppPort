@@ -14,11 +14,12 @@ import style from "../Styles.js/StylesModalLista";
 import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
-import { doc, getFirestore } from "firebase/firestore";
+import { doc, getFirestore, getId } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 
 import { nanoid } from "nanoid";
 import 'react-native-get-random-values'
+
 
 
 

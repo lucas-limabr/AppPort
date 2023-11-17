@@ -16,6 +16,8 @@ import { AntDesign } from '@expo/vector-icons';
 import Styles from "../Styles.js/StylesDescritores";
 import { useNavigation } from "@react-navigation/native";
 
+
+
 // import {adicionarQuestao} from "../Views/Listas"
 
 export default function Questoes() {
