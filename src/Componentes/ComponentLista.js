@@ -11,9 +11,9 @@ export const BotaoLista = ({ titulo }) => {
   const handlePress = async () => {
     const idDoDocumento = await fetchIdList('nomeLista', 'listas', titulo);
 
-    
+
       navigation.navigate('StackNav', { screen: 'Menu', params: { idDoDocumento } });
-    
+
   };
   
   return(
