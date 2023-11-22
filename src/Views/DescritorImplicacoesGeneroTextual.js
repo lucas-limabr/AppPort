@@ -4,11 +4,18 @@ import { LinearGradient } from "expo-linear-gradient";
 import Descritores from "../Buttons/Descritores";
 import Styles from "../Styles.js/StylesDescritores";
 import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
 import { AntDesign } from "@expo/vector-icons";
 
 export default function DescritorImplicacoesGeneroTextual() {
     const navigation = useNavigation();
+
+    const route = useRoute()
+
+    const id = route.params.id
+
+    console.log(id)
 
   useEffect(() => {
     navigation.setOptions({ tabBarVisible: false });

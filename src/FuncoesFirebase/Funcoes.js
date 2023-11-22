@@ -24,6 +24,7 @@ export const fetchIdList = async (campo, colecao, item) => {
   
         // console.log('Dados do documento:', dados);
         console.log('ID do documento:', idDoDocumento);
+        return idDoDocumento
       } else {
         console.log('Nenhum documento encontrado com base no título.');
       }

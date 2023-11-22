@@ -5,11 +5,18 @@ import Descritores from "../Buttons/Descritores";
 import Styles from "../Styles.js/StylesDescritores";
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
 
 
 export default function DescritorVariacaoLinguistica() {
     const navigation = useNavigation();
+
+    const route = useRoute()
+
+    const id = route.params.id
+
+    console.log(id)
 
   useEffect(() => {
     navigation.setOptions({ tabBarVisible: false });

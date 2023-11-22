@@ -4,11 +4,18 @@ import { LinearGradient } from "expo-linear-gradient";
 import Descritores from "../Buttons/Descritores";
 import Styles from "../Styles.js/StylesDescritores";
 import { useNavigation } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 
 import { AntDesign } from "@expo/vector-icons";
 
 export default function DescritoresProcedimentoLeitura() {
   const navigation = useNavigation();
+
+  const route = useRoute()
+
+  const id = route.params.id
+
+  console.log(id)
 
   useEffect(() => {
     navigation.setOptions({ tabBarVisible: false });
@@ -25,6 +32,7 @@ export default function DescritoresProcedimentoLeitura() {
         <Descritores
           titulo="Localização de informações explícitas"
           descritor="D1"
+          id={id}
         />
         <Descritores titulo="Inferência de sentido" descritor="D3" />
         <Descritores
