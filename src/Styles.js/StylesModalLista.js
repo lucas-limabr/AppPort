@@ -50,6 +50,19 @@ export default StyleSheet.create({
         color: '#fff',
         fontSize: 20,
         justifyContent:'center'
+    },
+    botaoEditar:{
+        alignItems: 'center',
+        width: '100vw',
+        marginTop: 70
+        
+    },
+    txtEditar:{
+        fontFamily: 'Inder_400Regular',
+        alignItems: 'center',
+        color: '#fff',
+        fontSize: 20,
+        left: 0
     }
 
 })

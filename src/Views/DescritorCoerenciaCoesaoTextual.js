@@ -31,18 +31,22 @@ export default function DescritorCoerenciaCoesaoTextual() {
         <Descritores
           titulo="Estabelecimento de relações entre partes de um texto"
           descritor="D2"
+          id={id}
         />
         <Descritores
           titulo="Identificação do confilito gerador do enredo"
           descritor="D7"
+          id={id}
         />
         <Descritores
           titulo="Estabelecimento de relação entre partes do texto"
           descritor="D8"
+          id={id}
         />
         <Descritores
           titulo="Estabelecimento das relações lógico-discursivas"
           descritor="D12"
+          id={id}
         />
       </View>
     </LinearGradient>

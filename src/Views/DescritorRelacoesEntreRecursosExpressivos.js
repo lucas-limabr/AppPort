@@ -31,10 +31,12 @@ export default function DescritorRelacoesEntreRecursosExpressivos() {
         <Descritores
           titulo="Identificação dos efeitos de ironia ou humor em textos variados"
           descritor="D13"
+          id={id}
         />
         <Descritores
           titulo="identificação do efeito de sentido decorrente do uso da pontuação"
           descritor="D14"
+          id={id}
         />
       </View>
     </LinearGradient>
