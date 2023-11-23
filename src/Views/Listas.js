@@ -18,29 +18,24 @@ import { doc, getFirestore, getId } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 
 import { nanoid } from "nanoid";
-import 'react-native-get-random-values'
-
-
-
-
-
+import "react-native-get-random-values";
 
 export default function Listas() {
-  const [atualizarDados, setAtualizarDados] = useState()
+  const [atualizarDados, setAtualizarDados] = useState();
   const db = getFirestore(FIREBASE_APP);
   const auth = FIREBASE_AUTH;
   const collectionRef = collection(db, "listas");
 
   const [visible, setVisible] = useState(false);
+  const [visibleEdit, setVisibleEdit] = useState(false)
+
 
   const [listas, setListas] = useState([]);
 
   const criador = auth.currentUser.uid;
-  const referenciaCriador = doc(db, 'users', criador)
+  const referenciaCriador = doc(db, "users", criador);
 
-  const codigo = nanoid(6)
-  
-  
+  const codigo = nanoid(6);
 
   async function buscarListasDoFirestore() {
     const listasCollection = collection(db, "listas");
@@ -59,11 +54,8 @@ export default function Listas() {
   }
 
   async function criarLista(nomeLista) {
-    setAtualizarDados(!atualizarDados)
+    setAtualizarDados(!atualizarDados);
     setVisible(false);
-
-    
-
 
     const novaLista = {
       criador: referenciaCriador,
@@ -72,15 +64,14 @@ export default function Listas() {
       questoes: [],
     };
 
-    console.log(novaLista)
+    console.log(novaLista);
     const listaCriada = await addDoc(collectionRef, novaLista);
-    const listaId = docRef.id
+    const listaId = docRef.id;
 
-    setListas([...listas,{...listas, novaLista}]);
+    setListas([...listas, { ...listas, novaLista }]);
     Alert.alert("Lista criado com sucesso");
-    
   }
-  
+
   useEffect(() => {
     async function carregarListas() {
       const listasDoFirestore = await buscarListasDoFirestore();
@@ -89,7 +80,6 @@ export default function Listas() {
 
     carregarListas();
   }, [atualizarDados]);
-
 
   function ModalLista() {
     const [nomeLista, setNomeLista] = useState("");
@@ -134,9 +124,37 @@ export default function Listas() {
     );
   }
 
+  const ModalEditar = () => {
+    return (
+      <Modal animationType="slide" transparent={true} visible={visibleEdit}>
+        <View style={style.container}>
+          <View style={style.boxGeral}>
+            <View style={{ alignItems: "center" }}>
+              
+            <View style={{ justifyContent: "center", height: 185 }}>
+              <TouchableOpacity style={style.botaoEditar}>
+                <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
+              </TouchableOpacity >
+              <TouchableOpacity style={style.botaoEditar}>
+                <Text style={style.txtEditar}>Duplicar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleEdit(false)}>
+                <Text style={style.txtEditar}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
+
+            </View>
+           
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
       <ModalLista />
+      <ModalEditar />
 
       <View style={Styles.container}>
         <View style={Styles.containerBusca}>
@@ -152,11 +170,12 @@ export default function Listas() {
           </TouchableOpacity>
         </View>
 
-        <FlatList style={Styles.flatlist}
+        <FlatList
+          style={Styles.flatlist}
           data={listas}
-          keyExtractor={(item) => item.id} 
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <Lista key={item.id} titulo1={item.nomeLista}/>
+            <Lista key={item.id} titulo1={item.nomeLista} onBotaoPress={()=>setVisibleEdit(true)}  />
           )}
         />
       </View>

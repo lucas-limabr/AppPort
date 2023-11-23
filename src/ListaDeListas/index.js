@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 import "firebase/firestore";
 
 export default function Questoes() {
-  const [value, setValue] = React.useState("first");
+  const [value, setValue] =useState("first");
   const [pergunta, setPergunta] = useState(null);
   const [respostaCorreta, setRespostaCorreta] = useState(null);
   const [id, setId] = useState(null);
@@ -30,6 +30,7 @@ export default function Questoes() {
   const [indice, setIndice] = useState(0);
   const [atualizarDados, setAtualizarDados] = useState(false);
   const route = useRoute();
+  const [questaoEstaNaLista, setQuestaoEstaNaLista] = useState(false)
 
   const navigation = useNavigation();
 
@@ -95,6 +96,8 @@ export default function Questoes() {
           // Atualiza a lista no Firestore
           await updateDoc(listaRef, { questoes: novaLista });
         }
+        const estaNaLista = await verificarArray(questaoId);
+            setQuestaoEstaNaLista(estaNaLista);
       } else {
         console.error("O documento da questão não existe no Firestore");
       }
@@ -117,7 +120,8 @@ export default function Questoes() {
         const listaData = listaDoc.data();
   
         // Verifique se a questão está na lista
-        const questaoEstaNaLista = listaData?.questoes?.some(questao => questao?.path === questaoRef.path);
+        const questaoEstaNaLista = listaData?.questoes?.some(questao => questao?.path === questaoRef.path && questaoRef.path !== null);
+
 
         console.log(questaoEstaNaLista)
   
@@ -153,7 +157,12 @@ export default function Questoes() {
       setUrlImagem(result.urlImagem);
       setId(result.id);
       
-    });
+    })
+    const verirficarEAtualizarEstado = async () =>{
+      const estaNaLista = await verificarArray(id)
+      setQuestaoEstaNaLista(estaNaLista)
+    };
+    verirficarEAtualizarEstado()
   }, [atualizarDados]);
 
   return (
@@ -170,7 +179,7 @@ export default function Questoes() {
             onPress={() => selecionarQuestao(id)}
           >
             <Text style={styles.label}>
-              {verificarArray(id) ? "Excluir" : "Incluir"}
+              {questaoEstaNaLista ? "Excluir" : "Incluir"}
             </Text>
           </TouchableOpacity>
         </View>

@@ -28,14 +28,16 @@ export default function DescritorImplicacoesGeneroTextual() {
             <AntDesign name="caretleft" size={50} color="#F54F59" />
           </TouchableOpacity>
         </View>
-        <Descritores titulo="Interpretação de textos" descritor="D5" />
+        <Descritores titulo="Interpretação de textos" descritor="D5" id={id} />
         <Descritores
           titulo="Reconhecimento do gênero discursivo"
           descritor="D16"
+          id={id}
         />
         <Descritores
           titulo="Identificação da finalidade textual"
           descritor="D9"
+          id={id}
         />
       </View>
     </LinearGradient>

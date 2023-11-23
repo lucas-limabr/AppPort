@@ -5,7 +5,7 @@ import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import {fetchIdList} from '../FuncoesFirebase/Funcoes'
 
-export const BotaoLista = ({ titulo }) => {
+export const BotaoLista = ({ titulo, onBotaoPress }) => {
   const navigation = useNavigation()
 
   const handlePress = async () => {
@@ -15,12 +15,16 @@ export const BotaoLista = ({ titulo }) => {
       navigation.navigate('StackNav', { screen: 'Menu', params: { idDoDocumento } });
 
   };
+
+  const handleBotaoPress = () => {
+    onBotaoPress()
+  }
   
   return(
   
   <TouchableOpacity style={Styles.lista}onPress={handlePress} >
     <View style={Styles.containerBotao}>
-      <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}}>
+      <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}} onPress={handleBotaoPress}>
       <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />
       </TouchableOpacity>
 
@@ -35,11 +39,11 @@ export const BotaoLista = ({ titulo }) => {
   </TouchableOpacity>
 );}
 
-export default function Lista({ titulo1 }) {
+export default function Lista({ titulo1, onBotaoPress }) {
   
     return (
     <View style = {Styles.containerFilho}>
-        <BotaoLista titulo={titulo1} />
+        <BotaoLista titulo={titulo1} onBotaoPress={onBotaoPress} />
     </View>
     )
   }

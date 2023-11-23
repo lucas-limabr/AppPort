@@ -32,7 +32,7 @@ export default function DescritorVariacaoLinguistica() {
             <AntDesign name="caretleft" size={50} color="#F54F59" />
           </TouchableOpacity>
         </View>
-        <Descritores titulo='Identificação das marcas linguísticas que evidenciam o locutor e o interlocutor de um texto'  descritor='D10'/>
+        <Descritores titulo='Identificação das marcas linguísticas que evidenciam o locutor e o interlocutor de um texto'  descritor='D10' id={id}/>
         
         
     </View>

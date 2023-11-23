@@ -34,13 +34,14 @@ export default function DescritoresProcedimentoLeitura() {
           descritor="D1"
           id={id}
         />
-        <Descritores titulo="Inferência de sentido" descritor="D3" />
+        <Descritores titulo="Inferência de sentido" descritor="D3" id={id}/>
         <Descritores
           titulo="Inferência de informação implícita"
           descritor="D4"
+          id={id}
         />
-        <Descritores titulo="Identificação do tema do texto" descritor="D6" />
-        <Descritores titulo="Distinção entre fato e opinião" descritor="D11" />
+        <Descritores titulo="Identificação do tema do texto" descritor="D6" id={id}/>
+        <Descritores titulo="Distinção entre fato e opinião" descritor="D11" id={id}/>
       </View>
     </LinearGradient>
   );
