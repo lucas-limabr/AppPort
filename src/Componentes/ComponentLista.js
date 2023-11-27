@@ -6,23 +6,29 @@ import { useNavigation } from "@react-navigation/native";
 import {fetchIdList} from '../FuncoesFirebase/Funcoes'
 
 export const BotaoLista = ({ titulo, onBotaoPress }) => {
-  const navigation = useNavigation()
 
-  const handlePress = async () => {
-    const idDoDocumento = await fetchIdList('nomeLista', 'listas', titulo);
-
-
-      navigation.navigate('StackNav', { screen: 'Menu', params: { idDoDocumento } });
-
+  const handleBotaoPress = async () => {
+    onBotaoPress();
+  
+    try {
+      const id = await fetchId();
+      // console.log(id);
+      return id;
+    } catch (error) {
+      // Lide com erros aqui, se necessário
+      console.error('Erro ao obter ID:', error);
+    }
   };
 
-  const handleBotaoPress = () => {
-    onBotaoPress()
+  const fetchId = async () =>{
+    const id = await fetchIdList('nomeLista', 'listas', titulo)
+
+    return id;
   }
   
   return(
   
-  <TouchableOpacity style={Styles.lista}onPress={handlePress} >
+  <TouchableOpacity style={Styles.lista} >
     <View style={Styles.containerBotao}>
       <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}} onPress={handleBotaoPress}>
       <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />

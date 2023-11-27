@@ -24,9 +24,13 @@ const Botao = ({titulo, onPress}) => (
 export default function Menu(){
     const navigation = useNavigation()
 
+    
+
     const route = useRoute()
 
-    const id = route.params.idDoDocumento
+    const id = route.params.itemId
+
+    
     
 
     return (
