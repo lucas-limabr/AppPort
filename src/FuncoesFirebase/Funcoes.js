@@ -1,6 +1,6 @@
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getDoc, getFirestore, where } from "firebase/firestore";
-import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import { addDoc, collection, query, getDocs, deleteDoc  } from "firebase/firestore";
 
 
 export const fetchIdList = async (campo, colecao, item) => {
@@ -32,3 +32,18 @@ export const fetchIdList = async (campo, colecao, item) => {
       console.error('Erro ao obter dados do documento:', error);
     }
   };
+
+  export const deleteList = async (codigoLista) => {
+    const db = getFirestore(FIREBASE_APP);
+  const listaRef = doc(db, "listas", codigoLista);
+
+  try {
+    // Deleta o documento correspondente ao código da lista
+    await deleteDoc(listaRef);
+    console.log(`Lista com código ${codigoLista} deletada com sucesso.`);
+  } catch (error) {
+    console.error("Erro ao deletar lista:", error);
+  }
+  };
+  
+  

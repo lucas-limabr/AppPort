@@ -21,7 +21,7 @@ import { useNavigation } from "@react-navigation/native";
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
 
-import { fetchIdList } from "../FuncoesFirebase/Funcoes";
+
 
 export default function Listas() {
   const [atualizarDados, setAtualizarDados] = useState();
@@ -202,7 +202,7 @@ export default function Listas() {
               
             <View style={{ justifyContent: "center", height: 185 }}>
               <TouchableOpacity style={style.botaoEditar} >
-                <Text style={style.txtEditar}>Codigo: {itemId}</Text>
+                <Text style={style.txtEditar}>Código: {itemId}</Text>
               </TouchableOpacity >
               <TouchableOpacity style={style.botaoEditar} onPress={() => {setVisibleCodigo(false); setVisibleEdit(false)}} >
                 <Text style={style.txtEditar}>Fechar</Text>
@@ -243,7 +243,7 @@ export default function Listas() {
           data={listas}
           keyExtractor={(item) => item.codigo}
           renderItem={({ item }) => (
-            <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)}  />
+            <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} onBotaoPressTo={() => setAtualizarDados(!atualizarDados)}/>
           )}
         />
         

@@ -3,9 +3,9 @@ import { View, Image, Text, TouchableOpacity, TextInput } from "react-native";
 import Styles from "../Styles.js/StylesLista";
 import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import {fetchIdList} from '../FuncoesFirebase/Funcoes'
+import {fetchIdList, deleteList} from '../FuncoesFirebase/Funcoes'
 
-export const BotaoLista = ({ titulo, onBotaoPress }) => {
+export const BotaoLista = ({ titulo, onBotaoPress, onBotaoPressTo }) => {
 
   const handleBotaoPress = async () => {
     onBotaoPress();
@@ -25,6 +25,13 @@ export const BotaoLista = ({ titulo, onBotaoPress }) => {
 
     return id;
   }
+
+  const handleDelete = async () => {
+    const codigoListaParaExcluir = await fetchId();
+    deleteList(codigoListaParaExcluir);
+    onBotaoPressTo();
+
+  }
   
   return(
   
@@ -34,7 +41,7 @@ export const BotaoLista = ({ titulo, onBotaoPress }) => {
       <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={{backgroundColor:'#F54F59'}}>
+      <TouchableOpacity style={{backgroundColor:'#F54F59'}} onPress={handleDelete}>
       <EvilIcons name="close" size={30} color="#fff" />
       </TouchableOpacity>
     </View>
