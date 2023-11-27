@@ -16,9 +16,12 @@ import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getFirestore, getId } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
 
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
+
+import { fetchIdList } from "../FuncoesFirebase/Funcoes";
 
 export default function Listas() {
   const [atualizarDados, setAtualizarDados] = useState();
@@ -28,12 +31,19 @@ export default function Listas() {
 
   const [visible, setVisible] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false)
+  const [visibleExcluir, setVisibleExcluir] = useState(false)
+  const [visibleCodigo, setVisibleCodigo] = useState(false)
+  const [itemId, setItemId] = useState('')
+
+  const navigation = useNavigation()
 
 
   const [listas, setListas] = useState([]);
 
   const criador = auth.currentUser.uid;
   const referenciaCriador = doc(db, "users", criador);
+
+  
 
   const codigo = nanoid(6);
 
@@ -64,7 +74,7 @@ export default function Listas() {
       questoes: [],
     };
 
-    console.log(novaLista);
+    
     const listaCriada = await addDoc(collectionRef, novaLista);
     const listaId = docRef.id;
 
@@ -72,12 +82,18 @@ export default function Listas() {
     Alert.alert("Lista criado com sucesso");
   }
 
+  const carregarItemId = (id) => {
+    setVisibleEdit(true)
+    setItemId(id)
+  }
+
   useEffect(() => {
     async function carregarListas() {
       const listasDoFirestore = await buscarListasDoFirestore();
       setListas(listasDoFirestore);
+     
     }
-
+    
     carregarListas();
   }, [atualizarDados]);
 
@@ -132,15 +148,66 @@ export default function Listas() {
             <View style={{ alignItems: "center" }}>
               
             <View style={{ justifyContent: "center", height: 185 }}>
-              <TouchableOpacity style={style.botaoEditar}>
+              <TouchableOpacity style={style.botaoEditar} onPress={() => {navigation.navigate('StackNav', { screen: 'Menu', params: {itemId } }); setVisibleEdit(false)}}>
                 <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
               </TouchableOpacity >
-              <TouchableOpacity style={style.botaoEditar}>
-                <Text style={style.txtEditar}>Duplicar</Text>
+              <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleCodigo(true)}>
+                <Text style={style.txtEditar}>Exibir código</Text>
               </TouchableOpacity>
               <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleEdit(false)}>
                 <Text style={style.txtEditar}>Fechar</Text>
               </TouchableOpacity>
+            </View>
+
+            </View>
+           
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+  const ModalExcluir = () => {
+    return (
+      <Modal animationType="slide" transparent={true} visible={visibleEdit}>
+        <View style={style.container}>
+          <View style={style.boxGeral}>
+            <View style={{ alignItems: "center" }}>
+              
+            <View style={{ justifyContent: "center", height: 185 }}>
+              <TouchableOpacity style={style.botaoEditar} onPress={() => {navigation.navigate('StackNav', { screen: 'Menu', params: {itemId } }); setVisibleEdit(false)}}>
+                <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
+              </TouchableOpacity >
+              <TouchableOpacity style={style.botaoEditar}>
+                <Text style={style.txtEditar}>Exibir código</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleEdit(false)}>
+                <Text style={style.txtEditar}>Fechar</Text>
+              </TouchableOpacity>
+            </View>
+
+            </View>
+           
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+  const ModalCodigo = () => {
+    
+    return (
+      <Modal animationType="slide" transparent={true} visible={visibleCodigo}>
+        <View style={style.container}>
+          <View style={style.boxGeral}>
+            <View style={{ alignItems: "center" }}>
+              
+            <View style={{ justifyContent: "center", height: 185 }}>
+              <TouchableOpacity style={style.botaoEditar} >
+                <Text style={style.txtEditar}>Codigo: {itemId}</Text>
+              </TouchableOpacity >
+              <TouchableOpacity style={style.botaoEditar} onPress={() => {setVisibleCodigo(false); setVisibleEdit(false)}} >
+                <Text style={style.txtEditar}>Fechar</Text>
+              </TouchableOpacity >
+              
             </View>
 
             </View>
@@ -155,6 +222,7 @@ export default function Listas() {
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
       <ModalLista />
       <ModalEditar />
+      <ModalCodigo/>
 
       <View style={Styles.container}>
         <View style={Styles.containerBusca}>
@@ -173,11 +241,12 @@ export default function Listas() {
         <FlatList
           style={Styles.flatlist}
           data={listas}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item) => item.codigo}
           renderItem={({ item }) => (
-            <Lista key={item.id} titulo1={item.nomeLista} onBotaoPress={()=>setVisibleEdit(true)}  />
+            <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)}  />
           )}
         />
+        
       </View>
     </LinearGradient>
   );
