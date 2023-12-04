@@ -225,9 +225,9 @@ export default function Listas() {
       <ModalCodigo/>
 
       <View style={Styles.container}>
-        <View style={Styles.containerBusca}>
+        {/* <View style={Styles.containerBusca}>
           <TextInput style={Styles.textInput}></TextInput>
-        </View>
+        </View> */}
 
         <View style={Styles.containerList}>
           <TouchableOpacity

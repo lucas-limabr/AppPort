@@ -10,6 +10,7 @@ export default StyleSheet.create({
         backgroundColor: '#FF8D94',
         height: 300,
         borderRadius: 10,
+        padding: 10
         
     },
     titulo:{
@@ -54,7 +55,11 @@ export default StyleSheet.create({
     botaoEditar:{
         alignItems: 'center',
         width: '100vw',
-        marginTop: 70
+        marginTop: 70,
+        backgroundColor:'#F54F59',
+        borderRadius:10,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
         
     },
     txtEditar:{
