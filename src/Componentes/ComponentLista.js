@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Image, Text, TouchableOpacity, TextInput } from "react-native";
 import Styles from "../Styles.js/StylesLista";
 import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import {fetchIdList, deleteList} from '../FuncoesFirebase/Funcoes'
 
-export const BotaoLista = ({ titulo, onBotaoPress, onBotaoPressTo }) => {
-
+export const BotaoLista = ({ titulo, onBotaoPress, onBotaoPressTo  }) => {
+  
   const handleBotaoPress = async () => {
     onBotaoPress();
   
@@ -26,10 +26,18 @@ export const BotaoLista = ({ titulo, onBotaoPress, onBotaoPressTo }) => {
     return id;
   }
 
+  const teste = () => {
+    
+  }
+
   const handleDelete = async () => {
     const codigoListaParaExcluir = await fetchId();
-    deleteList(codigoListaParaExcluir);
-    onBotaoPressTo();
+    console.log(onBotaoPressTo)
+    
+    await deleteList(codigoListaParaExcluir);
+    const novaLista = onBotaoPressTo.filter(item => item.codigo !== codigoListaParaExcluir);
+    console.log(novaLista)
+    
 
   }
   
@@ -52,11 +60,11 @@ export const BotaoLista = ({ titulo, onBotaoPress, onBotaoPressTo }) => {
   </TouchableOpacity>
 );}
 
-export default function Lista({ titulo1, onBotaoPress }) {
+export default function Lista({ titulo1, onBotaoPress, onBotaoPressTo}) {
   
     return (
     <View style = {Styles.containerFilho}>
-        <BotaoLista titulo={titulo1} onBotaoPress={onBotaoPress} />
+        <BotaoLista titulo={titulo1} onBotaoPress={onBotaoPress} onBotaoPressTo={onBotaoPressTo}  />
     </View>
     )
   }

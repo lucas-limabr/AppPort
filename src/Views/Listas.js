@@ -11,12 +11,15 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLista";
 import style from "../Styles.js/StylesModalLista";
-import Lista from "../Componentes/ComponentLista";
+// import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getFirestore, getId } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
+import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
+
+import {fetchIdList, deleteList} from '../FuncoesFirebase/Funcoes'
 
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
@@ -43,7 +46,7 @@ export default function Listas() {
   const criador = auth.currentUser.uid;
   const referenciaCriador = doc(db, "users", criador);
 
-  
+  const [forceRender, setForceRender] = useState(false);
 
   const codigo = nanoid(6);
 
@@ -96,6 +99,70 @@ export default function Listas() {
     
     carregarListas();
   }, [atualizarDados]);
+
+  const BotaoLista = ({ titulo, onBotaoPress  }) => {
+  
+    const handleBotaoPress = async () => {
+      onBotaoPress();
+    
+      try {
+        const id = await fetchId();
+        // console.log(id);
+        return id;
+      } catch (error) {
+        // Lide com erros aqui, se necessário
+        console.error('Erro ao obter ID:', error);
+      }
+    };
+  
+    const fetchId = async () =>{
+      const id = await fetchIdList('nomeLista', 'listas', titulo)
+  
+      return id;
+    }
+  
+    
+  
+    const handleDelete = async () => {
+      const codigoListaParaExcluir = await fetchId();
+      
+      await deleteList(codigoListaParaExcluir);
+      
+      setAtualizarDados(!atualizarDados)
+
+      console.log(atualizarDados)
+     
+      
+  
+    }
+    
+    return(
+    
+    <TouchableOpacity style={Styles.lista} >
+      <View style={Styles.containerBotao}>
+        <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}} onPress={handleBotaoPress}>
+        <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />
+        </TouchableOpacity>
+  
+        <TouchableOpacity style={{backgroundColor:'#F54F59'}} onPress={handleDelete}>
+        <EvilIcons name="close" size={30} color="#fff" />
+        </TouchableOpacity>
+      </View>
+      <View style={Styles.txt}>
+        <Text style={Styles.txtLista}> {titulo} </Text>
+  
+      </View>
+    </TouchableOpacity>
+  );}
+
+  function Lista({ titulo1, onBotaoPress}) {
+  
+    return (
+    <View style = {Styles.containerFilho}>
+        <BotaoLista titulo={titulo1} onBotaoPress={onBotaoPress}   />
+    </View>
+    )
+  }
 
   function ModalLista() {
     const [nomeLista, setNomeLista] = useState("");
@@ -166,32 +233,7 @@ export default function Listas() {
       </Modal>
     );
   };
-  const ModalExcluir = () => {
-    return (
-      <Modal animationType="slide" transparent={true} visible={visibleEdit}>
-        <View style={style.container}>
-          <View style={style.boxGeral}>
-            <View style={{ alignItems: "center" }}>
-              
-            <View style={{ justifyContent: "center", height: 185 }}>
-              <TouchableOpacity style={style.botaoEditar} onPress={() => {navigation.navigate('StackNav', { screen: 'Menu', params: {itemId } }); setVisibleEdit(false)}}>
-                <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
-              </TouchableOpacity >
-              <TouchableOpacity style={style.botaoEditar}>
-                <Text style={style.txtEditar}>Exibir código</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleEdit(false)}>
-                <Text style={style.txtEditar}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
-
-            </View>
-           
-          </View>
-        </View>
-      </Modal>
-    );
-  };
+  
   const ModalCodigo = () => {
     
     return (
@@ -243,8 +285,8 @@ export default function Listas() {
           data={listas}
           keyExtractor={(item) => item.codigo}
           renderItem={({ item }) => (
-            <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} onBotaoPressTo={() => setAtualizarDados(!atualizarDados)}/>
-          )}
+              <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} />
+            )}
         />
         
       </View>
