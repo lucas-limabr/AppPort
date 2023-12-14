@@ -24,6 +24,10 @@ import {fetchIdList, deleteList} from '../FuncoesFirebase/Funcoes'
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
 
+import Markdown from "react-native-markdown-display";
+
+
+
 
 
 export default function Listas() {
@@ -47,6 +51,8 @@ export default function Listas() {
   const referenciaCriador = doc(db, "users", criador);
 
   const [forceRender, setForceRender] = useState(false);
+
+  const copy = `# h1 Heading 8-) \n ## ola a todos \n ## _italico_ \n *negrito*`
 
   const codigo = nanoid(6);
 
@@ -288,6 +294,8 @@ export default function Listas() {
               <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} />
             )}
         />
+        
+        {/* <Markdown>{copy}</Markdown> */}
         
       </View>
     </LinearGradient>

@@ -20,6 +20,8 @@ import Styles from "../Styles.js/StylesDescritores";
 import { useNavigation } from "@react-navigation/native";
 import "firebase/firestore";
 
+import Markdown from "react-native-markdown-display";
+
 export default function Questoes() {
   const [value, setValue] =useState("first");
   const [pergunta, setPergunta] = useState(null);
