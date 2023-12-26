@@ -100,6 +100,13 @@ export default function Listas() {
   const carregarItemId = (id) => {
     setVisibleEdit(true)
     setItemId(id)
+    
+  }
+
+  const carregarLista = (id) => {
+    setItemId(id)
+    console.log(id)
+    navigation.navigate('StackNav', { screen: 'QuestoesLista', params: { itemId: id } })
   }
 
   useEffect(() => {
@@ -112,7 +119,7 @@ export default function Listas() {
     carregarListas();
   }, [atualizarDados]);
 
-  const BotaoLista = ({ titulo, onBotaoPress  }) => {
+  const BotaoLista = ({ titulo, onBotaoPress, onPressOne  }) => {
   
     const handleBotaoPress = async () => {
       onBotaoPress();
@@ -120,6 +127,20 @@ export default function Listas() {
       try {
         const id = await fetchId();
         // console.log(id);
+        return id;
+      } catch (error) {
+        // Lide com erros aqui, se necessário
+        console.error('Erro ao obter ID:', error);
+      }
+    };
+
+
+    const handleListNavigation = async () => {
+      onPressOne();
+    
+      try {
+        const id = await fetchId();
+        console.log(id);
         return id;
       } catch (error) {
         // Lide com erros aqui, se necessário
@@ -142,7 +163,7 @@ export default function Listas() {
       
       setAtualizarDados(!atualizarDados)
 
-      console.log(atualizarDados)
+      
      
       
   
@@ -150,12 +171,12 @@ export default function Listas() {
     
     return(
     
-    <TouchableOpacity style={Styles.lista} >
+    <TouchableOpacity style={Styles.lista} onPress={handleListNavigation}>
       <View style={Styles.containerBotao}>
-        <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}} onPress={handleBotaoPress}>
+        <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}} onPress={(handleBotaoPress)}>
         <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />
         </TouchableOpacity>
-  
+        {/*  */}
         <TouchableOpacity style={{backgroundColor:'#F54F59'}} onPress={handleDelete}>
         <EvilIcons name="close" size={30} color="#fff" />
         </TouchableOpacity>
@@ -167,11 +188,11 @@ export default function Listas() {
     </TouchableOpacity>
   );}
 
-  function Lista({ titulo1, onBotaoPress}) {
+  function Lista({ titulo1, onBotaoPress, onPressOne}) {
   
     return (
     <View style = {Styles.containerFilho}>
-        <BotaoLista titulo={titulo1} onBotaoPress={onBotaoPress}   />
+        <BotaoLista titulo={titulo1} onBotaoPress={onBotaoPress}  onPressOne={onPressOne} />
     </View>
     )
   }
@@ -297,7 +318,7 @@ export default function Listas() {
           data={listas}
           keyExtractor={(item) => item.codigo}
           renderItem={({ item }) => (
-              <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} />
+              <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} onPressOne={() => carregarLista(item.codigo)}/>
             )}
         />
         

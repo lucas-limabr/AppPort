@@ -11,6 +11,7 @@ import DescritorVariacaoLinguistica from "../Views/DescritorVariacaoLinguistica"
 import DescritorRelacoesEntreRecursosExpressivos from "../Views/DescritorRelacoesEntreRecursosExpressivos";
 import DescritorCoerenciaCoesaoTextual from "../Views/DescritorCoerenciaCoesaoTextual";
 import Questoes from "../ListaDeListas/index";
+import QuestoesLista from "../ListaDeListas/indexLista"
 
 import {useTabDisplay} from "../hooks/useTabDisplay"
 
@@ -50,6 +51,7 @@ export default function StackNav({navigation, route}) {
         component={DescritorCoerenciaCoesaoTextual}
       />
       <Stack.Screen name="Questoes" component={Questoes} />
+      <Stack.Screen name="QuestoesLista" component={QuestoesLista} />
     </Stack.Navigator>
   );
 }
