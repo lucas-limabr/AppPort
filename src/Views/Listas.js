@@ -14,7 +14,7 @@ import style from "../Styles.js/StylesModalLista";
 // import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
-import { doc, getFirestore, getId } from "firebase/firestore";
+import { doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
@@ -24,8 +24,7 @@ import {fetchIdList, deleteList} from '../FuncoesFirebase/Funcoes'
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
 
-import Markdown from "react-native-markdown-display";
-
+import { userReference } from "../FuncoesFirebase/Funcoes";
 
 
 
@@ -57,8 +56,11 @@ export default function Listas() {
   const codigo = nanoid(6);
 
   async function buscarListasDoFirestore() {
-    const listasCollection = collection(db, "listas");
-    const listasQuery = query(listasCollection);
+    try {
+    const usuarioLogadoReference = await userReference();
+
+    const listasCollection = collection(getFirestore(), "listas");
+    const listasQuery = query(listasCollection, where("criador", "==", usuarioLogadoReference));
 
     const listasSnapshot = await getDocs(listasQuery);
 
@@ -70,6 +72,10 @@ export default function Listas() {
     });
 
     return listas;
+  } catch (error) {
+    console.error(error);
+    // Lidar com o erro conforme necessário
+  }
   }
 
   async function criarLista(nomeLista) {
