@@ -1,6 +1,7 @@
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getDoc, getFirestore, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs, deleteDoc  } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 export const fetchIdList = async (campo, colecao, item) => {
@@ -46,4 +47,22 @@ export const fetchIdList = async (campo, colecao, item) => {
   }
   };
   
+  export const userReference = async () => {
+    // Supondo que você esteja usando Firebase Authentication
+    const auth = getAuth();
+  
+    return new Promise((resolve, reject) => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // O usuário está autenticado
+          const usuarioId = user.uid;
+          const usuarioReference = doc(getFirestore(), `users/${usuarioId}`);
+          resolve(usuarioReference);
+        } else {
+          // O usuário não está autenticado
+          reject("Usuário não autenticado");
+        }
+      });
+    });
+  }
   
