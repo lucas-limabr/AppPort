@@ -101,12 +101,13 @@ export default StyleSheet.create({
     },
     containerSalvar:{
         width: '100%',
-        right: 30,
+        left: 30,
         bottom: 5,
         alignItems: 'flex-end',
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-start',
         flexDirection: 'row',
         flex: 1,
+        
         
     },
     scroll:{

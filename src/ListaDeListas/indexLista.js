@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, Image } from "react-native";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { View, TouchableOpacity, Text, Image, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { FIREBASE_APP } from "../../FirebaseConfig";
@@ -29,64 +29,82 @@ export default function QuestoesLista() {
   const codigoLista = route.params.itemId;
   const [questoes, setQuestoes] = useState([]);
   const [indice, setIndice] = useState(0);
+  const [questoesCarregadas, setQuestoesCarregadas] = useState(false);
 
   const navigation = useNavigation();
 
-  const teste = '## teste teste'
+  const questoesCarregadasRef = useRef(questoesCarregadas);
 
   useEffect(() => {
-    const obterQuestoes = async () => {
-      try {
-        setIndice(0);
-        const db = getFirestore(FIREBASE_APP);
-        const listaCollectionRef = collection(db, "listas");
-        const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
-        const querySnapshot = await getDocs(q);
+    questoesCarregadasRef.current = questoesCarregadas;
+  }, [questoesCarregadas]);
 
-        if (!querySnapshot.empty) {
-          const docSnap = querySnapshot.docs[0];
-          const data = docSnap.data();
+  const obterQuestoes = useCallback(async () => {
+    try {
+      setIndice(0);
+      const db = getFirestore(FIREBASE_APP);
+      const listaCollectionRef = collection(db, "listas");
+      const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
+      const querySnapshot = await getDocs(q);
 
-          if (data && data.questoes) {
-            const referenciasQuestoes = data.questoes;
+      if (!querySnapshot.empty) {
+        const docSnap = querySnapshot.docs[0];
+        const data = docSnap.data();
 
-            const questoesPromises = referenciasQuestoes.map(
-              async (referencia) => {
-                const questaoDoc = await getDoc(referencia);
-                if (questaoDoc.exists()) {
-                  return questaoDoc.data();
-                } else {
-                  console.warn(
-                    "Documento de questão não encontrado:",
-                    referencia.id
-                  );
-                  return null;
-                }
-              }
-            );
+        if (data && data.questoes) {
+          const referenciasQuestoes = data.questoes;
 
-            const questoesArrayResultado = await Promise.all(questoesPromises);
+          const questoesPromises = referenciasQuestoes.map(async (referencia) => {
+            const questaoDoc = await getDoc(referencia);
+            if (questaoDoc.exists()) {
+              return questaoDoc.data();
+            } else {
+              console.warn("Documento de questão não encontrado:", referencia.id);
+              return null;
+            }
+          });
 
-            // Filtra para remover entradas nulas ou indefinidas
-            const questoesFiltradas = questoesArrayResultado.filter(
-              (questao) => questao
-            );
+          const questoesArrayResultado = await Promise.all(questoesPromises);
 
-            setQuestoes(questoesFiltradas);
-            
-          } else {
-            console.log("Documento não contém a estrutura esperada.");
-          }
+          // Filtra para remover entradas nulas ou indefinidas
+          const questoesFiltradas = questoesArrayResultado.filter((questao) => questao);
+
+          setQuestoes(questoesFiltradas);
+          // Utilize o callback de estado para garantir que está atualizado
+          setQuestoesCarregadas((prevState) => !prevState);
         } else {
-          console.log("Documento não encontrado.");
+          console.log("Documento não contém a estrutura esperada.");
         }
-      } catch (error) {
-        console.error("Erro ao obter as questões:", error);
+      } else {
+        console.log("Documento não encontrado.");
       }
-    };
-
-    obterQuestoes();
+    } catch (error) {
+      console.error("Erro ao obter as questões:", error);
+    }
   }, [codigoLista]);
+
+  useEffect(() => {
+    console.log("Chamando obterQuestoes");
+    obterQuestoes();
+
+    const time = 5000;
+
+    const timeoutId = setTimeout(() => {
+      console.log('to aqui agora em');
+      if (!questoesCarregadasRef.current) {
+        console.log('aqui');
+        // Mostra o alerta se as questões não foram carregadas
+        Alert.alert(
+          "Aviso",
+          "A lista está vazia!",
+          [{ text: "OK", onPress: () => navigation.goBack() }],
+          { cancelable: false }
+        );
+      }
+    }, time);
+
+    return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
+  }, [obterQuestoes, navigation]);
 
   function continuar() {
     if (indice < questoes.length - 1) {
@@ -102,18 +120,15 @@ export default function QuestoesLista() {
 
   const questaoAtual = questoes[indice];
 
-  
-
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
-      <View style={Styles.voltar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="caretleft" size={50} color="#F54F59" />
-        </TouchableOpacity>
-      </View>
       {questaoAtual ? (
         <View style={styles.container}>
           <View style={styles.containerSalvar}>
+            
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <AntDesign name="caretleft" size={50} color="#F54F59" />
+              </TouchableOpacity>
             
           </View>
           <View style={styles.enunciado}>
@@ -168,7 +183,16 @@ export default function QuestoesLista() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Markdown>Aguarde, carregando questões... </Markdown>
+          <Image
+            style={{
+              flex: 1,
+              width: "100%",
+              height: undefined,
+              aspectRatio: 1,
+            }}
+            source={require("../Imagens/Nuvem_3(uPDATE).gif")}
+            resizeMode="contain"
+          />
         </View>
       )}
     </LinearGradient>
