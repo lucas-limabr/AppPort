@@ -11,6 +11,8 @@ import "firebase/firestore";
 import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
 
+import Markdown from "react-native-markdown-display";
+
 import {
   getFirestore,
   collection,
@@ -30,7 +32,7 @@ export default function QuestoesLista() {
 
   const navigation = useNavigation();
 
-  console.log(codigoLista);
+  const teste = '## teste teste'
 
   useEffect(() => {
     const obterQuestoes = async () => {
@@ -71,7 +73,7 @@ export default function QuestoesLista() {
             );
 
             setQuestoes(questoesFiltradas);
-            console.log(questoesFiltradas);
+            
           } else {
             console.log("Documento não contém a estrutura esperada.");
           }
@@ -100,7 +102,7 @@ export default function QuestoesLista() {
 
   const questaoAtual = questoes[indice];
 
-  console.log(questaoAtual);
+  
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
@@ -166,7 +168,7 @@ export default function QuestoesLista() {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <Text>Aguarde, carregando questões...</Text>
+          <Markdown>Aguarde, carregando questões... </Markdown>
         </View>
       )}
     </LinearGradient>
