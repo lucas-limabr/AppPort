@@ -38,15 +38,15 @@ export default function App() {
     }
   },[login]);
 
-  /* const handleLogin = useEventCallback(({ login }) => {
-    setLogin(!login)
-    console.log("2")
+//   /* const handleLogin = useEventCallback(({ login }) => {
+//     setLogin(!login)
+//     console.log("2")
     
-  }) */
+//   }) */
 
- /*  useEffect(() => {
-    handleLogin.emit({ login: !login })
-  }, [login]) */
+//  /*  useEffect(() => {
+//     handleLogin.emit({ login: !login })
+//   }, [login]) */
 
   if (!fontLoaded) {
     return null;

@@ -4,6 +4,18 @@ import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesHome";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
+import {
+  getFirestore,
+  collection,
+  where,
+  doc,
+  get,
+  query,
+  getDocs,
+  getDoc,
+} from "firebase/firestore";
+
+import { useNavigation } from "@react-navigation/native";
 
 
 
@@ -11,12 +23,34 @@ import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
 
 
 export default function Home() { 
+
+  const db = getFirestore(FIREBASE_APP)
+
+  const navigation = useNavigation()
   
   const signIn = async (auth,email,senha) => {
     try{
       const resposta = await signInWithEmailAndPassword(auth, email, senha)
-      
-    } catch(error){
+
+      const docRef = collection(db, "users")
+      const q = query(docRef, where("email", "==", email))
+
+      const querySnapshot = await getDocs(q)
+
+      if (querySnapshot.size > 0) {
+        // Assume que há apenas um documento correspondente, caso contrário, ajuste conforme necessário
+        const userDoc = querySnapshot.docs[0].data();
+  
+        console.log("Dados adicionais do Firestore:", userDoc.email);
+        console.log("Dados adicionais do Firestore:", userDoc.nome);
+        console.log("Dados adicionais do Firestore:", userDoc.souProfessor);
+        console.log("Dados adicionais do Firestore:", userDoc.urlImagemPerfil);
+
+        if(!userDoc.souProfessor){
+          console.log('nao sou professor')
+        }
+
+       }} catch(error){
       Alert.alert('erro ' + error.message)
     }
   }
