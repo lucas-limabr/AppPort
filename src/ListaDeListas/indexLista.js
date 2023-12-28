@@ -90,9 +90,9 @@ export default function QuestoesLista() {
     const time = 5000;
 
     const timeoutId = setTimeout(() => {
-      console.log('to aqui agora em');
+      
       if (!questoesCarregadasRef.current) {
-        console.log('aqui');
+        
         // Mostra o alerta se as questões não foram carregadas
         Alert.alert(
           "Aviso",
