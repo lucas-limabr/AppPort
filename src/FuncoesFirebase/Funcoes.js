@@ -64,5 +64,22 @@ export const fetchIdList = async (campo, colecao, item) => {
         }
       });
     });
+
   }
+  export const userVerification = async (email) => {
+    const db = getFirestore(FIREBASE_APP);
+  
+    const docRef = collection(db, "users");
+    const q = query(docRef, where("email", "==", email));
+  
+    const querySnapshot = await getDocs(q);
+  
+    if (querySnapshot.size > 0) {
+      const userDoc = querySnapshot.docs[0].data();  
+      return userDoc.souProfessor;
+    }
+  
+    // Se não houver documento correspondente, retorne false (ou o valor que fizer sentido para o seu caso)
+    return false;
+  };
   

@@ -145,19 +145,19 @@ export default function Cadastro({ navigation }) {
     }
   };
 
-  const localStorage = async (nome, email, urlImagemPerfil) => {
-    const usuarioAssincrono = {
-      nome: nome,
-      email: email,
-      urlImagemPerfil: urlImagemPerfil,
-    };
-    const usuarioString = JSON.stringify(usuarioAssincrono);
+  // const localStorage = async (nome, email, urlImagemPerfil) => {
+  //   const usuarioAssincrono = {
+  //     nome: nome,
+  //     email: email,
+  //     urlImagemPerfil: urlImagemPerfil,
+  //   };
+  //   const usuarioString = JSON.stringify(usuarioAssincrono);
 
-    await AsyncStorage.setItem("@portuguito2023", usuarioString);
+  //   await AsyncStorage.setItem("@portuguito2023", usuarioString);
 
-    const teste = await AsyncStorage.getItem("@portuguito2023");
-    console.log(usuarioString === teste);
-  };
+  //   const teste = await AsyncStorage.getItem("@portuguito2023");
+  //   console.log(usuarioString === teste);
+  // };
 
   async function cadastroBD() {
     const user = await addDoc(userCollectionRef, {
@@ -166,7 +166,7 @@ export default function Cadastro({ navigation }) {
       souProfessor,
       urlImagemPerfil,
     });
-    localStorage(nome, email, urlImagemPerfil);
+    // localStorage(nome, email, urlImagemPerfil);
   }
 
   function cadastrar() {

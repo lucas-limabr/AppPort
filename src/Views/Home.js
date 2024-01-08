@@ -31,26 +31,8 @@ export default function Home() {
   const signIn = async (auth,email,senha) => {
     try{
       const resposta = await signInWithEmailAndPassword(auth, email, senha)
-
-      const docRef = collection(db, "users")
-      const q = query(docRef, where("email", "==", email))
-
-      const querySnapshot = await getDocs(q)
-
-      if (querySnapshot.size > 0) {
-        // Assume que há apenas um documento correspondente, caso contrário, ajuste conforme necessário
-        const userDoc = querySnapshot.docs[0].data();
-  
-        console.log("Dados adicionais do Firestore:", userDoc.email);
-        console.log("Dados adicionais do Firestore:", userDoc.nome);
-        console.log("Dados adicionais do Firestore:", userDoc.souProfessor);
-        console.log("Dados adicionais do Firestore:", userDoc.urlImagemPerfil);
-
-        if(!userDoc.souProfessor){
-          console.log('nao sou professor')
-        }
-
-       }} catch(error){
+      
+    } catch(error){
       Alert.alert('erro ' + error.message)
     }
   }
