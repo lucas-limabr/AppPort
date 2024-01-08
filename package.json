@@ -18,7 +18,7 @@
     "expo": "^49.0.0",
     "expo-font": "~11.4.0",
     "expo-linear-gradient": "~12.3.0",
-    "expo-status-bar": "~1.6.0",
+    "expo-status-bar": "^1.7.1",
     "firebase": "^10.3.1",
     "nanoid": "^5.0.3",
     "punycode": "^2.3.1",
@@ -35,7 +35,8 @@
     "use-event-callback": "^0.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "expo-module-scripts": "^3.1.0"
   },
   "private": true
 }

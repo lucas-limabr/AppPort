@@ -1,4 +1,4 @@
-import React from "react";
+
 import { StyleSheet } from "react-native"
 
 export default StyleSheet.create({
@@ -10,7 +10,6 @@ export default StyleSheet.create({
         margin: 10,
         borderRadius: 10,
         elevation: 10,
-
     },
 
     titleStyle: {
@@ -130,7 +129,7 @@ export default StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         flexDirection: "column",
     },
 
@@ -165,5 +164,11 @@ export default StyleSheet.create({
         width: "100%",
         flexDirection: "column",
         justifyContent: "center",
+    },
+    containerModal: {
+        backgroundColor:'rgba(0, 0, 0, 0.8)',        
+        flex: 1,
+        justifyContent: 'center',       
+        alignItems: 'center'
     },
 });
