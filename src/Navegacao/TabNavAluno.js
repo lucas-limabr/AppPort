@@ -3,10 +3,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Menu from "../Views/Menu";
 import Perfil from "../Views/Perfil";
 import Listas from "../Views/Listas";
-import StackNav from "./StackNav";
+import StackNavAluno from "./StackNavAluno";
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import MenuAluno from "../Views/MenuAluno";
 import PerfilAluno from "../Views/PerfilAluno";
+
 
 
 const Tab = createBottomTabNavigator()
@@ -47,19 +49,19 @@ export default function TabNavAluno() {
 
             />
 
-            {/* <Tab.Screen name='StackNav' component={StackNav} options={{
-                 tabBarButton: () => null,
+            <Tab.Screen name='StackNavAluno' component={StackNavAluno} options={{
+                
                 headerShown: false,
                 tabBarIcon: ({ color, focused }) => {
                     if (focused) {
-                        return <Feather name="home" size={50} color={color} />
+                        return <Ionicons name="trail-sign-outline" size={50} color={color} /> 
                     }
-                    return <Feather name="home" size={50} color='#fff' />
+                    return <Ionicons name="trail-sign-outline" size={50} color="#fff" /> 
                 },
                  
             }}
             
-            /> */}
+            />
 
             <Tab.Screen name='MenuAluno' component={MenuAluno} options={{
                 headerShown: false,
