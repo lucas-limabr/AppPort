@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, TouchableOpacity, Text, Modal, TextInput, FlatList, ScrollView } from "react-native";
 import Styles from "../Styles.js/StylesMenuAluno";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
-import { Firestore, doc, getFirestore, getId, where } from "firebase/firestore";
+import {  doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import { userReference } from "../FuncoesFirebase/Funcoes";
+
 
 export default function MenuAluno() {
   const db = getFirestore(FIREBASE_APP);
   const auth = FIREBASE_AUTH;
   const [visible, setVisible] = useState(false);
   const [listas, setListas] = useState([])
+  const [atualizarDados, setAtualizarDados] = useState()
   
   const aluno = auth.currentUser.uid
   const referenceAluno = doc(db, 'users', aluno)
@@ -37,6 +40,7 @@ export default function MenuAluno() {
         await addDoc(listAluno, newList)
         setListas((prevListas) => [...prevListas, listData]);
         setVisible(false)
+        setAtualizarDados(!atualizarDados)
         
         
       })
@@ -45,6 +49,37 @@ export default function MenuAluno() {
       console.error(error)
     }
   }
+  async function buscarListasDoFirestore() {
+    try {
+    const usuarioLogadoReference = await userReference();
+
+    const listasCollection = collection(getFirestore(), "ListaAluno");
+    const listasQuery = query(listasCollection, where("aluno", "==", usuarioLogadoReference));
+
+    const listasSnapshot = await getDocs(listasQuery);
+
+    const listas = [];
+
+    listasSnapshot.forEach((doc) => {
+      const listaData = doc.data();
+      listas.push(listaData);
+    });
+
+    return listas;
+  } catch (error) {
+    console.error(error);
+    // Lidar com o erro conforme necessário
+  }
+  }
+
+  useEffect(() => {
+    async function carregarListas() {
+      const listasDoFirestore = await buscarListasDoFirestore ();
+      setListas(listasDoFirestore)
+    }
+
+    carregarListas()
+  },[atualizarDados] )
 
   const ModalList = () => {
     const [codigo, setCodigo] = useState('')
