@@ -74,7 +74,7 @@ export default function SubMenu1() {
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
               <Text style={Styles.textButtom}>
-                Figura de linguagem
+                Figuras de linguagem
               </Text>
 
             </ImageBackground>

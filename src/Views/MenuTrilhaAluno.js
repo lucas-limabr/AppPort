@@ -15,25 +15,6 @@ export default function MenuTrilha() {
 
       <View>
 
-        <TouchableOpacity onPress={() => navigation.navigate('')}>
-
-          <ImageBackground source={require('../Imagens/Placa4.png')} style={Styles.buttom}>
-
-            <Text style={Styles.textButtom}>
-
-              Interpretação textual
-
-            </Text>
-
-          </ImageBackground>
-
-        </TouchableOpacity>
-
-      </View>
-
-
-      <View>
-
         <TouchableOpacity onPress={() => navigation.navigate('SubMenu2')}>
 
           <ImageBackground source={require('../Imagens/Placa4.png')} style={Styles.buttom}>
