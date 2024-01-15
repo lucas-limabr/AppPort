@@ -21,7 +21,7 @@ export default StyleSheet.create({
     textButtom: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: 23,
+        fontSize: 22,
         fontFamily: 'Inder_400Regular',
         top:-10,
 
