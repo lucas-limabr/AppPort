@@ -2,8 +2,11 @@ import React from "react";
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, ImageBackground, TouchableOpacity } from 'react-native'
 import Styles from '../Styles.js/StylesSubMenu3'
+import { useNavigation } from "@react-navigation/native";
 
 export default function SubMenu3() {
+  const navigation = useNavigation()
+
 
   return (
 
@@ -86,7 +89,7 @@ export default function SubMenu3() {
 
           <View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
 
               <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.voltar}>
 

@@ -2,8 +2,11 @@ import React from "react";
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, ImageBackground, TouchableOpacity } from 'react-native'
 import Styles from '../Styles.js/StylesMenuTrilha'
+import { useNavigation } from "@react-navigation/native";
 
 export default function MenuTrilha() {
+  const navigation = useNavigation()
+
 
   return (
 
@@ -12,7 +15,7 @@ export default function MenuTrilha() {
 
       <View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('')}>
 
           <ImageBackground source={require('../Imagens/Placa4.png')} style={Styles.buttom}>
 
@@ -31,7 +34,7 @@ export default function MenuTrilha() {
 
       <View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('SubMenu2')}>
 
           <ImageBackground source={require('../Imagens/Placa4.png')} style={Styles.buttom}>
 
@@ -50,7 +53,7 @@ export default function MenuTrilha() {
 
       <View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('SubMenu3')}>
 
           <ImageBackground source={require('../Imagens/Placa4.png')} style={Styles.buttom}>
 
@@ -69,7 +72,7 @@ export default function MenuTrilha() {
 
       <View>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('SubMenu1')}>
 
           <ImageBackground source={require('../Imagens/Placa4.png')} style={Styles.buttom}>
 
