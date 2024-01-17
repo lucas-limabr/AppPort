@@ -7,6 +7,8 @@ import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import {  doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { userReference } from "../FuncoesFirebase/Funcoes";
+import { useNavigation } from "@react-navigation/native";
+import { fetchIdList } from "../FuncoesFirebase/Funcoes";
 
 
 export default function MenuAluno() {
@@ -15,6 +17,8 @@ export default function MenuAluno() {
   const [visible, setVisible] = useState(false);
   const [listas, setListas] = useState([])
   const [atualizarDados, setAtualizarDados] = useState()
+  const [id, setId] = useState('')
+  const navigation = useNavigation()
   
   const aluno = auth.currentUser.uid
   const referenceAluno = doc(db, 'users', aluno)
@@ -72,6 +76,11 @@ export default function MenuAluno() {
   }
   }
 
+  const navegarLista = (id) => {
+    setId(id)
+    navigation.navigate('StackNavAluno', {screen: 'QuestoesAluno', params: {itemId: id} })
+  }
+
   useEffect(() => {
     async function carregarListas() {
       const listasDoFirestore = await buscarListasDoFirestore ();
@@ -110,11 +119,30 @@ export default function MenuAluno() {
     );
   };
 
-  function ClickButton({ title, acertos, erros, num3 }) {
+  function ClickButton({ title, acertos, erros, num3, onButtonPress }) {
     //Função que cria o botão
 
+    const handleListNavigation = async () => {
+      onButtonPress();
+
+      try{
+        const id = await fetchId()
+        console.log(id)
+        return id;
+        }catch(error){
+          console.log("Erro ao obter ID:", error)
+        }
+    }
+
+    const fetchId = async () => {
+      const id = await fetchIdList('nomeLista', 'ListaAluno', title)
+
+      return id
+    }
+
+
     return (
-      <TouchableOpacity style={Styles.buttom}>
+      <TouchableOpacity style={Styles.buttom} onPress={handleListNavigation}>
         <View style={Styles.titleStyle}>
           <Text style={Styles.titleStyleFont}>{title}</Text>
         </View>
@@ -163,7 +191,7 @@ export default function MenuAluno() {
         data={listas}
         keyExtractor={(item) => item.codigo}
         renderItem={({item}) => (
-          <ClickButton key={item.codigo} title={item.nomeLista} acertos={item.acertos} erros={item.erros} /> 
+          <ClickButton key={item.codigo} title={item.nomeLista} acertos={item.acertos} erros={item.erros} onButtonPress={() => navegarLista(item.codigo) } /> 
         )}
         />
       </View>

@@ -1,13 +1,12 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Menu from "../Views/Menu";
-import Perfil from "../Views/Perfil";
-import Listas from "../Views/Listas";
 import StackNavAluno from "./StackNavAluno";
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import MenuAluno from "../Views/MenuAluno";
 import PerfilAluno from "../Views/PerfilAluno";
+import MenuTrilha from "../Views/MenuTrilhaAluno";
+import StackNavTrilha from "./StackNavTrilha";
 
 
 
@@ -49,7 +48,7 @@ export default function TabNavAluno() {
 
             />
 
-            <Tab.Screen name='StackNavAluno' component={StackNavAluno} options={{
+            <Tab.Screen name='StackNavTrilha' component={StackNavTrilha} options={{
                 
                 headerShown: false,
                 tabBarIcon: ({ color, focused }) => {
@@ -64,6 +63,19 @@ export default function TabNavAluno() {
             />
 
             <Tab.Screen name='MenuAluno' component={MenuAluno} options={{
+                headerShown: false,
+                tabBarIcon: ({ color, focused }) => {
+                    if (focused) {
+                        return <FontAwesome5 name="clipboard-list" size={50} color={color} />
+                    }
+                    return <FontAwesome5 name="clipboard-list" size={50} color='#fff' />
+                }
+            }}
+
+            />
+            
+            <Tab.Screen name='StackNavAluno' component={StackNavAluno} options={{
+                tabBarButton: () => null,
                 headerShown: false,
                 tabBarIcon: ({ color, focused }) => {
                     if (focused) {

@@ -101,7 +101,6 @@ export default function Listas() {
 
   const carregarLista = (id) => {
     setItemId(id)
-    console.log(id)
     navigation.navigate('StackNav', { screen: 'QuestoesLista', params: { itemId: id } })
   }
 

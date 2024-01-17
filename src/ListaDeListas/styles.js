@@ -16,7 +16,7 @@ export default StyleSheet.create({
         backgroundColor: '#ff8c90',
         height: 'auto',
         width: 300,
-        marginTop : 0,
+        marginTop : 40,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center'
@@ -113,6 +113,14 @@ export default StyleSheet.create({
     scroll:{
         height: 250
         
+    },
+    confirmar:{
+        backgroundColor: '#F54F59',
+        width: 300,
+        height: 35,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
     }
     
     
