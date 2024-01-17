@@ -17,7 +17,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
-export default function StackNavAluno({navigation, route}) {
+export default function StackNavTrilha({navigation, route}) {
 
   useTabDisplay({navigation, route, screens: ['MenuTrilha','StackNavAluno','PerfilAluno','MenuAluno']})
 
@@ -48,10 +48,6 @@ export default function StackNavAluno({navigation, route}) {
         name="SubMenu3"
         component={SubMenu3}
       />
-      <Stack.Screen
-        name="QuestoesAluno"
-        component={QuestoesAluno}
-      />
-      </Stack.Navigator>
+    </Stack.Navigator>
   );
 }
