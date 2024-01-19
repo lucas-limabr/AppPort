@@ -4,6 +4,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesHome";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
+import {
+  getFirestore,
+  
+} from "firebase/firestore";
+
+import { useNavigation } from "@react-navigation/native";
 
 
 
@@ -11,6 +17,10 @@ import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
 
 
 export default function Home() { 
+
+  const db = getFirestore(FIREBASE_APP)
+
+  const navigation = useNavigation()
   
   const signIn = async (auth,email,senha) => {
     try{
