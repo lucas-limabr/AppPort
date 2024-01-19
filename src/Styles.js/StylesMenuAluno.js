@@ -6,7 +6,7 @@ export default StyleSheet.create({
     buttom: {
         backgroundColor: '#FFB9BD',
         width: 290,
-        height: 130,
+        height: 120,
         margin: 10,
         borderRadius: 10,
         elevation: 10,

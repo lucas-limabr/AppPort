@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { View, TouchableOpacity, Text, Modal, TextInput, FlatList, ScrollView } from "react-native";
@@ -9,6 +9,8 @@ import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
 import { fetchIdList } from "../FuncoesFirebase/Funcoes";
+import { useFocusEffect } from "@react-navigation/native";
+
 
 
 export default function MenuAluno() {
@@ -19,6 +21,7 @@ export default function MenuAluno() {
   const [atualizarDados, setAtualizarDados] = useState()
   const [id, setId] = useState('')
   const navigation = useNavigation()
+  
   
   const aluno = auth.currentUser.uid
   const referenceAluno = doc(db, 'users', aluno)
@@ -81,14 +84,15 @@ export default function MenuAluno() {
     navigation.navigate('StackNavAluno', {screen: 'QuestoesAluno', params: {itemId: id} })
   }
 
-  useEffect(() => {
-    async function carregarListas() {
-      const listasDoFirestore = await buscarListasDoFirestore ();
-      setListas(listasDoFirestore)
-    }
-
-    carregarListas()
-  },[atualizarDados] )
+  useFocusEffect(
+    useCallback(() => {
+      async function carregarListas() {
+        const listasDoFirestore = await buscarListasDoFirestore();
+        setListas(listasDoFirestore);
+      }
+      carregarListas();
+    }, [])
+  );
 
   const ModalList = () => {
     const [codigo, setCodigo] = useState('')
@@ -119,7 +123,7 @@ export default function MenuAluno() {
     );
   };
 
-  function ClickButton({ title, acertos, erros, num3, onButtonPress }) {
+  function ClickButton({ title, acertos, erros, onButtonPress }) {
     //Função que cria o botão
 
     const handleListNavigation = async () => {
@@ -151,7 +155,7 @@ export default function MenuAluno() {
 
           <Text style={Styles.styleFontContent}>Erros: {erros}</Text>
 
-          <Text style={Styles.styleFontContent}>{num3}% completa</Text>
+          
         </View>
       </TouchableOpacity>
     );

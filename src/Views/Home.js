@@ -6,13 +6,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
 import {
   getFirestore,
-  collection,
-  where,
-  doc,
-  get,
-  query,
-  getDocs,
-  getDoc,
+  
 } from "firebase/firestore";
 
 import { useNavigation } from "@react-navigation/native";
