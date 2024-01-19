@@ -107,7 +107,7 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
         flexDirection: 'row',
         flex: 1,
-        
+       
         
     },
     scroll:{

@@ -16,13 +16,20 @@ export default StyleSheet.create({
     },
 
     buttom: {
-        top:-18,
-        padding: 8,
-        margin: -36, 
+        padding: 8, 
+        margin: -32, 
         width: 260,
         height: 220,
         alignItems: 'center',
         justifyContent: 'center'
+
+    },
+
+    cor: {
+        height:500,
+        top:-32,
+        alignItems:"center",
+        justifyContent:'center',
 
     },
 });
