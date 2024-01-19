@@ -12,6 +12,7 @@ import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
 
 import Markdown from "react-native-markdown-display";
+import { RadioButton } from "react-native-paper";
 
 import {
   getFirestore,
@@ -22,14 +23,20 @@ import {
   query,
   getDocs,
   getDoc,
+  updateDoc,
 } from "firebase/firestore";
 
-export default function QuestoesLista() {
+export default function QuestoesAluno() {
   const route = useRoute();
   const codigoLista = route.params.itemId;
   const [questoes, setQuestoes] = useState([]);
   const [indice, setIndice] = useState(0);
   const [questoesCarregadas, setQuestoesCarregadas] = useState(false);
+  const [value,setValue] = useState('')
+  const [acertos, setAcertos] = useState()
+  const [erros, setErros] = useState()
+  console.log(indice)
+  
 
   const navigation = useNavigation();
 
@@ -43,9 +50,10 @@ export default function QuestoesLista() {
     try {
       setIndice(0);
       const db = getFirestore(FIREBASE_APP);
-      const listaCollectionRef = collection(db, "listas");
+      const listaCollectionRef = collection(db, "ListaAluno");
       const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
       const querySnapshot = await getDocs(q);
+      
 
       if (!querySnapshot.empty) {
         const docSnap = querySnapshot.docs[0];
@@ -57,7 +65,7 @@ export default function QuestoesLista() {
           const questoesPromises = referenciasQuestoes.map(async (referencia) => {
             const questaoDoc = await getDoc(referencia);
             if (questaoDoc.exists()) {
-              return questaoDoc.data();
+             return questaoDoc.data();
             } else {
               console.warn("Documento de questão não encontrado:", referencia.id);
               return null;
@@ -72,6 +80,14 @@ export default function QuestoesLista() {
           setQuestoes(questoesFiltradas);
           // Utilize o callback de estado para garantir que está atualizado
           setQuestoesCarregadas((prevState) => !prevState);
+
+          const acertos =  0
+          const erros =  0
+
+          setAcertos(acertos)
+          setErros(erros)
+
+          
         } else {
           console.log("Documento não contém a estrutura esperada.");
         }
@@ -83,8 +99,10 @@ export default function QuestoesLista() {
     }
   }, [codigoLista]);
 
+  
+
   useEffect(() => {
-    console.log("Chamando obterQuestoes");
+    
     obterQuestoes();
 
     const time = 5000;
@@ -110,13 +128,44 @@ export default function QuestoesLista() {
     if (indice < questoes.length - 1) {
       setIndice(indice + 1);
     }
+    
+  }
+  
+  const proximaQuestao = async (respostaCorreta, respostaALuno) => {
+    let novosAcertos = acertos
+    let novosErros = erros
+    if(respostaCorreta === respostaALuno){
+      novosAcertos++
+    }else{
+
+      novosErros++
+    }
+
+    try{
+      const db = getFirestore(FIREBASE_APP);
+      const listaCollectionRef = collection(db, "ListaAluno");
+      const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
+      const querySnapshot = await getDocs(q);
+
+      if(!querySnapshot.empty){
+        const docSnap = querySnapshot.docs[0]
+        const listaDocRef = doc(db, "ListaAluno", docSnap.id)
+
+        await updateDoc(listaDocRef, {
+          acertos: novosAcertos,
+          erros: novosErros,
+        })
+        setAcertos(novosAcertos)
+        setErros(novosErros)
+      }
+      indice < questoes.length - 1 ?  setIndice(indice + 1) : navigation.goBack({reload: true})   
+    }catch(error){
+      console.error(error)
+    }
+
   }
 
-  function voltar() {
-    if (indice > 0) {
-      setIndice(indice - 1);
-    }
-  }
+  
 
   const questaoAtual = questoes[indice];
 
@@ -124,13 +173,7 @@ export default function QuestoesLista() {
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       {questaoAtual ? (
         <View style={styles.container}>
-          <View style={styles.containerSalvar}>
-            
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <AntDesign name="caretleft" size={50} color="#F54F59" />
-              </TouchableOpacity>
-            
-          </View>
+          
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
               <Image
@@ -139,43 +182,53 @@ export default function QuestoesLista() {
                 resizeMode="contain"
               />
             </View>
-            <Text style={styles.txtEnunciado}>{questaoAtual.pergunta}</Text>
+            <Markdown style={{
+              body: {
+                fontSize: 16,
+                color: "#fff",
+                top: 0,
+                width: "90%",
+                left: 5,
+                padding: 5,
+                textAlign: "left",
+                fontFamily: "Inder_400Regular",
+              },
+            }}>{questaoAtual.pergunta}</Markdown>
           </View>
 
           <View style={styles.containerResposta}>
             <ScrollView style={styles.scroll}>
-              {/* Mapear o array de respostas */}
-              {questaoAtual.respostas.map((resposta, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={[
-                    resposta === questaoAtual.respostaCorreta
-                      ? [styles.alternativas, styles.selectLabel]
-                      : styles.alternativas,
-                  ]}
-                >
-                  <Text style={styles.txtEnunciado}>{resposta}</Text>
-                </TouchableOpacity>
-              ))}
+
+          <RadioButton.Group
+  onValueChange={(value) => {setValue(value)}}
+  value={value}
+>
+  {questaoAtual.respostas.map((resposta, index) => (
+    <RadioButton.Item
+      key={index}
+      label={resposta}
+      value={resposta}
+      style={[
+        styles.alternativas,
+        value === resposta && styles.selectLabel,
+      ]}
+      labelStyle={styles.label}
+      uncheckedColor="#fff"
+      color="#fff"
+    />
+  ))}
+</RadioButton.Group>
             </ScrollView>
           </View>
 
           <View style={styles.containerContinuar}>
-            {indice > 0 ? (
-              <TouchableOpacity style={styles.btnContinuar} onPress={voltar}>
-                <Text style={styles.label}>Voltar</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={[styles.btnContinuar, { backgroundColor: "#767577" }]}
-                disabled={true}
-                onPress={voltar}
-              >
-                <Text style={styles.label}>Voltar</Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity style={styles.btnContinuar} onPress={continuar}>
-              <Text style={styles.label}>Continuar</Text>
+            
+              
+            
+              
+            
+            <TouchableOpacity style={styles.confirmar} onPress={() => proximaQuestao(questaoAtual.respostaCorreta, value)}>
+              <Text style={styles.label}>Confirmar</Text>
             </TouchableOpacity>
           </View>
         </View>

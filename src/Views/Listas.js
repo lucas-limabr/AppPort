@@ -49,10 +49,6 @@ export default function Listas() {
   const criador = auth.currentUser.uid;
   const referenciaCriador = doc(db, "users", criador);
 
-  const [forceRender, setForceRender] = useState(false);
-
-  const copy = `# h1 Heading 8-) \n ## ola a todos \n ## _italico_ \n *negrito*`
-
   const codigo = nanoid(6);
 
   async function buscarListasDoFirestore() {
@@ -105,7 +101,6 @@ export default function Listas() {
 
   const carregarLista = (id) => {
     setItemId(id)
-    console.log(id)
     navigation.navigate('StackNav', { screen: 'QuestoesLista', params: { itemId: id } })
   }
 
