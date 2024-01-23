@@ -139,7 +139,16 @@ export default function Cadastro({ navigation }) {
       const resposta = await createUserWithEmailAndPassword(auth, email, senha);
       cadastroBD();
     } catch (error) {
-      Alert.alert("erro" + error.message);
+      if(error.code === "auth/invalid-email"){
+        Alert.alert("Email inválido.")
+      }
+      if(error.code === "auth/weak-password"){
+        Alert.alert("Sua senha necessita de pelo menos 6 caracteres.")
+      }
+      if(error.code === "auth/email-already-in-use"){
+        Alert.alert("Email já cadastrado.")
+      }
+      
       console.log(error);
       setVisible(false);
     }
@@ -169,7 +178,18 @@ export default function Cadastro({ navigation }) {
     // localStorage(nome, email, urlImagemPerfil);
   }
 
+  const validarEmail = (email) => {
+    const regex = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
+    console.log(regex.test(email))
+    return regex.test(email);
+  }
+
   function cadastrar() {
+    if(!validarEmail(email)){
+      Alert.alert("Email inválido")
+      return
+    }
+    
     if (
       email != confimarEmail ||
       email == "" ||
