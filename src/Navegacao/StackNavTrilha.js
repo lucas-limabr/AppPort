@@ -10,6 +10,7 @@ import SubMenu1 from "../Views/SubMenu1"
 import SubMenu2 from "../Views/SubMenu2"
 import SubMenu3 from "../Views/SubMenu3"
 import QuestoesAluno from "../ListaDeListas/indexAluno";
+import Trilha from "../Views/Trilha";
 
 
 import {useTabDisplay} from "../hooks/useTabDisplay"
@@ -47,6 +48,10 @@ export default function StackNavTrilha({navigation, route}) {
       <Stack.Screen
         name="SubMenu3"
         component={SubMenu3}
+      />
+      <Stack.Screen
+        name="Trilha"
+        component={Trilha}
       />
     </Stack.Navigator>
   );

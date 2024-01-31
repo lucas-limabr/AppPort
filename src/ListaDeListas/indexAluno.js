@@ -35,7 +35,7 @@ export default function QuestoesAluno() {
   const [value,setValue] = useState('')
   const [acertos, setAcertos] = useState()
   const [erros, setErros] = useState()
-  console.log(indice)
+ 
   
 
   const navigation = useNavigation();

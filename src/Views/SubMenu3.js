@@ -17,7 +17,7 @@ export default function SubMenu3() {
 
           <View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'silabas'})}>
 
               <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -33,7 +33,7 @@ export default function SubMenu3() {
 
           <View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'expressoesCotidianas'})}>
 
               <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -53,7 +53,7 @@ export default function SubMenu3() {
 
           <View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'acentuacao'})}>
 
               <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -69,7 +69,7 @@ export default function SubMenu3() {
 
           <View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'usoDosPorques'})}>
 
               <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
