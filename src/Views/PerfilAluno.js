@@ -8,11 +8,16 @@ import { useAuthentication } from "../hooks/useAutentication";
 import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { format, differenceInCalendarDays } from "date-fns";
+
 
 export default function PerfilAluno() {
   const [usuario, setUsuario] = useState();
   const [user,setUser] = useState()
 
+  const data = new Date
+
+  
   useEffect(() => {
         const fetchData = async (user) => {
           try {
@@ -51,14 +56,14 @@ export default function PerfilAluno() {
 
         <TouchableOpacity
           style={[Styles.botao, Styles.sombra]}
-          onPress={() => console.log(usuario.email)}
+          onPress={() => console.log(usuario.ultimoAcesso.toDate())}
         >
           <Text style={Styles.txtBotao}>Alterar foto</Text>
         </TouchableOpacity>
 
         <View style={Styles.containerFilho}>
           <TextInput style={Styles.input}>
-            <Text style={Styles.txtInput}>Nome: {usuario ? usuario.nome : "Sem nome"} </Text>
+            <Text style={Styles.txtInput}>Nome: {usuario ? usuario.nome : ""} </Text>
           </TextInput>
         </View>
 
@@ -71,7 +76,7 @@ export default function PerfilAluno() {
                 </View>
 
                 <View style={Styles.numberDays}>
-                  <Text style={Styles.txtnumberDays}>X</Text>
+                  <Text style={Styles.txtnumberDays}>{usuario ? differenceInCalendarDays(data, usuario.ultimoAcesso.toDate()) : ""}</Text>
                 </View>
 
                 <View style={Styles.titleView}>
@@ -85,7 +90,7 @@ export default function PerfilAluno() {
                 </View>
 
                 <View style={Styles.numberDays}>
-                  <Text style={Styles.txtDate}>XX:XX:XXXX</Text>
+                  <Text style={Styles.txtDate}>{usuario ? format(usuario.dataCadastro.toDate(), "dd/MM/yy") : ""}</Text>
                 </View>
               </View>
             </View>
@@ -94,7 +99,7 @@ export default function PerfilAluno() {
 
         <View style={Styles.containerFilho}>
           <TextInput style={Styles.viewOptions}>
-            <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : "Sem email"} </Text>
+            <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""} </Text>
           </TextInput>
         </View>
       </View>

@@ -169,11 +169,15 @@ export default function Cadastro({ navigation }) {
   // };
 
   async function cadastroBD() {
+    const data = new Date
+
     const user = await addDoc(userCollectionRef, {
       nome,
       email,
       souProfessor,
       urlImagemPerfil,
+      dataCadastro: data,
+      ultimoAcesso,
     });
     // localStorage(nome, email, urlImagemPerfil);
   }
