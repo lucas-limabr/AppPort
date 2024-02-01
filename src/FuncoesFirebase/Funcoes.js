@@ -1,6 +1,6 @@
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getDoc, getFirestore, where } from "firebase/firestore";
-import { addDoc, collection, query, getDocs, deleteDoc  } from "firebase/firestore";
+import { addDoc, collection, query, getDocs, deleteDoc, updateDoc  } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
@@ -100,4 +100,30 @@ export const fetchIdList = async (campo, colecao, item) => {
     // Se não houver documento correspondente, retorne false (ou o valor que fizer sentido para o seu caso)
     return false;
   };
+
+  export const updateDay = async (email) => {
+    const db = getFirestore(FIREBASE_APP);
+
+    const data = new Date
+
+    try {
+      // Consultar o usuário pelo e-mail
+      const q = query(collection(db, 'users'), where('email', '==', email));
+      const querySnapshot = await getDocs(q);
+  
+      // Verificar se o usuário existe
+      if (querySnapshot.size > 0) {
+        // Atualizar a data para a data atual usando serverTimestamp
+        const usuarioRef = doc(db, 'users', querySnapshot.docs[0].id);
+        await updateDoc(usuarioRef, {
+          ultimoAcesso: data 
+        });
+        
+        
+      }} catch (error) {
+      console.error('Erro ao atualizar a data:', error);
+    }
+
+
+  }
   
