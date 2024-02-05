@@ -21,9 +21,12 @@ export default function MenuAluno() {
   const [atualizarDados, setAtualizarDados] = useState()
   const [id, setId] = useState('')
   const navigation = useNavigation()
+
+  
   
   
   const aluno = auth.currentUser.uid
+
   const referenceAluno = doc(db, 'users', aluno)
 
   const searchList = async (codigo) => {
@@ -131,7 +134,7 @@ export default function MenuAluno() {
 
       try{
         const id = await fetchId()
-        console.log(id)
+        setId(id)
         return id;
         }catch(error){
           console.log("Erro ao obter ID:", error)
@@ -139,8 +142,8 @@ export default function MenuAluno() {
     }
 
     const fetchId = async () => {
-      const id = await fetchIdList('nomeLista', 'ListaAluno', title)
-
+      const id = await fetchIdList('nomeLista', 'ListaAluno', title, aluno)
+      
       return id
     }
 
@@ -195,7 +198,7 @@ export default function MenuAluno() {
         data={listas}
         keyExtractor={(item) => item.codigo}
         renderItem={({item}) => (
-          <ClickButton key={item.codigo} title={item.nomeLista} acertos={item.acertos} erros={item.erros} onButtonPress={() => navegarLista(item.codigo) } /> 
+          <ClickButton title={item.nomeLista} acertos={item.acertos} erros={item.erros} onButtonPress={() => navegarLista(id) } /> 
         )}
         />
       </View>
