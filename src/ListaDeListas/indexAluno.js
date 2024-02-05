@@ -25,6 +25,7 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 export default function QuestoesAluno() {
   const route = useRoute();
@@ -36,73 +37,77 @@ export default function QuestoesAluno() {
   const [acertos, setAcertos] = useState()
   const [erros, setErros] = useState()
  
+  const auth = FIREBASE_AUTH
   
-
+  const aluno = auth.currentUser.uid
+  
   const navigation = useNavigation();
-
+  
   const questoesCarregadasRef = useRef(questoesCarregadas);
-
+  
   useEffect(() => {
     questoesCarregadasRef.current = questoesCarregadas;
   }, [questoesCarregadas]);
-
-  const obterQuestoes = useCallback(async () => {
+  
+  
+  const obterQuestoes = async () => {
     try {
-      setIndice(0);
-      const db = getFirestore(FIREBASE_APP);
-      const listaCollectionRef = collection(db, "ListaAluno");
-      const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
-      const querySnapshot = await getDocs(q);
       
-
-      if (!querySnapshot.empty) {
-        const docSnap = querySnapshot.docs[0];
-        const data = docSnap.data();
-
+      const db = getFirestore(FIREBASE_APP);
+  
+      // Ajuste o nome da coleção para "ListaAluno" (maiúscula)
+      const documentoRef = doc(db, "ListaAluno", codigoLista);
+  
+      const documentoSnapshot = await getDoc(documentoRef);
+  
+      
+  
+      if (documentoSnapshot.exists()) {
+        const data = documentoSnapshot.data();
+        
+  
         if (data && data.questoes) {
           const referenciasQuestoes = data.questoes;
-
+  
           const questoesPromises = referenciasQuestoes.map(async (referencia) => {
             const questaoDoc = await getDoc(referencia);
-            if (questaoDoc.exists()) {
-             return questaoDoc.data();
-            } else {
-              console.warn("Documento de questão não encontrado:", referencia.id);
-              return null;
-            }
+            return questaoDoc.exists() ? questaoDoc.data() : null;
           });
-
+  
           const questoesArrayResultado = await Promise.all(questoesPromises);
-
+  
           // Filtra para remover entradas nulas ou indefinidas
           const questoesFiltradas = questoesArrayResultado.filter((questao) => questao);
-
-          setQuestoes(questoesFiltradas);
-          // Utilize o callback de estado para garantir que está atualizado
-          setQuestoesCarregadas((prevState) => !prevState);
-
-          const acertos =  0
-          const erros =  0
-
-          setAcertos(acertos)
-          setErros(erros)
-
+  
           
+  
+          setQuestoes(questoesFiltradas);
+          setQuestoesCarregadas(true);
+  
+          const acertos =  0;
+          const erros =  0;
+  
+          setAcertos(acertos);
+          setErros(erros);
         } else {
           console.log("Documento não contém a estrutura esperada.");
+          
         }
       } else {
         console.log("Documento não encontrado.");
+        
       }
     } catch (error) {
       console.error("Erro ao obter as questões:", error);
+      
     }
-  }, [codigoLista]);
+  };
+  
 
   
 
   useEffect(() => {
-    
+    setIndice(0)
     obterQuestoes();
 
     const time = 5000;
@@ -124,50 +129,41 @@ export default function QuestoesAluno() {
     return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
   }, [obterQuestoes, navigation]);
 
-  function continuar() {
-    if (indice < questoes.length - 1) {
-      setIndice(indice + 1);
-    }
-    
-  }
-  
   const proximaQuestao = async (respostaCorreta, respostaALuno) => {
-    let novosAcertos = acertos
-    let novosErros = erros
-    if(respostaCorreta === respostaALuno){
-      novosAcertos++
-    }else{
-
-      novosErros++
-    }
-
-    try{
+    try {
+      const novosAcertos = respostaCorreta === respostaALuno ? acertos + 1 : acertos;
+      const novosErros = respostaCorreta !== respostaALuno ? erros + 1 : erros;
+  
       const db = getFirestore(FIREBASE_APP);
-      const listaCollectionRef = collection(db, "ListaAluno");
-      const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
-      const querySnapshot = await getDocs(q);
-
-      if(!querySnapshot.empty){
-        const docSnap = querySnapshot.docs[0]
-        const listaDocRef = doc(db, "ListaAluno", docSnap.id)
-
+      const listaDocRef = doc(db, "ListaAluno", codigoLista);
+      const listaDocSnapshot = await getDoc(listaDocRef);
+  
+      if (listaDocSnapshot.exists()) {
+        // Atualizar o documento com os acertos e erros
         await updateDoc(listaDocRef, {
           acertos: novosAcertos,
           erros: novosErros,
-        })
-        setAcertos(novosAcertos)
-        setErros(novosErros)
-      }
-      indice < questoes.length - 1 ?  setIndice(indice + 1) : navigation.goBack({reload: true})   
-    }catch(error){
-      console.error(error)
-    }
-
-  }
-
+        });
   
-
+        // Atualizar o estado com os acertos e erros
+        setAcertos(novosAcertos);
+        setErros(novosErros);
+  
+        // Agendar a atualização do índice após a atualização do estado
+        if (indice < questoes.length - 1) {
+          setIndice(indice + 1);
+        } else {
+          navigation.goBack({ reload: true });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
   const questaoAtual = questoes[indice];
+  
+  
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
