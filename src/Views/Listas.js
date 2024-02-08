@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -18,6 +18,8 @@ import { doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
+
+import { useFocusEffect } from "@react-navigation/native";
 
 import {fetchIdList, deleteList} from '../FuncoesFirebase/Funcoes'
 
@@ -104,15 +106,15 @@ export default function Listas() {
     navigation.navigate('StackNav', { screen: 'QuestoesLista', params: { itemId: id } })
   }
 
-  useEffect(() => {
-    async function carregarListas() {
-      const listasDoFirestore = await buscarListasDoFirestore();
-      setListas(listasDoFirestore);
-     
-    }
-    
-    carregarListas();
-  }, [atualizarDados]);
+  useFocusEffect(
+    useCallback(() => {
+      async function carregarListas() {
+        const listasDoFirestore = await buscarListasDoFirestore();
+        setListas(listasDoFirestore);
+      } 
+      carregarListas()
+    }, [atualizarDados])
+  );
 
   const BotaoLista = ({ titulo, onBotaoPress, onPressOne  }) => {
   
@@ -171,7 +173,7 @@ export default function Listas() {
         <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}} onPress={(handleBotaoPress)}>
         <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />
         </TouchableOpacity>
-        {/*  */}
+        
         <TouchableOpacity style={{backgroundColor:'#F54F59'}} onPress={handleDelete}>
         <EvilIcons name="close" size={30} color="#fff" />
         </TouchableOpacity>

@@ -11,6 +11,8 @@ import "firebase/firestore";
 import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
 
+import { useFocusEffect } from "@react-navigation/native";
+
 import Markdown from "react-native-markdown-display";
 
 import {
@@ -84,7 +86,7 @@ export default function QuestoesLista() {
   }, [codigoLista]);
 
   useEffect(() => {
-    console.log("Chamando obterQuestoes");
+    
     obterQuestoes();
 
     const time = 5000;
@@ -92,6 +94,7 @@ export default function QuestoesLista() {
     const timeoutId = setTimeout(() => {
       
       if (!questoesCarregadasRef.current) {
+        
         
         // Mostra o alerta se as questões não foram carregadas
         Alert.alert(
@@ -102,7 +105,7 @@ export default function QuestoesLista() {
         );
       }
     }, time);
-
+    
     return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
   }, [obterQuestoes, navigation]);
 

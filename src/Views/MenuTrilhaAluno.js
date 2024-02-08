@@ -12,6 +12,8 @@ export default function MenuTrilha() {
       style={Styles.imageAjust}
       source={require("../Imagens/Trilha_Esborco2_2.png")}
     >
+    
+
       <StatusBar style="auto" />
       <View style={Styles.cor}>
         <View>
@@ -47,6 +49,7 @@ export default function MenuTrilha() {
           </TouchableOpacity>
         </View>
       </View>
+    
     </ImageBackground>
   );
 }

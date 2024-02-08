@@ -10,7 +10,8 @@ import SubMenu1 from "../Views/SubMenu1"
 import SubMenu2 from "../Views/SubMenu2"
 import SubMenu3 from "../Views/SubMenu3"
 import QuestoesAluno from "../ListaDeListas/indexAluno";
-
+import Trilha from "../Views/Trilha";
+import QuestoesTrilha from "../ListaDeListas/indexTrilha";
 
 import {useTabDisplay} from "../hooks/useTabDisplay"
 import { useNavigation } from "@react-navigation/native";
@@ -48,6 +49,15 @@ export default function StackNavTrilha({navigation, route}) {
         name="SubMenu3"
         component={SubMenu3}
       />
+      <Stack.Screen
+        name="Trilha"
+        component={Trilha}
+      />
+      <Stack.Screen
+        name="QuestoesTrilha"
+        component={QuestoesTrilha}
+      />
+      
     </Stack.Navigator>
   );
 }

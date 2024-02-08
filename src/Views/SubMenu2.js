@@ -17,7 +17,7 @@ export default function SubMenu2() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'classesGramaticais'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -37,7 +37,7 @@ export default function SubMenu2() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity  onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'pronomes'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -53,7 +53,7 @@ export default function SubMenu2() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'preposicoes'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -73,7 +73,7 @@ export default function SubMenu2() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'conjuncoes'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -89,7 +89,7 @@ export default function SubMenu2() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'flexoesVerbais'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 

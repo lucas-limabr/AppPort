@@ -1,0 +1,253 @@
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  Alert,
+  Modal,
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import styles from "./styles";
+import StylesEnd from "../Styles.js/StylesTerminouListaAluno";
+import { FIREBASE_APP } from "../../FirebaseConfig";
+import { useRoute } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
+import "firebase/firestore";
+import { useNavigation } from "@react-navigation/native";
+
+import Markdown from "react-native-markdown-display";
+import { RadioButton } from "react-native-paper";
+
+import {
+  getFirestore,
+  collection,
+  where,
+  doc,
+  get,
+  query,
+  getDocs,
+  getDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
+
+export default function QuestoesTrilha() {
+  const route = useRoute();
+  const navigation = useNavigation()
+
+  const [questoes, setQuestoes] = useState([]);
+  const [indice, setIndice] = useState(0);
+  const [value, setValue] = useState("");
+  const [acertos, setAcertos] = useState(0);
+  const [erros, setErros] = useState(0);
+  const [correct, setCorrect] = useState(false);
+  const [incorrect, setIncorrect] = useState(false);
+  const [end, setEnd] = useState(false);
+  const [atualizar, setAtualizar] = useState(true);
+
+  const userId = route.params.params.info.userId
+
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const db = getFirestore(FIREBASE_APP);
+        const questoesRefs = route.params.params.info.questoes;
+
+
+        const questoesDocs = await Promise.all(
+          questoesRefs.map(async (ref) => {
+            const questaoDoc = await getDoc(ref);
+            if (questaoDoc.exists()) {
+              return { id: questaoDoc.id, data: questaoDoc.data() };
+            } else {
+              return null;
+            }
+          })
+        );
+        const questoesValidas = questoesDocs.filter(
+          (questao) => questao !== null
+        );
+        setQuestoes(questoesValidas);
+      } catch (error) {
+        console.error("Erro ao acessar os documentos:", error);
+      }
+    };
+    fetchData();
+  }, [route.params.params.questoes]);
+
+  const conferirQuestao = (respostaCorreta, respostaAluno) => {
+    if (respostaCorreta === respostaAluno) {
+        setAcertos(acertos + 1);
+      } else {
+        setErros(erros + 1);
+      }
+      proximaQuestao();
+  };
+
+  const proximaQuestao = () => {
+    if (indice < questoes.length - 1) {
+      setIndice(indice + 1);
+    } else {
+      setEnd(true);
+    }
+  };
+
+  const finishActivity = async () => {
+    if (acertos >= 4) {
+        try {
+          const db = getFirestore(FIREBASE_APP);
+          const documentoRef = doc(db, "users", userId)
+          const usuarioRef = doc(documentoRef, "userFases", route.params.params.info.id);
+          await updateDoc(usuarioRef, {
+           concluido: true,
+          });
+          console.log("Atributo atualizado com sucesso no Firestore!");
+          
+        } catch (error) {
+          console.error("Erro ao atualizar atributo no Firestore:", error);
+        }
+      }
+      navigation.goBack({reload : true})
+  }
+
+  const ModalEnd = () => {
+    return (
+      <Modal animationType="fade" transparent={false} visible={end}>
+        <LinearGradient
+          colors={["#D5D4FB", "#9B98FC"]}
+          style={StylesEnd.gradient}
+        >
+          <View style={StylesEnd.container}>
+            <View style={StylesEnd.boxTitle}>
+              <Text style={StylesEnd.Title}>
+                PARABÉNS!!
+                <Text style={StylesEnd.SubTitle}>Você terminou a fase!!</Text>
+              </Text>
+            </View>
+
+            <View style={StylesEnd.box}>
+              <View style={StylesEnd.boxImage}>
+                <Image
+                  style={StylesEnd.ImageFormat}
+                  source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
+                />
+              </View>
+
+              <View style={StylesEnd.subDivTag}>
+                <View style={StylesEnd.subSubDivTag}>
+                  <View style={StylesEnd.tagText}>
+                    <Text style={StylesEnd.FontFormat}>Acertos: {acertos}</Text>
+                  </View>
+                  <View style={StylesEnd.tagText}>
+                    <Text style={StylesEnd.FontFormat}>Erros: {erros}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={StylesEnd.buttomBox}>
+                <TouchableOpacity
+                  style={StylesEnd.buttom}
+                  onPress={() => finishActivity()}
+                >
+                  <Text style={[StylesEnd.FontFormatButtom, StylesEnd.shadow]}>
+                    Confirmar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
+      </Modal>
+    );
+  };
+
+  return (
+    <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
+        <ModalEnd/>
+      {questoes && questoes[indice] ? (
+        <View style={styles.container}>
+          <View style={styles.enunciado}>
+            <View style={styles.backgroundImagem}>
+              <Image
+                style={styles.imagem}
+                source={{ uri: questoes[indice].data.urlImagem }}
+                resizeMode="contain"
+              />
+            </View>
+            <Markdown
+              style={{
+                body: {
+                  fontSize: 16,
+                  color: "#fff",
+                  top: 0,
+                  width: "90%",
+                  left: 5,
+                  padding: 5,
+                  textAlign: "left",
+                  fontFamily: "Inder_400Regular",
+                },
+              }}
+            >
+              {questoes[indice].data.pergunta}
+            </Markdown>
+          </View>
+
+          <View style={styles.containerResposta}>
+            <ScrollView style={styles.scroll}>
+              <RadioButton.Group
+                onValueChange={(value) => {
+                  setValue(value);
+                }}
+                value={value}
+              >
+                {questoes[indice].data.respostas.map((resposta, index) => (
+                  <RadioButton.Item
+                    key={index}
+                    label={resposta}
+                    value={resposta}
+                    style={[
+                      styles.alternativas,
+                      value === resposta && styles.selectLabel,
+                    ]}
+                    labelStyle={styles.label}
+                    uncheckedColor="#fff"
+                    color="#fff"
+                  />
+                ))}
+              </RadioButton.Group>
+            </ScrollView>
+          </View>
+
+          <View style={styles.containerContinuar}>
+            <TouchableOpacity
+              style={styles.confirmar}
+              onPress={() =>
+                conferirQuestao(questoes[indice].data.respostaCorreta, value)
+              }
+            >
+              <Text style={styles.label}>Confirmar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Image
+            style={{
+              flex: 1,
+              width: "100%",
+              height: undefined,
+              aspectRatio: 1,
+            }}
+            source={require("../Imagens/Nuvem_3(uPDATE).gif")}
+            resizeMode="contain"
+          />
+        </View>
+      )}
+    </LinearGradient>
+  );
+}
