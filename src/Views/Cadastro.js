@@ -13,10 +13,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Switch } from "react-native-gesture-handler";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import styles from "../Styles.js/StylesTermoDeUso";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { userVerification } from "../FuncoesFirebase/Funcoes";
 
 export default function Cadastro({ navigation }) {
   const [nome, setNome] = useState("");
@@ -137,7 +138,11 @@ export default function Cadastro({ navigation }) {
   const signUp = async () => {
     try {
       const resposta = await createUserWithEmailAndPassword(auth, email, senha);
-      cadastroBD();
+      await cadastroBD(resposta.user.uid);
+      if(!souProfessor){
+
+        await cadastroFases(resposta.user.uid)
+      }
     } catch (error) {
       if(error.code === "auth/invalid-email"){
         Alert.alert("Email inválido.")
@@ -168,18 +173,33 @@ export default function Cadastro({ navigation }) {
   //   console.log(usuarioString === teste);
   // };
 
-  async function cadastroBD() {
+  async function cadastroBD(userId) {
     const data = new Date
 
-    const user = await addDoc(userCollectionRef, {
+    await setDoc(doc(userCollectionRef, userId), {
+      userId,
       nome,
       email,
       souProfessor,
       urlImagemPerfil,
       dataCadastro: data,
-      ultimoAcesso,
+      ultimoAcesso: data,
     });
     // localStorage(nome, email, urlImagemPerfil);
+  }
+
+  const cadastroFases = async (userId) => {
+    const userCollectionRef = collection(db, "users", userId, "userFases");
+    const colecaoOriginal = collection(db, "fase");
+    const querySnapshot = await getDocs(colecaoOriginal);
+  
+    querySnapshot.forEach(async (docOriginal) => {
+      await setDoc(doc(userCollectionRef, docOriginal.id), {
+        ...docOriginal.data(),
+        userId: userId,
+        concluido: false
+      });
+    });
   }
 
   const validarEmail = (email) => {
