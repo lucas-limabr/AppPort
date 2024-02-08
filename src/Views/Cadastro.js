@@ -194,11 +194,17 @@ export default function Cadastro({ navigation }) {
     const querySnapshot = await getDocs(colecaoOriginal);
   
     querySnapshot.forEach(async (docOriginal) => {
-      await setDoc(doc(userCollectionRef, docOriginal.id), {
+      // Defina explicitamente o ID do documento na coleção de usuário
+      const newDocRef = doc(userCollectionRef, docOriginal.id);
+      const newDocData = {
         ...docOriginal.data(),
         userId: userId,
-        concluido: false
-      });
+        concluido: false,
+        id: newDocRef.id // Adicione o ID do novo documento como um atributo
+      };
+      await setDoc(newDocRef, newDocData);
+  
+      console.log("Novo documento criado:", newDocData);
     });
   }
 

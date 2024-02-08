@@ -59,28 +59,33 @@ export default StyleSheet.create({
     boxImage: {
         height: '100%',
         width: '40%',
+        justifyContent:"center",
+        alignItems:"center",
 
     },
 
     boxImageImage: {
-        height: '100%',
-        width: '100%',
+        height: 120,
+        width: 120,
 
     },
     
     boxImageButton: {
-        height: '110%',
-        width: '110%',
+        height: 120,
+        width: 120,
         alignItems:'center',
+        justifyContent:'center',
     },
 
     boxImageButtonText: {
         color:'#fff',
         fontSize:16,
         position:'absolute',
-        top:105,
+        top:94,
         fontFamily: 'Inder_400Regular',
 
     },
+
+    
 
 });
