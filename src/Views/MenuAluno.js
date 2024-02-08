@@ -82,10 +82,7 @@ export default function MenuAluno() {
   }
   }
 
-  const navegarLista = (id) => {
-    setId(id)
-    navigation.navigate('StackNavAluno', {screen: 'QuestoesAluno', params: {itemId: id} })
-  }
+  
 
   useFocusEffect(
     useCallback(() => {
@@ -135,6 +132,13 @@ export default function MenuAluno() {
       try{
         const id = await fetchId()
         setId(id)
+
+        if(id){
+          
+          
+          navigation.navigate('StackNavAluno', {screen: 'QuestoesAluno', params: {itemId: id} })
+        }
+        
         return id;
         }catch(error){
           console.log("Erro ao obter ID:", error)
@@ -143,6 +147,8 @@ export default function MenuAluno() {
 
     const fetchId = async () => {
       const id = await fetchIdList('nomeLista', 'ListaAluno', title, aluno)
+      setId(id)
+      
       
       return id
     }
@@ -198,7 +204,7 @@ export default function MenuAluno() {
         data={listas}
         keyExtractor={(item) => item.codigo}
         renderItem={({item}) => (
-          <ClickButton title={item.nomeLista} acertos={item.acertos} erros={item.erros} onButtonPress={() => navegarLista(id) } /> 
+          <ClickButton title={item.nomeLista} acertos={item.acertos} erros={item.erros} onButtonPress={() => console.log(item.id) } /> 
         )}
         />
       </View>
