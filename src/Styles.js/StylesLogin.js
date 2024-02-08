@@ -11,7 +11,8 @@ export default StyleSheet.create({
     containerFilho:{
         alignItems: 'flex-end',
         top: -190,
-        zIndex: 1
+        zIndex: 1,
+        
     },
     botaoGrande:{
         backgroundColor:'#FFB9BD',
@@ -71,11 +72,13 @@ export default StyleSheet.create({
         position: 'absolute',
         bottom: -22,
         width: '100%', 
-        height: '50%',
+        height: '40%',
        resizeMode: "contain",
+       overflow: "hidden",
+       
        
        
     },
-
+    
     
 })

@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function SubMenu1() {
   const navigation = useNavigation()
+  
 
 
   return (
@@ -17,7 +18,7 @@ export default function SubMenu1() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'crase'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -33,7 +34,7 @@ export default function SubMenu1() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity  onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'pontuacao'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -53,7 +54,7 @@ export default function SubMenu1() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'regencia'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -69,7 +70,7 @@ export default function SubMenu1() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity  onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'figurasDeLinguagem'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -89,7 +90,7 @@ export default function SubMenu1() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'concordancia'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
@@ -105,7 +106,7 @@ export default function SubMenu1() {
 
         <View>
 
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('Trilha', { screen: 'Trilha', params: 'vozesVerbais'})}>
 
             <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 

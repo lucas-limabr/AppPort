@@ -36,8 +36,10 @@ export default function Login({navigation}) {
             <Text style={Styles.frase}>Aprender pode ser divertido</Text>
 
             </View>
+            
 
             <Image style = {Styles.imageLogo} source={require('../Imagens/Levri8Cortado.gif')} />
+            
 
          </LinearGradient>
     )

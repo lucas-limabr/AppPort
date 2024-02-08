@@ -1,18 +1,21 @@
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getDoc, getFirestore, where } from "firebase/firestore";
-import { addDoc, collection, query, getDocs, deleteDoc  } from "firebase/firestore";
+import { addDoc, collection, query, getDocs, deleteDoc, updateDoc  } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { differenceInCalendarDays } from "date-fns";
 
 
-export const fetchIdList = async (campo, colecao, item) => {
+export const fetchIdList = async (campo, colecao, item, usuario) => {
     const db = getFirestore(FIREBASE_APP);
     const collectionRef = collection(db, colecao);
+
+    const alunoRef = doc(getFirestore(), `/users/${usuario}`)
     
-  
+    
     try {
       
-      const q = query(collectionRef, where(campo, '==', item));
-  
+      const q = query(collectionRef,  where("aluno", '==', alunoRef), where(campo, '==', item));
+      
       
       const querySnapshot = await getDocs(q);
   
@@ -23,8 +26,8 @@ export const fetchIdList = async (campo, colecao, item) => {
         const dados = primeiroDocumento.data();
         const idDoDocumento = primeiroDocumento.id;
   
-        // console.log('Dados do documento:', dados);
-        console.log('ID do documento:', idDoDocumento);
+        
+       
         return idDoDocumento
       } else {
         console.log('Nenhum documento encontrado com base no título.');
@@ -39,7 +42,7 @@ export const fetchIdList = async (campo, colecao, item) => {
   const listaRef = doc(db, "listas", codigoLista);
 
   try {
-    // Deleta o documento correspondente ao código da lista
+    
     await deleteDoc(listaRef);
     console.log(`Lista com código ${codigoLista} deletada com sucesso.`);
   } catch (error) {
@@ -48,7 +51,7 @@ export const fetchIdList = async (campo, colecao, item) => {
   };
   
   export const userReference = async () => {
-    // Supondo que você esteja usando Firebase Authentication
+    
     const auth = getAuth();
   
     return new Promise((resolve, reject) => {
@@ -82,4 +85,54 @@ export const fetchIdList = async (campo, colecao, item) => {
     // Se não houver documento correspondente, retorne false (ou o valor que fizer sentido para o seu caso)
     return false;
   };
+
+  export const getInfoUser = async (email) => {
+    const db = getFirestore(FIREBASE_APP);
+  
+    const docRef = collection(db, "users");
+    const q = query(docRef, where("email", "==", email));
+  
+    const querySnapshot = await getDocs(q);
+  
+    if (querySnapshot.size > 0) {
+      const userDoc = querySnapshot.docs[0].data();  
+      
+      return userDoc
+    }
+  
+    // Se não houver documento correspondente, retorne false (ou o valor que fizer sentido para o seu caso)
+    return false;
+  };
+
+  export const updateDay = async (email) => {
+    const db = getFirestore(FIREBASE_APP);
+
+    const dataAtual = new Date();
+
+    try {
+        // Consultar o usuário pelo e-mail
+        const q = query(collection(db, 'users'), where('email', '==', email));
+        const querySnapshot = await getDocs(q);
+
+        
+        if (querySnapshot.size > 0) {
+            const usuario = querySnapshot.docs[0].data();
+            const ultimoAcesso = usuario.ultimoAcesso.toDate(); 
+
+            
+            const diferencaEmDias = differenceInCalendarDays(dataAtual, ultimoAcesso);
+
+            
+            if (diferencaEmDias > 1) {
+                
+                const usuarioRef = doc(db, 'users', querySnapshot.docs[0].id);
+                await updateDoc(usuarioRef, {
+                    ultimoAcesso: dataAtual
+                });
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar a data:', error);
+    }
+}
   

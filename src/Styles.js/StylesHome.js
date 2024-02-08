@@ -23,7 +23,7 @@ export default StyleSheet.create({
     },
     input:{
         backgroundColor: '#EFEFFE',
-        padding:0,
+        padding:10,
         marginTop: 5,
         height:50,
         marginLeft:20,

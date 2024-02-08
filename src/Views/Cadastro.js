@@ -13,10 +13,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Switch } from "react-native-gesture-handler";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, setDoc, doc, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import styles from "../Styles.js/StylesTermoDeUso";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { userVerification } from "../FuncoesFirebase/Funcoes";
 
 export default function Cadastro({ navigation }) {
   const [nome, setNome] = useState("");
@@ -137,9 +138,22 @@ export default function Cadastro({ navigation }) {
   const signUp = async () => {
     try {
       const resposta = await createUserWithEmailAndPassword(auth, email, senha);
-      cadastroBD();
+      await cadastroBD(resposta.user.uid);
+      if(!souProfessor){
+
+        await cadastroFases(resposta.user.uid)
+      }
     } catch (error) {
-      Alert.alert("erro" + error.message);
+      if(error.code === "auth/invalid-email"){
+        Alert.alert("Email inválido.")
+      }
+      if(error.code === "auth/weak-password"){
+        Alert.alert("Sua senha necessita de pelo menos 6 caracteres.")
+      }
+      if(error.code === "auth/email-already-in-use"){
+        Alert.alert("Email já cadastrado.")
+      }
+      
       console.log(error);
       setVisible(false);
     }
@@ -159,17 +173,53 @@ export default function Cadastro({ navigation }) {
   //   console.log(usuarioString === teste);
   // };
 
-  async function cadastroBD() {
-    const user = await addDoc(userCollectionRef, {
+  async function cadastroBD(userId) {
+    const data = new Date
+
+    await setDoc(doc(userCollectionRef, userId), {
+      userId,
       nome,
       email,
       souProfessor,
       urlImagemPerfil,
+      dataCadastro: data,
+      ultimoAcesso: data,
     });
     // localStorage(nome, email, urlImagemPerfil);
   }
 
+  const cadastroFases = async (userId) => {
+    const userCollectionRef = collection(db, "users", userId, "userFases");
+    const colecaoOriginal = collection(db, "fase");
+    const querySnapshot = await getDocs(colecaoOriginal);
+  
+    querySnapshot.forEach(async (docOriginal) => {
+      // Defina explicitamente o ID do documento na coleção de usuário
+      const newDocRef = doc(userCollectionRef, docOriginal.id);
+      const newDocData = {
+        ...docOriginal.data(),
+        userId: userId,
+        concluido: false,
+        id: newDocRef.id // Adicione o ID do novo documento como um atributo
+      };
+      await setDoc(newDocRef, newDocData);
+  
+      console.log("Novo documento criado:", newDocData);
+    });
+  }
+
+  const validarEmail = (email) => {
+    const regex = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
+    console.log(regex.test(email))
+    return regex.test(email);
+  }
+
   function cadastrar() {
+    if(!validarEmail(email)){
+      Alert.alert("Email inválido")
+      return
+    }
+    
     if (
       email != confimarEmail ||
       email == "" ||

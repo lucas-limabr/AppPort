@@ -10,7 +10,9 @@ import TabNavAluno from "./TabNavAluno";
 import { useFonts, Inder_400Regular } from "@expo-google-fonts/inder"
 import { useAuthentication } from "../hooks/useAutentication";
 import { userVerification } from "../FuncoesFirebase/Funcoes";
+import { updateDay } from "../FuncoesFirebase/Funcoes";
 import Login from "../Views/Login";
+import { format, differenceInCalendarDays } from "date-fns";
 
 
 export default function Navegacao() {
@@ -22,6 +24,7 @@ export default function Navegacao() {
     const fetchVerification = async () => {
       const result = await userVerification(user?.email);
       setIsProfessor(result);
+      updateDay(user.email)
       console.log(`É professor: ${result}`);
       console.log(`Usuário: ${user?.email}`);
     };

@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, TouchableOpacity, Text, Image, Alert } from "react-native";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  Image,
+  Alert,
+  Modal,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { FIREBASE_APP } from "../../FirebaseConfig";
 import { useRoute } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
-import Styles from "../Styles.js/StylesDescritores";
+import Styles from "../Styles.js/StylesRespostaCorretaAluno";
+import Styless from "../Styles.js/StylesRespostaIncorretaAluno";
+import StylesEnd from "../Styles.js/StylesTerminouListaAluno";
 import "firebase/firestore";
 import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
@@ -25,155 +34,327 @@ import {
   getDoc,
   updateDoc,
 } from "firebase/firestore";
+import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 export default function QuestoesAluno() {
   const route = useRoute();
-  const codigoLista = route.params.itemId;
+  let codigoLista = route.params.itemId;
   const [questoes, setQuestoes] = useState([]);
   const [indice, setIndice] = useState(0);
   const [questoesCarregadas, setQuestoesCarregadas] = useState(false);
-  const [value,setValue] = useState('')
-  const [acertos, setAcertos] = useState()
-  const [erros, setErros] = useState()
-  console.log(indice)
-  
+  const [value, setValue] = useState("");
+  const [acertos, setAcertos] = useState(0);
+  const [erros, setErros] = useState(0);
+  const [correct, setCorrect] = useState(false);
+  const [incorrect, setIncorrect] = useState(false);
+  const [end, setEnd] = useState(false);
+  const [atualizar, setAtualizar] = useState(true);
+
+  const auth = FIREBASE_AUTH;
+
+  const aluno = auth.currentUser.uid;
 
   const navigation = useNavigation();
 
   const questoesCarregadasRef = useRef(questoesCarregadas);
 
   useEffect(() => {
-    questoesCarregadasRef.current = questoesCarregadas;
-  }, [questoesCarregadas]);
-
-  const obterQuestoes = useCallback(async () => {
-    try {
-      setIndice(0);
-      const db = getFirestore(FIREBASE_APP);
-      const listaCollectionRef = collection(db, "ListaAluno");
-      const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
-      const querySnapshot = await getDocs(q);
-      
-
-      if (!querySnapshot.empty) {
-        const docSnap = querySnapshot.docs[0];
-        const data = docSnap.data();
-
-        if (data && data.questoes) {
-          const referenciasQuestoes = data.questoes;
-
-          const questoesPromises = referenciasQuestoes.map(async (referencia) => {
-            const questaoDoc = await getDoc(referencia);
-            if (questaoDoc.exists()) {
-             return questaoDoc.data();
-            } else {
-              console.warn("Documento de questão não encontrado:", referencia.id);
-              return null;
-            }
-          });
-
-          const questoesArrayResultado = await Promise.all(questoesPromises);
-
-          // Filtra para remover entradas nulas ou indefinidas
-          const questoesFiltradas = questoesArrayResultado.filter((questao) => questao);
-
-          setQuestoes(questoesFiltradas);
-          // Utilize o callback de estado para garantir que está atualizado
-          setQuestoesCarregadas((prevState) => !prevState);
-
-          const acertos =  0
-          const erros =  0
-
-          setAcertos(acertos)
-          setErros(erros)
-
-          
-        } else {
-          console.log("Documento não contém a estrutura esperada.");
-        }
-      } else {
-        console.log("Documento não encontrado.");
-      }
-    } catch (error) {
-      console.error("Erro ao obter as questões:", error);
-    }
-  }, [codigoLista]);
-
-  
+    setIndice(0);
+  }, []);
 
   useEffect(() => {
-    
-    obterQuestoes();
+    codigoLista = route.params.itemId;
 
-    const time = 5000;
+    setIndice(0);
+
+    if (codigoLista) {
+      const obterQuestoes = async () => {
+        try {
+          const db = getFirestore(FIREBASE_APP);
+          const documentoRef = doc(db, "ListaAluno", codigoLista);
+          const documentoSnapshot = await getDoc(documentoRef);
+
+          if (documentoSnapshot.exists()) {
+            const data = documentoSnapshot.data();
+
+            if (data && data.questoes.length > 0) {
+              const referenciasQuestoes = data.questoes;
+              const questoesPromises = referenciasQuestoes.map(
+                async (referencia) => {
+                  const questaoDoc = await getDoc(referencia);
+                  return questaoDoc.exists() ? questaoDoc.data() : null;
+                }
+              );
+
+              const questoesArrayResultado =
+                await Promise.all(questoesPromises);
+              const questoesFiltradas = questoesArrayResultado.filter(
+                (questao) => questao
+              );
+              setQuestoes(questoesFiltradas);
+              setQuestoesCarregadas(true);
+
+              const acertos = 0;
+              const erros = 0;
+              setAcertos(acertos);
+              setErros(erros);
+            } else {
+              console.log("Documento não contém a estrutura esperada.");
+              setQuestoesCarregadas(false);
+            }
+          } else {
+            console.log("Documento não encontrado.");
+          }
+        } catch (error) {
+          console.error("Erro ao obter as questões:", error);
+        }
+      };
+
+      obterQuestoes();
+    }
+
+    const time = 7000;
 
     const timeoutId = setTimeout(() => {
-      
-      if (!questoesCarregadasRef.current) {
-        
+      if (!questoesCarregadas) {
+        setIndice(0);
         // Mostra o alerta se as questões não foram carregadas
         Alert.alert(
           "Aviso",
           "A lista está vazia!",
-          [{ text: "OK", onPress: () => navigation.goBack() }],
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                clearTimeout(timeoutId); // Limpa o timeout antes de navegar de volta
+                navigation.goBack();
+              },
+            },
+          ],
           { cancelable: false }
         );
       }
     }, time);
 
     return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
-  }, [obterQuestoes, navigation]);
+  }, [codigoLista, navigation, atualizar]);
 
-  function continuar() {
-    if (indice < questoes.length - 1) {
-      setIndice(indice + 1);
-    }
-    
-  }
-  
-  const proximaQuestao = async (respostaCorreta, respostaALuno) => {
-    let novosAcertos = acertos
-    let novosErros = erros
-    if(respostaCorreta === respostaALuno){
-      novosAcertos++
-    }else{
+  const refreshComponent = () => {
+    setAtualizar((prevKey) => prevKey + 1);
+  };
 
-      novosErros++
-    }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshComponent();
+    });
 
-    try{
+    return unsubscribe;
+  }, [navigation]);
+
+  const conferirQuestao = async (respostaCorreta, respostaALuno) => {
+    try {
+      const novosAcertos =
+        respostaCorreta === respostaALuno ? acertos + 1 : acertos;
+      const novosErros = respostaCorreta !== respostaALuno ? erros + 1 : erros;
+
       const db = getFirestore(FIREBASE_APP);
-      const listaCollectionRef = collection(db, "ListaAluno");
-      const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
-      const querySnapshot = await getDocs(q);
+      const listaDocRef = doc(db, "ListaAluno", codigoLista);
+      const listaDocSnapshot = await getDoc(listaDocRef);
 
-      if(!querySnapshot.empty){
-        const docSnap = querySnapshot.docs[0]
-        const listaDocRef = doc(db, "ListaAluno", docSnap.id)
-
+      if (listaDocSnapshot.exists()) {
         await updateDoc(listaDocRef, {
           acertos: novosAcertos,
           erros: novosErros,
-        })
-        setAcertos(novosAcertos)
-        setErros(novosErros)
+        });
+
+        setAcertos(novosAcertos);
+        setErros(novosErros);
+
+        respostaCorreta === respostaALuno
+          ? setCorrect(true)
+          : setIncorrect(true);
       }
-      indice < questoes.length - 1 ?  setIndice(indice + 1) : navigation.goBack({reload: true})   
-    }catch(error){
-      console.error(error)
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-  }
+  const proximaQuestao = () => {
+    if (indice < questoes.length - 1) {
+      setIndice(indice + 1);
+      setCorrect(false);
+      setIncorrect(false);
+    } else {
+      setEnd(true);
+    }
+  };
 
-  
+  const finishList = () => {
+    setIndice(0);
+    setCorrect(false);
+    setIncorrect(false);
+    setAcertos(0);
+    setErros(0);
+    setEnd(false);
+    navigation.goBack({ reload: true });
+  };
+
+  const ModalSad = () => {
+    return (
+      <Modal animationType="fade" transparent={false} visible={incorrect}>
+        <LinearGradient
+          colors={["#D5D4FB", "#9B98FC"]}
+          style={Styless.gradient}
+        >
+          <View style={Styless.container}>
+            <View style={Styless.boxTitle}>
+              <Text style={Styless.Title}>Resposta incorreta</Text>
+            </View>
+
+            <View style={Styless.box}>
+              <View style={Styless.boxImage}>
+                <Image
+                  style={Styless.ImageFormat}
+                  source={require("../Imagens/animations/AnimacoesMascoteErrouMaioria.gif")}
+                />
+              </View>
+
+              <View style={Styless.subDivTag}>
+                <View style={Styless.subSubDivTag}>
+                  <View style={Styless.tagText}>
+                    <Text style={Styless.FontFormat}>Acertos:</Text>
+                  </View>
+                  <View style={Styless.tagText}>
+                    <Text style={Styless.FontFormat}>Erros:</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={Styless.buttomBox}>
+                <TouchableOpacity
+                  style={Styless.buttom}
+                  onPress={() => proximaQuestao()}
+                >
+                  <Text style={[Styless.FontFormatButtom, Styless.shadow]}>
+                    Próxima questão
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
+      </Modal>
+    );
+  };
+
+  const ModalHappy = () => {
+    return (
+      <Modal animationType="fade" transparent={false} visible={correct}>
+        <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
+          <View style={Styles.container}>
+            <View style={Styles.boxTitle}>
+              <Text style={Styles.Title}>
+                MUITO BEM!
+                <Text style={Styles.SubTitle}>Certa Resposta</Text>
+              </Text>
+            </View>
+
+            <View style={Styles.box}>
+              <View style={Styles.boxImage}>
+                <Image
+                  style={Styles.ImageFormat}
+                  source={require("../Imagens/animations/AnimacoesMascoteAcimaDaMedia.gif")}
+                />
+              </View>
+
+              <View style={Styles.subDivTag}>
+                <View style={Styles.subSubDivTag}>
+                  <View style={Styles.tagText}>
+                    <Text style={Styles.FontFormat}>Acertos:</Text>
+                  </View>
+                  <View style={Styles.tagText}>
+                    <Text style={Styles.FontFormat}>Erros:</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={Styles.buttomBox}>
+                <TouchableOpacity
+                  style={Styles.buttom}
+                  onPress={() => proximaQuestao()}
+                >
+                  <Text style={[Styles.FontFormatButtom, Styles.shadow]}>
+                    Próxima questão
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
+      </Modal>
+    );
+  };
+
+  const ModalEnd = () => {
+    return (
+      <Modal animationType="fade" transparent={false} visible={end}>
+        <LinearGradient
+          colors={["#D5D4FB", "#9B98FC"]}
+          style={StylesEnd.gradient}
+        >
+          <View style={StylesEnd.container}>
+            <View style={StylesEnd.boxTitle}>
+              <Text style={StylesEnd.Title}>
+                PARABÉNS!!
+                <Text style={StylesEnd.SubTitle}>Você terminou a lista</Text>
+              </Text>
+            </View>
+
+            <View style={StylesEnd.box}>
+              <View style={StylesEnd.boxImage}>
+                <Image
+                  style={StylesEnd.ImageFormat}
+                  source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
+                />
+              </View>
+
+              <View style={StylesEnd.subDivTag}>
+                <View style={StylesEnd.subSubDivTag}>
+                  <View style={StylesEnd.tagText}>
+                    <Text style={StylesEnd.FontFormat}>Acertos: {acertos}</Text>
+                  </View>
+                  <View style={StylesEnd.tagText}>
+                    <Text style={StylesEnd.FontFormat}>Erros: {erros}</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={StylesEnd.buttomBox}>
+                <TouchableOpacity
+                  style={StylesEnd.buttom}
+                  onPress={() => finishList()}
+                >
+                  <Text style={[StylesEnd.FontFormatButtom, StylesEnd.shadow]}>
+                    Confirmar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
+      </Modal>
+    );
+  };
 
   const questaoAtual = questoes[indice];
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
+      <ModalHappy />
+      <ModalSad />
+      <ModalEnd />
       {questaoAtual ? (
         <View style={styles.container}>
-          
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
               <Image
@@ -182,52 +363,57 @@ export default function QuestoesAluno() {
                 resizeMode="contain"
               />
             </View>
-            <Markdown style={{
-              body: {
-                fontSize: 16,
-                color: "#fff",
-                top: 0,
-                width: "90%",
-                left: 5,
-                padding: 5,
-                textAlign: "left",
-                fontFamily: "Inder_400Regular",
-              },
-            }}>{questaoAtual.pergunta}</Markdown>
+            <Markdown
+              style={{
+                body: {
+                  fontSize: 16,
+                  color: "#fff",
+                  top: 0,
+                  width: "90%",
+                  left: 5,
+                  padding: 5,
+                  textAlign: "left",
+                  fontFamily: "Inder_400Regular",
+                },
+              }}
+            >
+              {questaoAtual.pergunta}
+            </Markdown>
           </View>
 
           <View style={styles.containerResposta}>
             <ScrollView style={styles.scroll}>
-
-          <RadioButton.Group
-  onValueChange={(value) => {setValue(value)}}
-  value={value}
->
-  {questaoAtual.respostas.map((resposta, index) => (
-    <RadioButton.Item
-      key={index}
-      label={resposta}
-      value={resposta}
-      style={[
-        styles.alternativas,
-        value === resposta && styles.selectLabel,
-      ]}
-      labelStyle={styles.label}
-      uncheckedColor="#fff"
-      color="#fff"
-    />
-  ))}
-</RadioButton.Group>
+              <RadioButton.Group
+                onValueChange={(value) => {
+                  setValue(value);
+                }}
+                value={value}
+              >
+                {questaoAtual.respostas.map((resposta, index) => (
+                  <RadioButton.Item
+                    key={index}
+                    label={resposta}
+                    value={resposta}
+                    style={[
+                      styles.alternativas,
+                      value === resposta && styles.selectLabel,
+                    ]}
+                    labelStyle={styles.label}
+                    uncheckedColor="#fff"
+                    color="#fff"
+                  />
+                ))}
+              </RadioButton.Group>
             </ScrollView>
           </View>
 
           <View style={styles.containerContinuar}>
-            
-              
-            
-              
-            
-            <TouchableOpacity style={styles.confirmar} onPress={() => proximaQuestao(questaoAtual.respostaCorreta, value)}>
+            <TouchableOpacity
+              style={styles.confirmar}
+              onPress={() =>
+                conferirQuestao(questaoAtual.respostaCorreta, value)
+              }
+            >
               <Text style={styles.label}>Confirmar</Text>
             </TouchableOpacity>
           </View>
