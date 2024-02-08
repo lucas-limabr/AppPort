@@ -48,6 +48,7 @@ export default function QuestoesAluno() {
   const [correct, setCorrect] = useState(false);
   const [incorrect, setIncorrect] = useState(false);
   const [end, setEnd] = useState(false);
+  const [atualizar, setAtualizar] = useState(true);
 
   const auth = FIREBASE_AUTH;
 
@@ -121,14 +122,34 @@ export default function QuestoesAluno() {
         Alert.alert(
           "Aviso",
           "A lista está vazia!",
-          [{ text: "OK", onPress: () => navigation.goBack() }],
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                clearTimeout(timeoutId); // Limpa o timeout antes de navegar de volta
+                navigation.goBack();
+              },
+            },
+          ],
           { cancelable: false }
         );
       }
     }, time);
 
     return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
-  }, [codigoLista, navigation, questoesCarregadas]);
+  }, [codigoLista, navigation, atualizar]);
+
+  const refreshComponent = () => {
+    setAtualizar((prevKey) => prevKey + 1);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshComponent();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const conferirQuestao = async (respostaCorreta, respostaALuno) => {
     try {
