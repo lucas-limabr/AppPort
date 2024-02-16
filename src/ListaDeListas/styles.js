@@ -7,9 +7,10 @@ export default StyleSheet.create({
         ...StyleSheet.absoluteFillObject,        
     },
     container: {
-        flex: 1,
-        marginTop: 25,
+        
+        marginTop: 30,
         alignItems: 'center',
+        
        
     },
     enunciado:{
@@ -89,7 +90,8 @@ export default StyleSheet.create({
         justifyContent: 'space-evenly',
         flexDirection: 'row',
         flex: 1,
-        position: "relative"
+        position: "relative",
+        top:45
     },
     btnSalvar:{
         backgroundColor: '#F54F59',
@@ -98,20 +100,22 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
+        marginLeft: 10
     },
     containerSalvar:{
         width: '100%',
-        left: 30,
-        bottom: 5,
+        right: 30,
+        top: 30,
         alignItems: 'flex-end',
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-end',
         flexDirection: 'row',
         flex: 1,
        
         
     },
     scroll:{
-        height: 250
+        height: 200,
+        
         
     },
     confirmar:{
@@ -121,7 +125,8 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-    }
+    },
+    
     
     
 

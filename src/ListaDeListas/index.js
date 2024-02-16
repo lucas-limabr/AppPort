@@ -212,7 +212,7 @@ export default function Questoes() {
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-        <View style={styles.containerSalvar}>
+      <View style={styles.containerSalvar}>
           <TouchableOpacity
             style={styles.btnSalvar}
             onPress={() => selecionarQuestao(id)}

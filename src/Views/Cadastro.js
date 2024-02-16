@@ -185,7 +185,6 @@ export default function Cadastro({ navigation }) {
       dataCadastro: data,
       ultimoAcesso: data,
     });
-    // localStorage(nome, email, urlImagemPerfil);
   }
 
   const cadastroFases = async (userId) => {
@@ -194,13 +193,12 @@ export default function Cadastro({ navigation }) {
     const querySnapshot = await getDocs(colecaoOriginal);
   
     querySnapshot.forEach(async (docOriginal) => {
-      // Defina explicitamente o ID do documento na coleção de usuário
       const newDocRef = doc(userCollectionRef, docOriginal.id);
       const newDocData = {
         ...docOriginal.data(),
         userId: userId,
         concluido: false,
-        id: newDocRef.id // Adicione o ID do novo documento como um atributo
+        id: newDocRef.id 
       };
       await setDoc(newDocRef, newDocData);
   
