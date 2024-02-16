@@ -21,7 +21,7 @@ import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import {fetchIdList, deleteList} from '../FuncoesFirebase/Funcoes'
+import {fetchIdList, deleteList, fetchQuestionIdByTitle} from '../FuncoesFirebase/Funcoes'
 
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
@@ -77,7 +77,7 @@ export default function Listas() {
   }
 
   async function criarLista(nomeLista) {
-    setAtualizarDados(!atualizarDados);
+    
     setVisible(false);
 
     const novaLista = {
@@ -92,7 +92,8 @@ export default function Listas() {
     const listaId = docRef.id;
 
     setListas([...listas, { ...listas, novaLista }]);
-    Alert.alert("Lista criado com sucesso");
+    setAtualizarDados(!atualizarDados);
+    Alert.alert("Lista criada com sucesso");
   }
 
   const carregarItemId = (id) => {
@@ -146,7 +147,11 @@ export default function Listas() {
     };
   
     const fetchId = async () =>{
-      const id = await fetchIdList('nomeLista', 'listas', titulo)
+      const id = await fetchQuestionIdByTitle('nomeLista', 'listas', referenciaCriador)
+
+      console.log("id " + id)
+
+      console.log(titulo)
   
       return id;
     }
@@ -154,16 +159,13 @@ export default function Listas() {
     
   
     const handleDelete = async () => {
-      const codigoListaParaExcluir = await fetchId();
+     
+
+      // console.log(referenciaCriador.id)
       
-      await deleteList(codigoListaParaExcluir);
+      await deleteList(titulo, referenciaCriador.id);
       
       setAtualizarDados(!atualizarDados)
-
-      
-     
-      
-  
     }
     
     return(

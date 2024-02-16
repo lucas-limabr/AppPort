@@ -114,7 +114,7 @@ export default function Trilha() {
           if(subTema ==="usoDosPorques" || subTema =="pronomes" || subTema === "pontuacao" || subTema === "regencia"){
             switch (index) {
               case 0:
-                style = Styles.AjustItens_center;
+                style = Styles.AjustItens_right;
                 break;
   
               case 1:
@@ -122,7 +122,7 @@ export default function Trilha() {
                 break;
   
               case 2:
-                style = Styles.AjustItens_center;
+                style = Styles.AjustItens_right;
                 break;
   
   
@@ -184,15 +184,15 @@ export default function Trilha() {
           if(subTema ==="concordancia" || subTema =="conjuncoes" || subTema === "classesGramaticais" || subTema === "preposicoes" || subTema === "vozesVerbais"  || subTema === "expressoesCotidianas" ||  subTema === "crase"){
             switch (index) {
               case 0:
-                style = Styles.AjustItens_left;
+                style = Styles.AjustItens_right;
                 break;
   
               case 1:
-                style = Styles.AjustItens_center;
+                style = Styles.AjustItens_right;
                 break;
   
               default:
-                style = Styles.AjustItens_center;
+                style = Styles.AjustItens_right;
                 break;
             }
           }

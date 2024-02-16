@@ -96,7 +96,7 @@ export default function QuestoesTrilha() {
   };
 
   const finishActivity = async () => {
-    if (acertos >= 4) {
+    if (acertos >= questoes.length - 2) {
         try {
           const db = getFirestore(FIREBASE_APP);
           const documentoRef = doc(db, "users", userId)
@@ -104,7 +104,6 @@ export default function QuestoesTrilha() {
           await updateDoc(usuarioRef, {
            concluido: true,
           });
-          console.log("Atributo atualizado com sucesso no Firestore!");
           
         } catch (error) {
           console.error("Erro ao atualizar atributo no Firestore:", error);
