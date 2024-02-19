@@ -164,12 +164,21 @@ export default function Questoes() {
     }
   };
 
+  const verirficarEAtualizarEstado = async () => {
+    const estaNaLista = await verificarArray(id);
+    setQuestaoEstaNaLista(estaNaLista);
+    console.log(estaNaLista)
+  };
+
   function continuar() {
     setIndice(indice + 1);
     setAtualizarDados(!atualizarDados);
+    verirficarEAtualizarEstado()
+    
   }
 
   function voltar() {
+    verirficarEAtualizarEstado()
     if (indice != 0) {
       setIndice(indice - 1);
       setAtualizarDados(!atualizarDados);
@@ -185,10 +194,7 @@ export default function Questoes() {
       setId(result.id);
     });
 
-    const verirficarEAtualizarEstado = async () => {
-      const estaNaLista = await verificarArray(id);
-      setQuestaoEstaNaLista(estaNaLista);
-    };
+    
 
     const obterIdLista = async () => {
       const idListaObtido = await obterIdPorCodigo(codigo, "listas");

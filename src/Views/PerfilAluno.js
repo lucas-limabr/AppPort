@@ -9,6 +9,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { format, differenceInCalendarDays } from "date-fns";
+import { getAuth, signOut } from "firebase/auth";
 
 
 export default function PerfilAluno() {
@@ -16,6 +17,12 @@ export default function PerfilAluno() {
   const [user,setUser] = useState()
 
   const data = new Date
+
+  const logout = () => {
+    const auth = getAuth();
+
+    signOut(auth)
+  }
 
   
   useEffect(() => {
@@ -56,9 +63,9 @@ export default function PerfilAluno() {
 
         <TouchableOpacity
           style={[Styles.botao, Styles.sombra]}
-          onPress={() => console.log(usuario.ultimoAcesso.toDate())}
+          onPress={() => logout()}
         >
-          <Text style={Styles.txtBotao}>Alterar foto</Text>
+          <Text style={Styles.txtBotao}>Sair</Text>
         </TouchableOpacity>
 
         <View style={Styles.containerFilho}>
