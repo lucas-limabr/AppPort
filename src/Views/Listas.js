@@ -250,7 +250,7 @@ export default function Listas() {
               <TouchableOpacity style={style.botaoEditar} onPress={() => {navigation.navigate('StackNav', { screen: 'Menu', params: {itemId } }); setVisibleEdit(false)}}>
                 <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
               </TouchableOpacity >
-              <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleCodigo(true)}>
+              <TouchableOpacity style={style.botaoEditar} onPress={() =>{setVisibleEdit(false); setVisibleCodigo(true)}}>
                 <Text style={style.txtEditar}>Exibir código</Text>
               </TouchableOpacity>
               <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleEdit(false)}>

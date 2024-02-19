@@ -117,8 +117,19 @@ export default function QuestoesLista() {
     }, time);
   
     return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
-  }, [obterQuestoes, navigation]);
-  
+  }, [obterQuestoes, navigation, atualizar]);
+
+  const refreshComponent = () => {
+    setAtualizar((prevKey) => prevKey + 1);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      refreshComponent();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
   
 
   function continuar() {

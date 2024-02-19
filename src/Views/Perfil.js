@@ -7,10 +7,19 @@ import { getInfoUser } from "../FuncoesFirebase/Funcoes";
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { UserContext } from "../Contexts/auth";
 import { format, differenceInCalendarDays } from "date-fns";
+import { getAuth, signOut } from "firebase/auth";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Perfil(){
     const [usuario, setUsuario] = useState();
     const [user,setUser] = useState()
+    const navigation = useNavigation()
+
+    const logout = () => {
+      const auth = getAuth();
+
+      signOut(auth)
+    }
   
     const data = new Date
 
@@ -74,6 +83,10 @@ export default function Perfil(){
                         <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""}</Text>
                 </TextInput>
                 </View>
+
+                <TouchableOpacity style={[Styles.botao, Styles.sombra]} onPress={() => logout()}>
+                    <Text style={Styles.txtBotao}>Sair</Text>
+                </TouchableOpacity>
             
                 
 
