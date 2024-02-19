@@ -59,34 +59,32 @@ export default function Perfil(){
 
                 <View style={Styles.backgroundUser}>
 
-                <Image style={Styles.image}  source={require('../Imagens/defaultUser.png')} />
+                <Image style={Styles.image}  source={require('../Imagens/defaultIconPlayer1.png')} />
                 </View>
 
 
                 
-
-                <TouchableOpacity style={[Styles.botao, Styles.sombra]}>
-                    <Text style={Styles.txtBotao}>Alterar foto</Text>
-                </TouchableOpacity>
-
-                <View style={Styles.containerFilho}>
-
-                <TextInput style={Styles.input}>
-                        <Text style={Styles.txtInput}>Nome: {usuario ? usuario.nome : "" }</Text>
-                </TextInput>
-                </View>
-                
-
-                <View style={Styles.containerFilho}>
-
-                <TextInput style={Styles.input}>
-                        <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""}</Text>
-                </TextInput>
-                </View>
 
                 <TouchableOpacity style={[Styles.botao, Styles.sombra]} onPress={() => logout()}>
                     <Text style={Styles.txtBotao}>Sair</Text>
                 </TouchableOpacity>
+
+                <View style={Styles.containerFilho}>
+
+                <View style={Styles.input}>
+                        <Text style={Styles.txtInput}>Nome: {usuario ? usuario.nome : "" }</Text>
+                </View>
+                </View>
+                
+
+                <View style={Styles.containerFilho}>
+
+                <View style={Styles.input}>
+                        <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""}</Text>
+                </View>
+                </View>
+
+                
             
                 
 

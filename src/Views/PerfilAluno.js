@@ -57,7 +57,7 @@ export default function PerfilAluno() {
         <View style={Styles.backgroundUser}>
           <Image
             style={Styles.image}
-            source={require("../Imagens/defaultUser.png")}
+            source={require("../Imagens/defaultIconPlayer1.png")}
           />
         </View>
 
@@ -69,9 +69,9 @@ export default function PerfilAluno() {
         </TouchableOpacity>
 
         <View style={Styles.containerFilho}>
-          <TextInput style={Styles.input}>
+          <View style={Styles.viewOptions}>
             <Text style={Styles.txtInput}>Nome: {usuario ? usuario.nome : ""} </Text>
-          </TextInput>
+          </View>
         </View>
 
         <View style={Styles.containerFilho}>
@@ -105,9 +105,9 @@ export default function PerfilAluno() {
         </View>
 
         <View style={Styles.containerFilho}>
-          <TextInput style={Styles.viewOptions}>
+          <View style={Styles.viewOptions}>
             <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""} </Text>
-          </TextInput>
+          </View>
         </View>
       </View>
     </LinearGradient>
