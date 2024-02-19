@@ -14,7 +14,7 @@ export default StyleSheet.create({
         marginTop: 10,
     },
     image:{  
-            height:120,
+            height:180,
             resizeMode: "contain",
     },
     backgroundUser:{
@@ -49,13 +49,12 @@ export default StyleSheet.create({
     },
     input:{
         backgroundColor: '#EFEFFE',
-        padding:4,
         marginTop: 5,
-        height:50,
-        width:300,
-        marginLeft:20,
-        marginRight: 20,
-        borderRadius:10,
+        height: 50,
+        width: 300,
+        borderRadius: 10,
+        justifyContent: "center",
+        padding: 10
     },
     txtInput:{
         color: '#ff8c90',
