@@ -111,7 +111,7 @@ export default function Trilha() {
           
           let style;
 
-          if(subTema ==="usoDosPorques" || subTema =="pronomes" || subTema === "pontuacao" || subTema === "regencia"){
+          if(subTema ==="usoDosPorques" || subTema =="pronomes" || subTema === "pontuacao" || subTema === "regencia" ){
             switch (index) {
               case 0:
                 style = Styles.AjustItens_right;
@@ -181,7 +181,7 @@ export default function Trilha() {
                 break;
             }
           }
-          if(subTema ==="concordancia" || subTema =="conjuncoes" || subTema === "classesGramaticais" || subTema === "preposicoes" || subTema === "vozesVerbais"  || subTema === "expressoesCotidianas" ||  subTema === "crase"){
+          if(subTema ==="concordancia" || subTema =="conjuncoes" || subTema === "classesGramaticais" || subTema === "preposicoes" || subTema === "vozesVerbais"  || subTema === "expressoesCotidianas" ||  subTema === "crase"  || subTema === "figurasDeLinguagem"){
             switch (index) {
               case 0:
                 style = Styles.AjustItens_right;
