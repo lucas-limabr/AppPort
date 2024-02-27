@@ -45,7 +45,7 @@ export default StyleSheet.create({
         alignItems: 'flex-start',
         width: 300,
         marginTop: 10,
-       
+        height: 200,
     },
     resposta:{
         backgroundColor: '#ff8c90',
@@ -62,13 +62,14 @@ export default StyleSheet.create({
         borderRadius: 50,
         width: 300,
         marginTop: 5,
-        height: 'auto',        
+        height: 'auto', 
+               
     },
     label:{
         fontFamily: 'Inder_400Regular',
         color: '#fff',
         textAlign: "auto",
-        
+        borderWidth: 0
         
     },
     selectLabel:{
@@ -84,14 +85,8 @@ export default StyleSheet.create({
 
     },
     containerContinuar:{
-        width: '100%',
-        bottom: 5,
-        alignItems: 'flex-end',
-        justifyContent: 'space-evenly',
-        flexDirection: 'row',
-        flex: 1,
-        position: "relative",
-        top:45
+        top: 5,
+        height: 45
     },
     btnSalvar:{
         backgroundColor: '#F54F59',
@@ -113,11 +108,6 @@ export default StyleSheet.create({
        
         
     },
-    scroll:{
-        height: 200,
-        
-        
-    },
     confirmar:{
         backgroundColor: '#F54F59',
         width: 300,
@@ -125,7 +115,9 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
+        
     },
+    
     
     
     

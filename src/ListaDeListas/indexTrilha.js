@@ -17,7 +17,7 @@ import "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 import Markdown from "react-native-markdown-display";
-import { RadioButton } from "react-native-paper";
+import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
 import {
   getFirestore,
@@ -34,7 +34,7 @@ import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 export default function QuestoesTrilha() {
   const route = useRoute();
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   const [questoes, setQuestoes] = useState([]);
   const [indice, setIndice] = useState(0);
@@ -46,16 +46,13 @@ export default function QuestoesTrilha() {
   const [end, setEnd] = useState(false);
   const [atualizar, setAtualizar] = useState(true);
 
-  const userId = route.params.params.info.userId
-
-  
+  const userId = route.params.params.info.userId;
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const db = getFirestore(FIREBASE_APP);
         const questoesRefs = route.params.params.info.questoes;
-
 
         const questoesDocs = await Promise.all(
           questoesRefs.map(async (ref) => {
@@ -80,11 +77,11 @@ export default function QuestoesTrilha() {
 
   const conferirQuestao = (respostaCorreta, respostaAluno) => {
     if (respostaCorreta === respostaAluno) {
-        setAcertos(acertos + 1);
-      } else {
-        setErros(erros + 1);
-      }
-      proximaQuestao();
+      setAcertos(acertos + 1);
+    } else {
+      setErros(erros + 1);
+    }
+    proximaQuestao();
   };
 
   const proximaQuestao = () => {
@@ -97,20 +94,36 @@ export default function QuestoesTrilha() {
 
   const finishActivity = async () => {
     if (acertos >= questoes.length - 2) {
-        try {
-          const db = getFirestore(FIREBASE_APP);
-          const documentoRef = doc(db, "users", userId)
-          const usuarioRef = doc(documentoRef, "userFases", route.params.params.info.id);
-          await updateDoc(usuarioRef, {
-           concluido: true,
-          });
-          
-        } catch (error) {
-          console.error("Erro ao atualizar atributo no Firestore:", error);
-        }
+      try {
+        const db = getFirestore(FIREBASE_APP);
+        const documentoRef = doc(db, "users", userId);
+        const usuarioRef = doc(
+          documentoRef,
+          "userFases",
+          route.params.params.info.id
+        );
+        await updateDoc(usuarioRef, {
+          concluido: true,
+        });
+      } catch (error) {
+        console.error("Erro ao atualizar atributo no Firestore:", error);
       }
-      navigation.goBack({reload : true})
-  }
+    }
+    navigation.goBack({ reload: true });
+  };
+
+  const MarkdownRadioButton = ({ label, value, checked, onChange }) => {
+    return (
+      <View>
+        <RadioButton.Item
+          label={<Markdown>{label}</Markdown>}
+          value={value}
+          status={checked === value ? "checked" : "unchecked"}
+          onPress={() => onChange(value)}
+        />
+      </View>
+    );
+  };
 
   const ModalEnd = () => {
     return (
@@ -165,7 +178,7 @@ export default function QuestoesTrilha() {
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
-        <ModalEnd/>
+      <ModalEnd />
       {questoes && questoes[indice] ? (
         <View style={styles.container}>
           <View style={styles.enunciado}>
@@ -195,40 +208,66 @@ export default function QuestoesTrilha() {
           </View>
 
           <View style={styles.containerResposta}>
-            <ScrollView style={styles.scroll}>
-              <RadioButton.Group
-                onValueChange={(value) => {
-                  setValue(value);
-                }}
-                value={value}
+            <ScrollView>
+              <RadioButtonGroup
+                selected={value}
+                onSelected={(value) => setValue(value)}
+                radioBackground="#F54F59"
               >
                 {questoes[indice].data.respostas.map((resposta, index) => (
-                  <RadioButton.Item
+                  <RadioButtonItem
                     key={index}
-                    label={resposta}
+                    label={
+                      <View
+                        style={{
+                          flexDirection: "row-reverse",
+                          backgroundColor: "#ffb9bd",
+                          borderRadius: 50,
+                          width: 300,
+                          marginTop: 5,
+                          height: "auto",
+                          left: -24,
+                          position: "relative",
+                          zIndex: -1,
+                        }}
+                      >
+                        <Markdown
+                          style={{
+                            body: {
+                              fontSize: 16,
+                              color: "#fff",
+                              top: 0,
+                              width: "90%",
+                              left: -0.5,
+                              padding: 5,
+                              textAlign: "center",
+                              fontFamily: "Inder_400Regular",
+                            },
+                          }}
+                        >
+                          {resposta}
+                        </Markdown>
+                      </View>
+                    }
                     value={resposta}
-                    style={[
-                      styles.alternativas,
-                      value === resposta && styles.selectLabel,
-                    ]}
-                    labelStyle={styles.label}
-                    uncheckedColor="#fff"
-                    color="#fff"
+                    style={{ borderWidth: 1,borderColor: "#fff", left: 4, top: 3, backgroundColor:'#fff', width: 25, height:25  }}
                   />
                 ))}
-              </RadioButton.Group>
+              </RadioButtonGroup>
+              <View style={styles.containerContinuar}>
+                <TouchableOpacity
+                  style={styles.confirmar}
+                  onPress={() =>
+                    conferirQuestao(
+                      questoes[indice].data.respostaCorreta,
+                      value
+                    )
+                  }
+                >
+                  <Text style={styles.label}>Confirmar</Text>
+                </TouchableOpacity>
+              </View>
             </ScrollView>
-          </View>
-
-          <View style={styles.containerContinuar}>
-            <TouchableOpacity
-              style={styles.confirmar}
-              onPress={() =>
-                conferirQuestao(questoes[indice].data.respostaCorreta, value)
-              }
-            >
-              <Text style={styles.label}>Confirmar</Text>
-            </TouchableOpacity>
           </View>
         </View>
       ) : (
