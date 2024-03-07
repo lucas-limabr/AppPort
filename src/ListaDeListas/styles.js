@@ -84,6 +84,15 @@ export default StyleSheet.create({
         borderRadius: 10,
 
     },
+    containerContinuarProfessor:{
+        width: '100%',
+        top: 2,
+        alignItems: 'flex-end',
+        justifyContent: 'space-evenly',
+        flexDirection: 'row',
+        flex: 1,
+        position: "relative"
+    },
     containerContinuar:{
         top: 5,
         height: 45
