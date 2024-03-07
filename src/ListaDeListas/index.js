@@ -129,7 +129,6 @@ export default function Questoes() {
         // Aguarde a resolução da Promise antes de definir o estado
         const estaNaLista = await verificarArray(questaoId);
         setQuestaoEstaNaLista(estaNaLista);
-        console.log(estaNaLista);
       } else {
         console.error("O documento da questão não existe no Firestore");
       }
@@ -167,7 +166,6 @@ export default function Questoes() {
   const verirficarEAtualizarEstado = async () => {
     const estaNaLista = await verificarArray(id);
     setQuestaoEstaNaLista(estaNaLista);
-    console.log(estaNaLista)
   };
 
   function continuar() {
@@ -352,10 +350,7 @@ export default function Questoes() {
                 {resposta[3]}
               </Markdown>
             </TouchableOpacity>
-          </ScrollView>
-        </View>
-
-        <View style={styles.containerContinuar}>
+            <View style={styles.containerContinuarProfessor}>
           {indice > 0 ? (
             <TouchableOpacity style={styles.btnContinuar} onPress={voltar}>
               <Text style={styles.label}>Voltar</Text>
@@ -373,6 +368,10 @@ export default function Questoes() {
             <Text style={styles.label}>Continuar</Text>
           </TouchableOpacity>
         </View>
+          </ScrollView>
+        </View>
+
+        
       </View>
     </LinearGradient>
   );

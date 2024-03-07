@@ -69,7 +69,7 @@ export default function QuestoesTrilha() {
         );
         setQuestoes(questoesValidas);
       } catch (error) {
-        console.error("Erro ao acessar os documentos:", error);
+        
       }
     };
     fetchData();
@@ -106,7 +106,7 @@ export default function QuestoesTrilha() {
           concluido: true,
         });
       } catch (error) {
-        console.error("Erro ao atualizar atributo no Firestore:", error);
+        
       }
     }
     navigation.goBack({ reload: true });

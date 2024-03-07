@@ -99,14 +99,12 @@ export default function QuestoesAluno() {
               setAcertos(acertos);
               setErros(erros);
             } else {
-              console.log("Documento não contém a estrutura esperada.");
               setQuestoesCarregadas(false);
             }
           } else {
             console.log("Documento não encontrado.");
           }
         } catch (error) {
-          console.error("Erro ao obter as questões:", error);
         }
       };
 
@@ -175,7 +173,7 @@ export default function QuestoesAluno() {
           : setIncorrect(true);
       }
     } catch (error) {
-      console.error(error);
+
     }
   };
 
