@@ -7,9 +7,10 @@ export default StyleSheet.create({
         ...StyleSheet.absoluteFillObject,        
     },
     container: {
-        flex: 1,
-        marginTop: 25,
+        
+        marginTop: 30,
         alignItems: 'center',
+        
        
     },
     enunciado:{
@@ -44,7 +45,7 @@ export default StyleSheet.create({
         alignItems: 'flex-start',
         width: 300,
         marginTop: 10,
-       
+        height: 200,
     },
     resposta:{
         backgroundColor: '#ff8c90',
@@ -61,13 +62,14 @@ export default StyleSheet.create({
         borderRadius: 50,
         width: 300,
         marginTop: 5,
-        height: 'auto',        
+        height: 'auto', 
+               
     },
     label:{
         fontFamily: 'Inder_400Regular',
         color: '#fff',
         textAlign: "auto",
-        
+        borderWidth: 0
         
     },
     selectLabel:{
@@ -82,14 +84,18 @@ export default StyleSheet.create({
         borderRadius: 10,
 
     },
-    containerContinuar:{
+    containerContinuarProfessor:{
         width: '100%',
-        bottom: 5,
+        top: 2,
         alignItems: 'flex-end',
         justifyContent: 'space-evenly',
         flexDirection: 'row',
         flex: 1,
         position: "relative"
+    },
+    containerContinuar:{
+        top: 5,
+        height: 45
     },
     btnSalvar:{
         backgroundColor: '#F54F59',
@@ -98,20 +104,17 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 10,
+        marginLeft: 10
     },
     containerSalvar:{
         width: '100%',
-        left: 30,
-        bottom: 5,
+        right: 30,
+        top: 30,
         alignItems: 'flex-end',
-        justifyContent: 'flex-start',
+        justifyContent: 'flex-end',
         flexDirection: 'row',
         flex: 1,
        
-        
-    },
-    scroll:{
-        height: 250
         
     },
     confirmar:{
@@ -121,7 +124,10 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-    }
+        
+    },
+    
+    
     
     
 

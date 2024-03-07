@@ -6,7 +6,7 @@ export default StyleSheet.create({
     },
     container: {
         flex: 1,
-        marginTop: 100,
+        marginTop: 60,
         alignItems: 'center',
 
     },
@@ -64,7 +64,7 @@ export default StyleSheet.create({
     },
 
     image: {
-        height: 120,
+        height: 180,
         resizeMode: "contain",
     },
 
@@ -129,6 +129,7 @@ export default StyleSheet.create({
         width: 300,
         borderRadius: 10,
         justifyContent: "center",
+        padding: 10
     },
 
     txtInput: {

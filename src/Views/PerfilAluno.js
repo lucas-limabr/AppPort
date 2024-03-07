@@ -9,6 +9,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { format, differenceInCalendarDays } from "date-fns";
+import { getAuth, signOut } from "firebase/auth";
 
 
 export default function PerfilAluno() {
@@ -16,6 +17,12 @@ export default function PerfilAluno() {
   const [user,setUser] = useState()
 
   const data = new Date
+
+  const logout = () => {
+    const auth = getAuth();
+
+    signOut(auth)
+  }
 
   
   useEffect(() => {
@@ -50,21 +57,21 @@ export default function PerfilAluno() {
         <View style={Styles.backgroundUser}>
           <Image
             style={Styles.image}
-            source={require("../Imagens/defaultUser.png")}
+            source={require("../Imagens/defaultIconPlayer1.png")}
           />
         </View>
 
         <TouchableOpacity
           style={[Styles.botao, Styles.sombra]}
-          onPress={() => console.log(usuario.ultimoAcesso.toDate())}
+          onPress={() => logout()}
         >
-          <Text style={Styles.txtBotao}>Alterar foto</Text>
+          <Text style={Styles.txtBotao}>Sair</Text>
         </TouchableOpacity>
 
         <View style={Styles.containerFilho}>
-          <TextInput style={Styles.input}>
+          <View style={Styles.viewOptions}>
             <Text style={Styles.txtInput}>Nome: {usuario ? usuario.nome : ""} </Text>
-          </TextInput>
+          </View>
         </View>
 
         <View style={Styles.containerFilho}>
@@ -98,9 +105,9 @@ export default function PerfilAluno() {
         </View>
 
         <View style={Styles.containerFilho}>
-          <TextInput style={Styles.viewOptions}>
+          <View style={Styles.viewOptions}>
             <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""} </Text>
-          </TextInput>
+          </View>
         </View>
       </View>
     </LinearGradient>

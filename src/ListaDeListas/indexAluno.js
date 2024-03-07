@@ -21,7 +21,7 @@ import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
 
 import Markdown from "react-native-markdown-display";
-import { RadioButton } from "react-native-paper";
+import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
 import {
   getFirestore,
@@ -99,14 +99,12 @@ export default function QuestoesAluno() {
               setAcertos(acertos);
               setErros(erros);
             } else {
-              console.log("Documento não contém a estrutura esperada.");
               setQuestoesCarregadas(false);
             }
           } else {
             console.log("Documento não encontrado.");
           }
         } catch (error) {
-          console.error("Erro ao obter as questões:", error);
         }
       };
 
@@ -175,7 +173,7 @@ export default function QuestoesAluno() {
           : setIncorrect(true);
       }
     } catch (error) {
-      console.error(error);
+
     }
   };
 
@@ -383,27 +381,51 @@ export default function QuestoesAluno() {
 
           <View style={styles.containerResposta}>
             <ScrollView style={styles.scroll}>
-              <RadioButton.Group
-                onValueChange={(value) => {
-                  setValue(value);
-                }}
-                value={value}
+              <RadioButtonGroup
+                selected={value}
+                onSelected={(value) => setValue(value)}
+                radioBackground="#F54F59"
               >
                 {questaoAtual.respostas.map((resposta, index) => (
-                  <RadioButton.Item
+                  <RadioButtonItem
                     key={index}
-                    label={resposta}
+                    label={
+                      <View
+                        style={{
+                          flexDirection: "row-reverse",
+                          backgroundColor: "#ffb9bd",
+                          borderRadius: 50,
+                          width: 300,
+                          marginTop: 5,
+                          height: "auto",
+                          left: -24,
+                          position: "relative",
+                          zIndex: -1,
+                        }}
+                      >
+                        <Markdown
+                          style={{
+                            body: {
+                              fontSize: 16,
+                              color: "#fff",
+                              top: 0,
+                              width: "90%",
+                              left: -0.5,
+                              padding: 5,
+                              textAlign: "center",
+                              fontFamily: "Inder_400Regular",
+                            },
+                          }}
+                        >
+                          {resposta}
+                        </Markdown>
+                      </View>
+                    }
                     value={resposta}
-                    style={[
-                      styles.alternativas,
-                      value === resposta && styles.selectLabel,
-                    ]}
-                    labelStyle={styles.label}
-                    uncheckedColor="#fff"
-                    color="#fff"
+                    style={{ borderWidth: 1,borderColor: "#fff", left: 4, top: 3, backgroundColor:'#fff', width: 25, height:25  }}
                   />
                 ))}
-              </RadioButton.Group>
+              </RadioButtonGroup>
             </ScrollView>
           </View>
 

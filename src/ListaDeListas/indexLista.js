@@ -32,6 +32,7 @@ export default function QuestoesLista() {
   const [questoes, setQuestoes] = useState([]);
   const [indice, setIndice] = useState(0);
   const [questoesCarregadas, setQuestoesCarregadas] = useState(false);
+  const [atualizar, setAtualizar] = useState(true);
 
   const navigation = useNavigation();
 
@@ -56,26 +57,32 @@ export default function QuestoesLista() {
         if (data && data.questoes) {
           const referenciasQuestoes = data.questoes;
 
-          const questoesPromises = referenciasQuestoes.map(async (referencia) => {
-            const questaoDoc = await getDoc(referencia);
-            if (questaoDoc.exists()) {
-              return questaoDoc.data();
-            } else {
-              console.warn("Documento de questão não encontrado:", referencia.id);
-              return null;
+          const questoesPromises = referenciasQuestoes.map(
+            async (referencia) => {
+              const questaoDoc = await getDoc(referencia);
+              if (questaoDoc.exists()) {
+                return questaoDoc.data();
+              } else {
+                console.warn(
+                  "Documento de questão não encontrado:",
+                  referencia.id
+                );
+                return null;
+              }
             }
-          });
+          );
 
           const questoesArrayResultado = await Promise.all(questoesPromises);
 
           // Filtra para remover entradas nulas ou indefinidas
-          const questoesFiltradas = questoesArrayResultado.filter((questao) => questao);
+          const questoesFiltradas = questoesArrayResultado.filter(
+            (questao) => questao
+          );
 
           setQuestoes(questoesFiltradas);
           // Utilize o callback de estado para garantir que está atualizado
           setQuestoesCarregadas((prevState) => !prevState);
         } else {
-          console.log("Documento não contém a estrutura esperada.");
         }
       } else {
         console.log("Documento não encontrado.");
@@ -86,32 +93,62 @@ export default function QuestoesLista() {
   }, [codigoLista]);
 
   useEffect(() => {
-    
     obterQuestoes();
 
-    const time = 5000;
+    const time = 7000;
 
     const timeoutId = setTimeout(() => {
-      
-      if (!questoesCarregadasRef.current) {
-        
-        
+      if (questoesCarregadas) {
+        // Aqui, você sabe que as questões foram carregadas com sucesso
+      } else {
         // Mostra o alerta se as questões não foram carregadas
         Alert.alert(
           "Aviso",
           "A lista está vazia!",
-          [{ text: "OK", onPress: () => navigation.goBack() }],
+          [
+            {
+              text: "OK",
+              onPress: () => {
+                clearTimeout(timeoutId); // Limpa o timeout antes de navegar de volta
+                navigation.goBack();
+              },
+            },
+          ],
           { cancelable: false }
         );
       }
     }, time);
-    
+
     return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
-  }, [obterQuestoes, navigation]);
+  }, [obterQuestoes, navigation, atualizar]);
+
+  const refreshComponent = () => {
+    setAtualizar((prevKey) => prevKey + 1);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      refreshComponent();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   function continuar() {
     if (indice < questoes.length - 1) {
       setIndice(indice + 1);
+    }
+    if (indice == questoes.length - 1) {
+      Alert.alert(
+        "Fim",
+        "Você chegou ao final da lista",
+        [
+          {
+            text: "OK",
+          },
+        ],
+        { cancelable: false }
+      );
     }
   }
 
@@ -125,15 +162,20 @@ export default function QuestoesLista() {
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
+      <View style={Styles.voltar}>
+        <TouchableOpacity
+          onPress={() => {
+            setIndice(0);
+            navigation.goBack();
+          }}
+        >
+          <AntDesign name="caretleft" size={50} color="#F54F59" />
+        </TouchableOpacity>
+      </View>
       {questaoAtual ? (
         <View style={styles.container}>
-          <View style={styles.containerSalvar}>
-            
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <AntDesign name="caretleft" size={50} color="#F54F59" />
-              </TouchableOpacity>
-            
-          </View>
+          <View style={styles.containerSalvar}></View>
+
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
               <Image
@@ -142,11 +184,26 @@ export default function QuestoesLista() {
                 resizeMode="contain"
               />
             </View>
-            <Text style={styles.txtEnunciado}>{questaoAtual.pergunta}</Text>
+            <Markdown
+              style={{
+                body: {
+                  fontSize: 16,
+                  color: "#fff",
+                  top: 0,
+                  width: "90%",
+                  left: 5,
+                  padding: 5,
+                  textAlign: "left",
+                  fontFamily: "Inder_400Regular",
+                },
+              }}
+            >
+              {questaoAtual.pergunta}
+            </Markdown>
           </View>
 
           <View style={styles.containerResposta}>
-            <ScrollView style={styles.scroll}>
+            <ScrollView>
               {/* Mapear o array de respostas */}
               {questaoAtual.respostas.map((resposta, index) => (
                 <TouchableOpacity
@@ -157,29 +214,53 @@ export default function QuestoesLista() {
                       : styles.alternativas,
                   ]}
                 >
-                  <Text style={styles.txtEnunciado}>{resposta}</Text>
+                  <Markdown
+                    style={{
+                      body: {
+                        fontSize: 16,
+                        color: "#fff",
+                        top: 0,
+                        width: "90%",
+                        left: 5,
+                        padding: 5,
+                        textAlign: "left",
+                        fontFamily: "Inder_400Regular",
+                      },
+                    }}
+                  >
+                    {resposta}
+                  </Markdown>
                 </TouchableOpacity>
               ))}
-            </ScrollView>
-          </View>
 
-          <View style={styles.containerContinuar}>
-            {indice > 0 ? (
-              <TouchableOpacity style={styles.btnContinuar} onPress={voltar}>
-                <Text style={styles.label}>Voltar</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={[styles.btnContinuar, { backgroundColor: "#767577" }]}
-                disabled={true}
-                onPress={voltar}
-              >
-                <Text style={styles.label}>Voltar</Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity style={styles.btnContinuar} onPress={continuar}>
-              <Text style={styles.label}>Continuar</Text>
-            </TouchableOpacity>
+              <View style={styles.containerContinuarProfessor}>
+                {indice > 0 ? (
+                  <TouchableOpacity
+                    style={styles.btnContinuar}
+                    onPress={voltar}
+                  >
+                    <Text style={styles.label}>Voltar</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={[
+                      styles.btnContinuar,
+                      { backgroundColor: "#767577" },
+                    ]}
+                    disabled={true}
+                    onPress={voltar}
+                  >
+                    <Text style={styles.label}>Voltar</Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  style={styles.btnContinuar}
+                  onPress={continuar}
+                >
+                  <Text style={styles.label}>Continuar</Text>
+                </TouchableOpacity>
+              </View>
+            </ScrollView>
           </View>
         </View>
       ) : (
