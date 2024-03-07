@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import TabNav from "./TabNav";
 import LoginNav from "./LoginNav";
 import TabNavAluno from "./TabNavAluno";
+import { View, Image } from "react-native";
 
 
 import { useFonts, Inder_400Regular } from "@expo-google-fonts/inder"
@@ -37,13 +38,31 @@ export default function Navegacao() {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <NavigationContainer>
-                {
-                    user ? (
-                    isProfessor ? <TabNav /> : <TabNavAluno />)
-                    : (
-                        <LoginNav/>
-                    )
-                }
+            {
+    user !== null ? (
+        user ? (
+            isProfessor ? <TabNav /> : <TabNavAluno />
+        ) : (
+          <View
+      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+    >
+      <Image
+        style={{
+          flex: 1,
+          width: "100%",
+          height: undefined,
+          aspectRatio: 1,
+        }}
+        source={require("../Imagens/Nuvem_3(uPDATE).gif")}
+        resizeMode="contain"
+      />
+    </View>
+            
+        )
+    ) : (
+      <LoginNav />
+    )
+}
             </NavigationContainer>
         </SafeAreaView>
     )

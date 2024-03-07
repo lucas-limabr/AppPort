@@ -13,6 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Switch } from "react-native-gesture-handler";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { addDoc, collection, setDoc, doc, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import styles from "../Styles.js/StylesTermoDeUso";
@@ -143,6 +144,7 @@ export default function Cadastro({ navigation }) {
 
         await cadastroFases(resposta.user.uid)
       }
+      const login = await signInWithEmailAndPassword(auth, email, senha)
     } catch (error) {
       if(error.code === "auth/invalid-email"){
         Alert.alert("Email inválido.")
@@ -159,20 +161,6 @@ export default function Cadastro({ navigation }) {
     }
   };
 
-  // const localStorage = async (nome, email, urlImagemPerfil) => {
-  //   const usuarioAssincrono = {
-  //     nome: nome,
-  //     email: email,
-  //     urlImagemPerfil: urlImagemPerfil,
-  //   };
-  //   const usuarioString = JSON.stringify(usuarioAssincrono);
-
-  //   await AsyncStorage.setItem("@portuguito2023", usuarioString);
-
-  //   const teste = await AsyncStorage.getItem("@portuguito2023");
-  //   console.log(usuarioString === teste);
-  // };
-
   async function cadastroBD(userId) {
     const data = new Date
 
@@ -185,7 +173,6 @@ export default function Cadastro({ navigation }) {
       dataCadastro: data,
       ultimoAcesso: data,
     });
-    // localStorage(nome, email, urlImagemPerfil);
   }
 
   const cadastroFases = async (userId) => {
@@ -194,13 +181,12 @@ export default function Cadastro({ navigation }) {
     const querySnapshot = await getDocs(colecaoOriginal);
   
     querySnapshot.forEach(async (docOriginal) => {
-      // Defina explicitamente o ID do documento na coleção de usuário
       const newDocRef = doc(userCollectionRef, docOriginal.id);
       const newDocData = {
         ...docOriginal.data(),
         userId: userId,
         concluido: false,
-        id: newDocRef.id // Adicione o ID do novo documento como um atributo
+        id: newDocRef.id 
       };
       await setDoc(newDocRef, newDocData);
   

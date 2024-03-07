@@ -27,7 +27,9 @@ export default function Home() {
       const resposta = await signInWithEmailAndPassword(auth, email, senha)
       
     } catch(error){
-      Alert.alert('erro ' + error.message)
+      if(error.code === "auth/invalid-email")
+      Alert.alert('Email ou senha inválidos.' )
+      
     }
   }
 

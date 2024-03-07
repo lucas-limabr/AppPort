@@ -34,7 +34,7 @@ export default StyleSheet.create({
     },
     voltar:{
         position: 'absolute',
-        top: 30,
+        top: 10,
         height: 50,
         width: 50,
         left: 30,

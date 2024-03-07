@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Telas",
-    "slug": "Telas",
-    "version": "1.0.0",
+    "name": "Portuguito",
+    "slug": "Portuguito",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/iconePortuguito4.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -15,16 +15,23 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.jonathasqs1.Portuguito"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/iconePortuguito4.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.jonathasqs1.Portuguito"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f03664b0-28dd-4991-bfe5-2e527ba85864"
+      }
     }
   }
 }

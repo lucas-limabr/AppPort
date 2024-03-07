@@ -110,22 +110,93 @@ export default function Trilha() {
   
           
           let style;
-          switch (index) {
-            case 0:
-              style = Styles.AjustItens_center; 
-              break;
-            case 1:
-              style = Styles.AjustItens_left; 
-              break;
-            case 2:
-              style = Styles.AjustItens_right; 
-              break;
-            
-            default:
-              style = Styles.AjustItens_center; 
-              break;
-          }
+
+          if(subTema ==="usoDosPorques" || subTema =="pronomes" || subTema === "pontuacao" || subTema === "regencia" ){
+            switch (index) {
+              case 0:
+                style = Styles.AjustItens_right;
+                break;
   
+              case 1:
+                style = Styles.AjustItens_left;
+                break;
+  
+              case 2:
+                style = Styles.AjustItens_right;
+                break;
+  
+  
+              default:
+                style = Styles.AjustItens_center;
+                break;
+            }
+          }
+          if(subTema ==="acentuacao" || subTema =="silabas"){
+            switch (index) {
+              case 0:
+                style = Styles.AjustItens_right;
+                break;
+  
+              case 1:
+                style = Styles.AjustItens_left;
+                break;
+  
+              case 2:
+                style = Styles.AjustItens_left;
+                break;
+  
+              case 3:
+                style = Styles.AjustItens_right;
+                break;
+                
+              default:
+                style = Styles.AjustItens_center;
+                break;
+            }
+          }
+          if(subTema ==="flexoesVerbais"){
+            switch (index) {
+              case 0:
+                style = Styles.AjustItens_center;
+                break;
+  
+              case 1:
+                style = Styles.AjustItens_center;
+                break;
+  
+              case 2:
+                style = Styles.AjustItens_left;
+                break;
+  
+              case 3:
+                style = Styles.AjustItens_center;
+                break;
+                
+              case 4:
+                style = Styles.AjustItens_center;
+                break;
+  
+              default:
+                style = Styles.AjustItens_center;
+                break;
+            }
+          }
+          if(subTema ==="concordancia" || subTema =="conjuncoes" || subTema === "classesGramaticais" || subTema === "preposicoes" || subTema === "vozesVerbais"  || subTema === "expressoesCotidianas" ||  subTema === "crase"  || subTema === "figurasDeLinguagem"){
+            switch (index) {
+              case 0:
+                style = Styles.AjustItens_right;
+                break;
+  
+              case 1:
+                style = Styles.AjustItens_right;
+                break;
+  
+              default:
+                style = Styles.AjustItens_right;
+                break;
+            }
+          }
+            
           return (
             <View style={Styles.box}>
               <View style={style}>

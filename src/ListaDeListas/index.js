@@ -129,7 +129,6 @@ export default function Questoes() {
         // Aguarde a resolução da Promise antes de definir o estado
         const estaNaLista = await verificarArray(questaoId);
         setQuestaoEstaNaLista(estaNaLista);
-        console.log(estaNaLista);
       } else {
         console.error("O documento da questão não existe no Firestore");
       }
@@ -164,12 +163,20 @@ export default function Questoes() {
     }
   };
 
+  const verirficarEAtualizarEstado = async () => {
+    const estaNaLista = await verificarArray(id);
+    setQuestaoEstaNaLista(estaNaLista);
+  };
+
   function continuar() {
     setIndice(indice + 1);
     setAtualizarDados(!atualizarDados);
+    verirficarEAtualizarEstado()
+    
   }
 
   function voltar() {
+    verirficarEAtualizarEstado()
     if (indice != 0) {
       setIndice(indice - 1);
       setAtualizarDados(!atualizarDados);
@@ -185,10 +192,7 @@ export default function Questoes() {
       setId(result.id);
     });
 
-    const verirficarEAtualizarEstado = async () => {
-      const estaNaLista = await verificarArray(id);
-      setQuestaoEstaNaLista(estaNaLista);
-    };
+    
 
     const obterIdLista = async () => {
       const idListaObtido = await obterIdPorCodigo(codigo, "listas");
@@ -212,7 +216,7 @@ export default function Questoes() {
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-        <View style={styles.containerSalvar}>
+      <View style={styles.containerSalvar}>
           <TouchableOpacity
             style={styles.btnSalvar}
             onPress={() => selecionarQuestao(id)}
@@ -346,10 +350,7 @@ export default function Questoes() {
                 {resposta[3]}
               </Markdown>
             </TouchableOpacity>
-          </ScrollView>
-        </View>
-
-        <View style={styles.containerContinuar}>
+            <View style={styles.containerContinuarProfessor}>
           {indice > 0 ? (
             <TouchableOpacity style={styles.btnContinuar} onPress={voltar}>
               <Text style={styles.label}>Voltar</Text>
@@ -367,6 +368,10 @@ export default function Questoes() {
             <Text style={styles.label}>Continuar</Text>
           </TouchableOpacity>
         </View>
+          </ScrollView>
+        </View>
+
+        
       </View>
     </LinearGradient>
   );
