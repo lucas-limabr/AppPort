@@ -1,19 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Menu from "../Views/Menu";
 import Perfil from "../Views/Perfil";
 import Listas from "../Views/Listas";
 import StackNav from "./StackNav";
 import { Feather, FontAwesome5 } from '@expo/vector-icons';
 
-
 const Tab = createBottomTabNavigator()
 
 export default function TabNav() {
-
-    
-
-    
 
     return (
         <Tab.Navigator
@@ -46,7 +40,7 @@ export default function TabNav() {
             />
 
             <Tab.Screen name='StackNav' component={StackNav} options={{
-                 tabBarButton: () => null,
+                tabBarButton: () => null,
                 headerShown: false,
                 tabBarIcon: ({ color, focused }) => {
                     if (focused) {
@@ -54,9 +48,9 @@ export default function TabNav() {
                     }
                     return <Feather name="home" size={50} color='#fff' />
                 },
-                 
+
             }}
-            
+
             />
 
             <Tab.Screen name='Listas' component={Listas} options={{

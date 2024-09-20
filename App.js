@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import useEventCallback from "use-event-callback";
 import { useFonts, Inder_400Regular } from "@expo-google-fonts/inder"
 import Navegacao from "./src/Navegacao";
 import { UserProvider } from "./src/Contexts/auth";
@@ -16,7 +15,7 @@ export default function App() {
 
   useEffect(() => {
     const localStorage = async (nome, email, urlImagemPerfil) => {
-      
+
     }
 
     localStorage('nome', 'email', 'urlImagemPerfil')
@@ -29,32 +28,32 @@ export default function App() {
             setUsuario(usuario);
             setUsuarioAtual(usuario)
             console.log("1")
-            
+
           }
         })
         .catch(error => {
           console.error("Erro ao obter usuário do AsyncStorage:", error);
         });
     }
-  },[login]);
+  }, [login]);
 
-//   /* const handleLogin = useEventCallback(({ login }) => {
-//     setLogin(!login)
-//     console.log("2")
-    
-//   }) */
+  //   /* const handleLogin = useEventCallback(({ login }) => {
+  //     setLogin(!login)
+  //     console.log("2")
 
-//  /*  useEffect(() => {
-//     handleLogin.emit({ login: !login })
-//   }, [login]) */
+  //   }) */
+
+  //  /*  useEffect(() => {
+  //     handleLogin.emit({ login: !login })
+  //   }, [login]) */
 
   if (!fontLoaded) {
     return null;
   }
 
   return (
-    <UserProvider value={{usuarioAtual}}>
-      <Navegacao onLogin={() => handleLogin.triggerEvent}/>
+    <UserProvider value={{ usuarioAtual }}>
+      <Navegacao />
     </UserProvider>
   );
 }

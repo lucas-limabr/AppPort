@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import Cadastro from "../Views/Cadastro"
 import Home from "../Views/Home";

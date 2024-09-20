@@ -6,20 +6,14 @@ import TabNav from "./TabNav";
 import LoginNav from "./LoginNav";
 import TabNavAluno from "./TabNavAluno";
 import { View, Image } from "react-native";
-
-
-import { useFonts, Inder_400Regular } from "@expo-google-fonts/inder"
 import { useAuthentication } from "../hooks/useAutentication";
 import { userVerification } from "../FuncoesFirebase/Funcoes";
 import { updateDay } from "../FuncoesFirebase/Funcoes";
-import Login from "../Views/Login";
-import { format, differenceInCalendarDays } from "date-fns";
-
 
 export default function Navegacao() {
-    const user = useAuthentication();
+  const user = useAuthentication();
 
-    const [isProfessor, setIsProfessor] = useState(null);
+  const [isProfessor, setIsProfessor] = useState(null);
 
   useEffect(() => {
     const fetchVerification = async () => {
@@ -35,35 +29,35 @@ export default function Navegacao() {
     }
   }, [user]);
 
-    return (
-        <SafeAreaView style={{ flex: 1 }}>
-            <NavigationContainer>
-            {
-    user !== null ? (
-        user ? (
-            isProfessor ? <TabNav /> : <TabNavAluno />
-        ) : (
-          <View
-      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-    >
-      <Image
-        style={{
-          flex: 1,
-          width: "100%",
-          height: undefined,
-          aspectRatio: 1,
-        }}
-        source={require("../Imagens/Nuvem_3(uPDATE).gif")}
-        resizeMode="contain"
-      />
-    </View>
-            
-        )
-    ) : (
-      <LoginNav />
-    )
-}
-            </NavigationContainer>
-        </SafeAreaView>
-    )
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <NavigationContainer>
+        {
+          user !== null ? (
+            user ? (
+              isProfessor ? <TabNav /> : <TabNavAluno />
+            ) : (
+              <View
+                style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+              >
+                <Image
+                  style={{
+                    flex: 1,
+                    width: "100%",
+                    height: undefined,
+                    aspectRatio: 1,
+                  }}
+                  source={require("../Imagens/Nuvem_3(uPDATE).gif")}
+                  resizeMode="contain"
+                />
+              </View>
+
+            )
+          ) : (
+            <LoginNav />
+          )
+        }
+      </NavigationContainer>
+    </SafeAreaView>
+  )
 }
