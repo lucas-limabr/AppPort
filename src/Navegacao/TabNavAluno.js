@@ -5,18 +5,11 @@ import { Feather, FontAwesome5 } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import MenuAluno from "../Views/MenuAluno";
 import PerfilAluno from "../Views/PerfilAluno";
-import MenuTrilha from "../Views/MenuTrilhaAluno";
 import StackNavTrilha from "./StackNavTrilha";
-
-
 
 const Tab = createBottomTabNavigator()
 
 export default function TabNavAluno() {
-
-    
-
-    
 
     return (
         <Tab.Navigator
@@ -49,17 +42,17 @@ export default function TabNavAluno() {
             />
 
             <Tab.Screen name='StackNavTrilha' component={StackNavTrilha} options={{
-                
+
                 headerShown: false,
                 tabBarIcon: ({ color, focused }) => {
                     if (focused) {
-                        return <Ionicons name="trail-sign-outline" size={50} color={color} /> 
+                        return <Ionicons name="trail-sign-outline" size={50} color={color} />
                     }
-                    return <Ionicons name="trail-sign-outline" size={50} color="#fff" /> 
+                    return <Ionicons name="trail-sign-outline" size={50} color="#fff" />
                 },
-                 
+
             }}
-            
+
             />
 
             <Tab.Screen name='MenuAluno' component={MenuAluno} options={{
@@ -73,7 +66,7 @@ export default function TabNavAluno() {
             }}
 
             />
-            
+
             <Tab.Screen name='StackNavAluno' component={StackNavAluno} options={{
                 tabBarButton: () => null,
                 headerShown: false,
