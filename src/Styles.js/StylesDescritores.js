@@ -18,7 +18,7 @@ export default StyleSheet.create({
         elevation: 10,
         width: 300,
         marginTop: 10,
-        height: 80,
+        height: 'auto',
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
