@@ -21,7 +21,7 @@ import { EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 
 import { useFocusEffect } from "@react-navigation/native";
 
-import { fetchIdList, deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
+import { validateListName, deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
 
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
@@ -83,22 +83,33 @@ export default function Listas() {
   }
 
   async function criarLista(nomeLista) {
+    try {
+      try {
+        const usuarioLogadoReference = await userReference();
+        await validateListName(nomeLista, usuarioLogadoReference);
+      } catch (error) {
+        Alert.alert("Erro: " + error.message);
+        throw error;
+      }
 
-    setVisible(false);
+      setVisible(false);
 
-    const novaLista = {
-      criador: referenciaCriador,
-      codigo: codigo,
-      nomeLista,
-      questoes: [],
-    };
+      const novaLista = {
+        criador: referenciaCriador,
+        codigo: codigo,
+        nomeLista,
+        questoes: [],
+      };
 
 
-    const listaCriada = await addDoc(collectionRef, novaLista);
-    
-    carregarListas();
+      const listaCriada = await addDoc(collectionRef, novaLista);
 
-    Alert.alert("Lista criada com sucesso");
+      carregarListas();
+
+      Alert.alert("Lista criada com sucesso");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const carregarItemId = (id) => {
@@ -149,7 +160,7 @@ export default function Listas() {
     };
 
     const fetchId = async () => {
-      
+
       const id = await fetchQuestionIdByTitle(titulo, 'listas', referenciaCriador);
 
       return id;
@@ -160,7 +171,7 @@ export default function Listas() {
     const handleDelete = async () => {
       const listId = await fetchId();
       await deleteList(listId);
-      
+
       carregarListas();
 
       Alert.alert("Lista excluída com sucesso");
