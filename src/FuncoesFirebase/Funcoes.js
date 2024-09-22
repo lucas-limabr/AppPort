@@ -68,12 +68,30 @@ export const fetchQuestionIdByTitle = async (title, collectionName, userId) => {
   }
 };
 
+export const validateListName = async (newListName, currentUserReference) => {
+  if (newListName === '') {
+    throw new Error("lista criada não possui nome");
+  }
+
+  const listasCollection = collection(getFirestore(), "listas");
+  const listasQuery = query(listasCollection, where("criador", "==", currentUserReference));
+
+  const listasSnapshot = await getDocs(listasQuery);
+
+  listasSnapshot.forEach((doc) => {
+    const listaData = doc.data();
+    if (listaData.nomeLista === newListName) {
+      throw new Error("lista de mesmo nome já existente");
+    }
+  });
+}
+
 export const deleteList = async (listId) => {
   const db = getFirestore();
 
   try {
     const docRef = doc(db, 'listas', listId);
-    
+
     try {
       await deleteDoc(docRef);
     } catch (error) {
@@ -103,6 +121,7 @@ export const userReference = async () => {
     });
   });
 };
+
 export const userVerification = async (email) => {
   const db = getFirestore(FIREBASE_APP);
 
