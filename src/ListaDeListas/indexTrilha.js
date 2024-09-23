@@ -126,6 +126,8 @@ export default function QuestoesTrilha() {
   };
 
   const ModalEnd = () => {
+    const acertosPercentual = acertos / questoes.length * 100
+    const acertouTodas = acertos === questoes.length
     return (
       <Modal animationType="fade" transparent={false} visible={end}>
         <LinearGradient
@@ -133,19 +135,52 @@ export default function QuestoesTrilha() {
           style={StylesEnd.gradient}
         >
           <View style={StylesEnd.container}>
-            <View style={StylesEnd.boxTitle}>
+            <View style={StylesEnd.boxTitle}>            
+            {acertouTodas ? (
+              <Text style={StylesEnd.Title}>
+                PERFEITO!!
+                <Text style={StylesEnd.SubTitle}>
+                  Você acertou todas as questões!
+                </Text>
+              </Text>
+            ) : acertosPercentual > 50 ? (
               <Text style={StylesEnd.Title}>
                 PARABÉNS!!
-                <Text style={StylesEnd.SubTitle}>Você terminou a fase!!</Text>
+                <Text style={StylesEnd.SubTitle}>
+                  Você acertou boa parte das questões!
+                </Text>
               </Text>
+            ) : (
+              <View>
+                <Text style={StylesEnd.Title}>
+                  FOI POR POUCO
+                </Text>
+                <Text style={StylesEnd.SubTitle}>
+                  Tente novamente...
+                </Text>
+              </View>
+)}
             </View>
 
             <View style={StylesEnd.box}>
               <View style={StylesEnd.boxImage}>
-                <Image
-                  style={StylesEnd.ImageFormat}
-                  source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
-                />
+                {acertouTodas? (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
+                  />
+                ) : acertosPercentual > 50 ? (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteAcimaDaMedia.gif")}
+                  />
+                ) : (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteErrouMaioria.gif")}
+                  />
+                )}
+                
               </View>
 
               <View style={StylesEnd.subDivTag}>

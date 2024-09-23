@@ -51,6 +51,7 @@ export default StyleSheet.create({
         textAlign: 'center',
         fontSize: 28,
         fontFamily: 'Inder_400Regular',
+        marginTop: 20
     },
 
     FontFormat: {
