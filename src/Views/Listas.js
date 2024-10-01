@@ -3,18 +3,14 @@ import { View, Text, TouchableOpacity, TextInput, Modal, Alert, FlatList, } from
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLista";
 import style from "../Styles.js/StylesModalLista";
-// import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, FontAwesome5 } from '@expo/vector-icons';
-
 import { useFocusEffect } from "@react-navigation/native";
-
-import { fetchIdList, deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
-
+import { deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
 
@@ -28,7 +24,6 @@ export default function Listas() {
 
   const [visible, setVisible] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false)
-  const [visibleExcluir, setVisibleExcluir] = useState(false)
   const [visibleCodigo, setVisibleCodigo] = useState(false)
   const [itemId, setItemId] = useState('')
 
@@ -76,10 +71,9 @@ export default function Listas() {
       questoes: [],
     };
 
+    await addDoc(collectionRef, novaLista);
 
-    const listaCriada = await addDoc(collectionRef, novaLista);
-
-    setListas([...listas, { ...listas, novaLista }]);
+    setListas([...listas, novaLista]);
     setAtualizarDados(!atualizarDados);
     Alert.alert("Lista criada com sucesso");
   }
@@ -289,10 +283,6 @@ export default function Listas() {
       <ModalCodigo />
 
       <View style={Styles.container}>
-        {/* <View style={Styles.containerBusca}>
-          <TextInput style={Styles.textInput}></TextInput>
-        </View> */}
-
         <View style={Styles.containerList}>
           <TouchableOpacity
             style={Styles.addLista}
@@ -305,7 +295,7 @@ export default function Listas() {
         <FlatList
           style={Styles.flatlist}
           data={listas}
-          keyExtractor={(item) => item.codigo}
+          keyExtractor={(item) => String(item.codigo)}
           renderItem={({ item }) => (
             <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} onPressOne={() => carregarLista(item.codigo)} />
           )}
