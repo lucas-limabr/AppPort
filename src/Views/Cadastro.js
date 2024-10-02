@@ -69,6 +69,7 @@ export default function Cadastro() {
     );
   }
 
+  //3º função chamada. Tenta criar um novo usuário no Firebase
   const signUp = async () => {
     try {
       const resposta = await createUserWithEmailAndPassword(auth, email, senha);
@@ -94,6 +95,7 @@ export default function Cadastro() {
     }
   };
 
+  //4º função chamada. Ela cria o objeto usuário no banco de dados (Firestore) 
   async function cadastroBD(userId) {
     const data = new Date
 
@@ -108,31 +110,51 @@ export default function Cadastro() {
     });
   }
 
+  //5º função chamada. Se o usuário for um aluno, essa função cria as fases no Firestore para o usuário
   const cadastroFases = async (userId) => {
+    //a subcoleção userFases será criada dinamicamente
+    //referência para a subcoleção 'userFases' dentro do documento do usuário
     const userCollectionRef = collection(db, "users", userId, "userFases");
+
+    //referência para a coleção original de fases ('fase'), de onde os dados serão copiados
     const colecaoOriginal = collection(db, "fase");
+
+    //obtém todos os documentos da coleção 'fase'
     const querySnapshot = await getDocs(colecaoOriginal);
 
+    //itera sobre cada documento (fase) encontrado na coleção original
     querySnapshot.forEach(async (docOriginal) => {
-      const newDocRef = doc(userCollectionRef, docOriginal.id);
-      const newDocData = {
-        ...docOriginal.data(),
-        userId: userId,
-        concluido: false,
-        id: newDocRef.id
-      };
-      await setDoc(newDocRef, newDocData);
+      //cria uma referência para um novo documento na coleção 'userFases' usando o mesmo ID do documento original
+      try {
+        const newDocRef = doc(userCollectionRef, docOriginal.id);
 
-      console.log("Novo documento criado:", newDocData);
+        // Prepara os dados do novo documento que será inserido, copiando os dados do original e adicionando campos personalizados
+        const newDocData = {
+          ...docOriginal.data(), //copia todos os dados do documento original
+          userId: userId, //adiciona o ID do usuário para vincular a fase a esse usuário
+          concluido: false, //adiciona o campo 'concluido' para marcar o progresso da fase (inicialmente false)
+          id: newDocRef.id //o ID do novo documento é o mesmo do original
+        };
+
+        //insere o novo documento na subcoleção 'userFases' com os dados preparados
+        await setDoc(newDocRef, newDocData);
+
+        console.log("Novo documento criado:", newDocData);
+      }
+      catch (error) {
+        console.error("Erro ao criar fase:", error)
+      }
     });
   }
 
+  //2º função chamada. Ela validará o email informado pelo usuário, retorna true se o formato é válido 
   const validarEmail = (email) => {
     const regex = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
     console.log(regex.test(email))
     return regex.test(email);
   }
 
+  //1º função chamada. Ela verificará se os inputs do usuário estão adequados
   function cadastrar() {
     if (!validarEmail(email)) {
       Alert.alert("Email inválido")
@@ -219,6 +241,7 @@ export default function Cadastro() {
           <TouchableOpacity style={Styles.botao} onPress={cadastrar}>
             <Text style={Styles.textBotao}>CADASTRAR</Text>
           </TouchableOpacity>
+          {/* componente funcional que renderiza o modal (termo de uso). Sua exibição é controlada por um useState */}
           <CustomModal />
         </View>
       </ScrollView>

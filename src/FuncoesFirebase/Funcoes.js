@@ -1,13 +1,6 @@
-import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
-import { doc, getDoc, getFirestore, where } from "firebase/firestore";
-import {
-  addDoc,
-  collection,
-  query,
-  getDocs,
-  deleteDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { FIREBASE_APP } from "../../FirebaseConfig";
+import { doc, getFirestore, where } from "firebase/firestore";
+import { collection, query, getDocs, deleteDoc, updateDoc, } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { differenceInCalendarDays } from "date-fns";
 
@@ -102,8 +95,6 @@ export const deleteList = async (listId) => {
   }
 };
 
-
-
 export const userReference = async () => {
   const auth = getAuth();
 
@@ -132,6 +123,7 @@ export const userVerification = async (email) => {
 
   if (querySnapshot.size > 0) {
     const userDoc = querySnapshot.docs[0].data();
+    //do objeto que representa o usuário, é retornado um booleano que indica se ele é professor(true) uo aluno (false)
     return userDoc.souProfessor;
   }
 

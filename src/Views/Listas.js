@@ -1,51 +1,32 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Modal,
-  Alert,
-  FlatList,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Modal, Alert, FlatList, } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLista";
 import style from "../Styles.js/StylesModalLista";
-// import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, FontAwesome5 } from '@expo/vector-icons';
-
 import { useFocusEffect } from "@react-navigation/native";
-
 import { validateListName, deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
-
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
-
 import { userReference } from "../FuncoesFirebase/Funcoes";
-import { Title } from "react-native-paper";
-
-
-
 
 export default function Listas() {
-  const [atualizarDados, setAtualizarDados] = useState();
+  const [atualizarDados, setAtualizarDados] = useState(false);
   const db = getFirestore(FIREBASE_APP);
   const auth = FIREBASE_AUTH;
   const collectionRef = collection(db, "listas");
 
   const [visible, setVisible] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false)
-  const [visibleExcluir, setVisibleExcluir] = useState(false)
   const [visibleCodigo, setVisibleCodigo] = useState(false)
   const [itemId, setItemId] = useState('')
 
   const navigation = useNavigation()
-
 
   const [listas, setListas] = useState([]);
 
@@ -54,7 +35,9 @@ export default function Listas() {
 
   const codigo = nanoid(6);
 
+  //A função recupera as listas criadas pelo usuário logado
   async function buscarListasDoFirestore() {
+
     try {
       const usuarioLogadoReference = await userReference();
 
@@ -102,7 +85,7 @@ export default function Listas() {
       };
 
 
-      const listaCriada = await addDoc(collectionRef, novaLista);
+      await addDoc(collectionRef, novaLista);
 
       carregarListas();
 
@@ -305,10 +288,6 @@ export default function Listas() {
       <ModalCodigo />
 
       <View style={Styles.container}>
-        {/* <View style={Styles.containerBusca}>
-          <TextInput style={Styles.textInput}></TextInput>
-        </View> */}
-
         <View style={Styles.containerList}>
           <TouchableOpacity
             style={Styles.addLista}
@@ -321,7 +300,7 @@ export default function Listas() {
         <FlatList
           style={Styles.flatlist}
           data={listas}
-          keyExtractor={(item) => item.codigo}
+          keyExtractor={(item) => String(item.codigo)}
           renderItem={({ item }) => (
             <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} onPressOne={() => carregarLista(item.codigo)} />
           )}
