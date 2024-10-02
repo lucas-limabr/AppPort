@@ -35,15 +35,11 @@ export const fetchIdList = async (campo, colecao, item, usuario) => {
 
 export const fetchQuestionIdByTitle = async (title, collectionName, userId) => {
   const db = getFirestore(FIREBASE_APP);
-
-  console.log(title);
-  console.log(collectionName);
-  console.log(userId);
   try {
     // Cria a consulta para buscar a questão com base no título e no usuário
     const q = query(
       collection(db, collectionName),
-      where("titulo", "==", title),
+      where("nomeLista", "==", title),
       where("criador", "==", userId)
     );
 
@@ -54,7 +50,6 @@ export const fetchQuestionIdByTitle = async (title, collectionName, userId) => {
     if (!querySnapshot.empty) {
       // Retorna o ID da primeira questão encontrada
       const firstQuestion = querySnapshot.docs[0];
-      console.log(firstQuestion);
       return firstQuestion.id;
     } else {
       console.log("Nenhuma questão encontrada com o título fornecido.");
@@ -66,26 +61,35 @@ export const fetchQuestionIdByTitle = async (title, collectionName, userId) => {
   }
 };
 
-export const deleteList = async (title, criador) => {
+export const validateListName = async (newListName, currentUserReference) => {
+  if (newListName === '') {
+    throw new Error("lista criada não possui nome");
+  }
+
+  const listasCollection = collection(getFirestore(), "listas");
+  const listasQuery = query(listasCollection, where("criador", "==", currentUserReference));
+
+  const listasSnapshot = await getDocs(listasQuery);
+
+  listasSnapshot.forEach((doc) => {
+    const listaData = doc.data();
+    if (listaData.nomeLista === newListName) {
+      throw new Error("lista de mesmo nome já existente");
+    }
+  });
+}
+
+export const deleteList = async (listId) => {
   const db = getFirestore();
 
   try {
-    const referencia = await userReference();
-    console.log(referencia)
-    const collectionRef = collection(db, 'listas');
+    const docRef = doc(db, 'listas', listId);
 
-
-    const q = query(collectionRef, where("nomeLista", "==", title), where("criador", "==", referencia));
-    const snap = await getDocs(q);
-
-
-    snap.forEach(async (doc) => {
-      try {
-        await deleteDoc(doc.ref);
-      } catch (error) {
-        console.error("Erro ao excluir o documento:", error);
-      }
-    });
+    try {
+      await deleteDoc(docRef);
+    } catch (error) {
+      throw new Error('Erro ao excluir a lista: ' + error);
+    }
   } catch (error) {
     console.log(error);
   }
