@@ -9,19 +9,11 @@ import { doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, FontAwesome5 } from '@expo/vector-icons';
-
 import { useFocusEffect } from "@react-navigation/native";
-
 import { validateListName, deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
-
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
-
 import { userReference } from "../FuncoesFirebase/Funcoes";
-import { Title } from "react-native-paper";
-
-
-
 
 export default function Listas() {
   const [atualizarDados, setAtualizarDados] = useState(false);
@@ -45,7 +37,7 @@ export default function Listas() {
 
   //A função recupera as listas criadas pelo usuário logado
   async function buscarListasDoFirestore() {
-    
+
     try {
       const usuarioLogadoReference = await userReference();
 
