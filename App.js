@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useFonts, Inder_400Regular } from "@expo-google-fonts/inder"
 import Navegacao from "./src/Navegacao";
 import { UserProvider } from "./src/Contexts/auth";
