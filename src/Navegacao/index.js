@@ -11,14 +11,17 @@ import { userVerification } from "../FuncoesFirebase/Funcoes";
 import { updateDay } from "../FuncoesFirebase/Funcoes";
 
 export default function Navegacao() {
+  //retorna o usuário atualmente autenticado (ou null se não estiver logado)
   const user = useAuthentication();
 
   const [isProfessor, setIsProfessor] = useState(null);
 
   useEffect(() => {
     const fetchVerification = async () => {
+      //Verifica se o usuário é professor ou aluno (baseado no email do usuário)
       const result = await userVerification(user?.email);
       setIsProfessor(result);
+      //chama a função para atualizar(se for o caso) a última data de login
       updateDay(user.email)
       console.log(`É professor: ${result}`);
       console.log(`Usuário: ${user?.email}`);
@@ -37,6 +40,7 @@ export default function Navegacao() {
             user ? (
               isProfessor ? <TabNav /> : <TabNavAluno />
             ) : (
+              //transição de imagem que é renderizada enquanto não carrega a tela do aluno ou do professor
               <View
                 style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
               >
