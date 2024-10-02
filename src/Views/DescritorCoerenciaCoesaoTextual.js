@@ -37,7 +37,7 @@ export default function DescritorCoerenciaCoesaoTextual() {
           id={id}
         />
         <Descritores
-          titulo="Estabelecimento de relação entre partes do texto"
+          titulo="Estabelecimento de relação e causa entre partes e elementos do texto"
           descritor="D8"
           id={id}
         />

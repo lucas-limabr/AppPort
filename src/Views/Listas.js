@@ -9,12 +9,19 @@ import { doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, FontAwesome5 } from '@expo/vector-icons';
+
 import { useFocusEffect } from "@react-navigation/native";
-import { deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
+
+import { validateListName, deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
+
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
 
 import { userReference } from "../FuncoesFirebase/Funcoes";
+import { Title } from "react-native-paper";
+
+
+
 
 export default function Listas() {
   const [atualizarDados, setAtualizarDados] = useState(false);
@@ -38,6 +45,7 @@ export default function Listas() {
 
   //A função recupera as listas criadas pelo usuário logado
   async function buscarListasDoFirestore() {
+    
     try {
       const usuarioLogadoReference = await userReference();
 
@@ -60,22 +68,39 @@ export default function Listas() {
     }
   }
 
+  async function carregarListas() {
+    const listasDoFirestore = await buscarListasDoFirestore();
+    setListas(listasDoFirestore);
+  }
+
   async function criarLista(nomeLista) {
+    try {
+      try {
+        const usuarioLogadoReference = await userReference();
+        await validateListName(nomeLista, usuarioLogadoReference);
+      } catch (error) {
+        Alert.alert("Erro: " + error.message);
+        throw error;
+      }
 
-    setVisible(false);
+      setVisible(false);
 
-    const novaLista = {
-      criador: referenciaCriador,
-      codigo: codigo,
-      nomeLista,
-      questoes: [],
-    };
+      const novaLista = {
+        criador: referenciaCriador,
+        codigo: codigo,
+        nomeLista,
+        questoes: [],
+      };
 
-    await addDoc(collectionRef, novaLista);
 
-    setListas([...listas, novaLista]);
-    setAtualizarDados(!atualizarDados);
-    Alert.alert("Lista criada com sucesso");
+      await addDoc(collectionRef, novaLista);
+
+      carregarListas();
+
+      Alert.alert("Lista criada com sucesso");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const carregarItemId = (id) => {
@@ -89,20 +114,11 @@ export default function Listas() {
     navigation.navigate('StackNav', { screen: 'QuestoesLista', params: { itemId: id } })
   }
 
-  async function carregarListas() {
-    const listasDoFirestore = await buscarListasDoFirestore();
-    setListas(listasDoFirestore);
-  }
 
-  useEffect(() => {
-    carregarListas();  // Recarrega quando atualizarDados mudar
-  }, [atualizarDados]);
-
-  //useFocusEffect smp será executado quando a tela ganhar foco
   useFocusEffect(
     useCallback(() => {
-      carregarListas();  // Recarrega quando a tela ganha foco
-    }, [])
+      carregarListas()
+    }, [atualizarDados])
   );
 
   const BotaoLista = ({ titulo, onBotaoPress, onPressOne }) => {
@@ -135,11 +151,8 @@ export default function Listas() {
     };
 
     const fetchId = async () => {
-      const id = await fetchQuestionIdByTitle('nomeLista', 'listas', referenciaCriador)
 
-      console.log("id " + id)
-
-      console.log(titulo)
+      const id = await fetchQuestionIdByTitle(titulo, 'listas', referenciaCriador);
 
       return id;
     }
@@ -147,30 +160,25 @@ export default function Listas() {
 
 
     const handleDelete = async () => {
+      const listId = await fetchId();
+      await deleteList(listId);
 
+      carregarListas();
 
-      // console.log(referenciaCriador.id)
-
-      await deleteList(titulo, referenciaCriador.id);
-
-      setAtualizarDados(!atualizarDados)
+      Alert.alert("Lista excluída com sucesso");
     }
 
     return (
 
       <TouchableOpacity style={Styles.lista} onPress={handleListNavigation}>
-        <View style={Styles.containerBotao}>
+        <View style={Styles.containerInfo}>
           <TouchableOpacity style={{ marginLeft: 5, marginTop: 0 }} onPress={(handleBotaoPress)}>
             <FontAwesome5 name="ellipsis-h" size={20} color="#fff" />
           </TouchableOpacity>
-
+          <Text style={Styles.txtLista}> {titulo} </Text>
           <TouchableOpacity style={{ backgroundColor: '#F54F59' }} onPress={handleDelete}>
             <EvilIcons name="close" size={30} color="#fff" />
           </TouchableOpacity>
-        </View>
-        <View style={Styles.txt}>
-          <Text style={Styles.txtLista}> {titulo} </Text>
-
         </View>
       </TouchableOpacity>
     );
@@ -246,7 +254,9 @@ export default function Listas() {
                   <Text style={style.txtEditar}>Fechar</Text>
                 </TouchableOpacity>
               </View>
+
             </View>
+
           </View>
         </View>
       </Modal>
@@ -268,8 +278,11 @@ export default function Listas() {
                 <TouchableOpacity style={style.botaoEditar} onPress={() => { setVisibleCodigo(false); setVisibleEdit(false) }} >
                   <Text style={style.txtEditar}>Fechar</Text>
                 </TouchableOpacity >
+
               </View>
+
             </View>
+
           </View>
         </View>
       </Modal>
