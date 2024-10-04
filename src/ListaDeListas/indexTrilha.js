@@ -242,8 +242,8 @@ export default function QuestoesTrilha() {
             </Markdown>
           </View>
 
-          <View style={styles.containerResposta}>
-            <ScrollView>
+          <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
               <RadioButtonGroup
                 selected={value}
                 onSelected={(value) => setValue(value)}

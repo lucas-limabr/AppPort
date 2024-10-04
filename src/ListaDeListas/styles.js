@@ -7,11 +7,9 @@ export default StyleSheet.create({
         ...StyleSheet.absoluteFillObject,        
     },
     container: {
-        
-        marginTop: 30,
+        marginTop: 10,
         alignItems: 'center',
-        
-       
+        flex: 1
     },
     enunciado:{
         backgroundColor: '#ff8c90',
@@ -40,12 +38,6 @@ export default StyleSheet.create({
         padding: 10,
         textAlign: 'left',
         fontFamily: 'Inder_400Regular', 
-    },
-    containerResposta:{
-        alignItems: 'flex-start',
-        width: 300,
-        marginTop: 10,
-        height: 200,
     },
     resposta:{
         backgroundColor: '#ff8c90',
@@ -125,6 +117,9 @@ export default StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 20,
         
+    },
+    ScrollViewContent:{
+        flex:1
     },
     
     
