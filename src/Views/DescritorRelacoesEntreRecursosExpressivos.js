@@ -34,7 +34,7 @@ export default function DescritorRelacoesEntreRecursosExpressivos() {
           id={id}
         />
         <Descritores
-          titulo="identificação do efeito de sentido decorrente do uso da pontuação"
+          titulo="Identificação do efeito de sentido decorrente do uso da pontuação"
           descritor="D14"
           id={id}
         />
