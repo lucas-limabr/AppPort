@@ -74,7 +74,7 @@ export default function SubMenu3() {
               <ImageBackground source={require('../Imagens/Placa5.png')} style={Styles.buttom}>
 
                 <Text style={Styles.textButtom}>
-                  Uso dos porques
+                  Uso dos porquês
                 </Text>
 
               </ImageBackground>

@@ -28,13 +28,12 @@ export default StyleSheet.create({
     },
 
     buttom: {
-        padding: 8,
+        padding: 3,
         margin: 8, 
         width: 160,
         height: 140,
         alignItems: 'center',
         justifyContent: 'center'
-
     },
 
 });
