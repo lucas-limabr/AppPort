@@ -10,8 +10,9 @@ export default StyleSheet.create({
         backgroundColor: '#FF8D94',
         height: 300,
         borderRadius: 10,
-        padding: 10
-        
+        padding: 10,
+        justifyContent:"center",
+        display:"flex"
     },
     titulo:{
         fontFamily: 'Inder_400Regular',
@@ -55,7 +56,7 @@ export default StyleSheet.create({
     botaoEditar:{
         alignItems: 'center',
         width: '100vw',
-        marginTop: 70,
+        marginTop: 35,
         backgroundColor:'#F54F59',
         borderRadius:10,
         paddingHorizontal: 10,

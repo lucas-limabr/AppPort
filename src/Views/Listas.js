@@ -5,7 +5,7 @@ import Styles from "../Styles.js/StylesLista";
 import style from "../Styles.js/StylesModalLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
-import { doc, getFirestore, getId, where } from "firebase/firestore";
+import { doc, getFirestore, getId, where, updateDoc } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, FontAwesome5 } from '@expo/vector-icons';
@@ -25,6 +25,8 @@ export default function Listas() {
   const [visibleEdit, setVisibleEdit] = useState(false)
   const [visibleCodigo, setVisibleCodigo] = useState(false)
   const [itemId, setItemId] = useState('')
+
+  let finalizada //variavel que é usadada para atualizar o banco de dados
 
   const navigation = useNavigation()
 
@@ -81,6 +83,7 @@ export default function Listas() {
         criador: referenciaCriador,
         codigo: codigo,
         nomeLista,
+        finalizada: false, // deixa como padrão false para lista finalizada
         questoes: [],
       };
 
@@ -96,11 +99,24 @@ export default function Listas() {
   }
 
   const carregarItemId = (id) => {
-    setVisibleEdit(true)
     setItemId(id)
 
+    for (let i = 0; i < listas.length; i++) {
+      if (id == listas[i].codigo) {
+        
+        
+        finalizada = listas[i].finalizada
+        
+        console.log(id);
+        console.log(finalizada);
+        
+        break      
+      }
+    }//provavelmente o erro está aqui, acho que finalizada não foi atualizada antes do modal aparecer, e por isso não é desativado ou ativado os botoes
+    setVisibleEdit(true)
   }
 
+  
   const carregarLista = (id) => {
     setItemId(id)
     navigation.navigate('StackNav', { screen: 'QuestoesLista', params: { itemId: id } })
@@ -112,6 +128,64 @@ export default function Listas() {
       carregarListas()
     }, [atualizarDados])
   );
+  
+  async function finalizarLista(codigo) { //atualiza o atributo finalizada da lista no banco de dados para a varável finalizada do código
+    try {
+      const listasCollection = collection(db, "listas");
+      const listasQuery = query(listasCollection, where("codigo", "==", codigo));
+      const listasSnapshot = await getDocs(listasQuery);
+      
+      if (!listasSnapshot.empty) {
+        const listaDoc = listasSnapshot.docs[0]; 
+        
+        const listaRef = doc(db, "listas", listaDoc.id); 
+  
+        // Atualiza o campo "finalizada" para true
+        await updateDoc(listaRef, { finalizada: true });
+        console.log("Lista finalizada com sucesso");
+
+        
+
+      } else {
+        console.error("Lista não encontrada");
+      }
+    } catch (error) {
+      console.error("Erro ao finalizar a lista:", error);
+    }
+  }
+  
+  
+  const alertCloseList = () => {
+
+    Alert.alert(
+      "Você realmente deseja finalizar a lista?",
+      "Apos ela ser finalizada não é possível adicionar nem remover mais questões",
+      [
+        {
+          text: 'Cancelar',
+          onPress: () => console.log('Cancelado'),
+        },
+        {
+          text: 'Confirmar',
+          onPress: async () => {
+            setVisibleCodigo(true);  // Ativa o botão e o modal "Exibir código" ao confirmar
+            
+
+            console.log(finalizada);
+
+
+            // FUNÇÃO QUE DEFINE FINALIZADA TRUE NO BANCO DE DADOS
+            await finalizarLista(itemId)
+
+            
+            console.log('a lista finalizada');
+          },
+        },
+      ],
+      { cancelable: true }
+    )
+
+  }
 
   const BotaoLista = ({ titulo, onBotaoPress, onPressOne }) => {
 
@@ -127,7 +201,6 @@ export default function Listas() {
         console.error('Erro ao obter ID:', error);
       }
     };
-
 
     const handleListNavigation = async () => {
       onPressOne();
@@ -233,15 +306,24 @@ export default function Listas() {
       <Modal animationType="slide" transparent={true} visible={visibleEdit}>
         <View style={style.container}>
           <View style={style.boxGeral}>
-            <View style={{ alignItems: "center" }}>
+            <View style={{alignItems: "center"}}>
 
-              <View style={{ justifyContent: "center", height: 185 }}>
+              <View style={{ justifyContent: "center" , height: 185, alignItems: "center" }}>
                 <TouchableOpacity style={style.botaoEditar} onPress={() => { navigation.navigate('StackNav', { screen: 'Menu', params: { itemId } }); setVisibleEdit(false) }}>
                   <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
-                </TouchableOpacity >
-                <TouchableOpacity style={style.botaoEditar} onPress={() => { setVisibleEdit(false); setVisibleCodigo(true) }}>
-                  <Text style={style.txtEditar}>Exibir código</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={style.botaoEditar} onPress={alertCloseList}>
+                  <Text style={style.txtEditar}>Finalizar Lista</Text>
+                </TouchableOpacity >
+                {visibleCodigo && finalizada && (
+                  <TouchableOpacity
+                    style={style.botaoEditar}
+                    onPress={() => setVisibleCodigo(true)} // Mantém o modal visível
+                  >
+                    <Text style={style.txtEditar}>Exibir código</Text>
+                  </TouchableOpacity>
+                )}
+
                 <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleEdit(false)}>
                   <Text style={style.txtEditar}>Fechar</Text>
                 </TouchableOpacity>
