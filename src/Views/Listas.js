@@ -6,7 +6,7 @@ import style from "../Styles.js/StylesModalLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getFirestore, getId, where } from "firebase/firestore";
-import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import { addDoc, collection, query, getDocs, updateDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 import { EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useFocusEffect } from "@react-navigation/native";
@@ -25,6 +25,7 @@ export default function Listas() {
   const [visibleEdit, setVisibleEdit] = useState(false)
   const [visibleCodigo, setVisibleCodigo] = useState(false)
   const [itemId, setItemId] = useState('')
+  const [itemFinalizado, setItemFinalizado] = useState(false)
 
   const navigation = useNavigation()
 
@@ -82,6 +83,7 @@ export default function Listas() {
         codigo: codigo,
         nomeLista,
         questoes: [],
+        finalizado: false,
       };
 
 
@@ -95,10 +97,10 @@ export default function Listas() {
     }
   }
 
-  const carregarItemId = (id) => {
+  const carregarItemId = (id, finalizado) => {
     setVisibleEdit(true)
     setItemId(id)
-
+    setItemFinalizado(finalizado)
   }
 
   const carregarLista = (id) => {
@@ -106,44 +108,29 @@ export default function Listas() {
     navigation.navigate('StackNav', { screen: 'QuestoesLista', params: { itemId: id } })
   }
 
-
   useFocusEffect(
     useCallback(() => {
       carregarListas()
     }, [atualizarDados])
   );
 
-  const BotaoLista = ({ titulo, onBotaoPress, onPressOne }) => {
+  const BotaoLista = ({ titulo, finalizado, questoes, onBotaoPress, onPressOne }) => {
 
     const handleBotaoPress = async () => {
       onBotaoPress();
-
-      try {
-        const id = await fetchId();
-        // console.log(id);
-        return id;
-      } catch (error) {
-        // Lide com erros aqui, se necessário
-        console.error('Erro ao obter ID:', error);
-      }
     };
 
 
     const handleListNavigation = async () => {
-      onPressOne();
-
-      try {
-        const id = await fetchId();
-        console.log(id);
-        return id;
-      } catch (error) {
-        // Lide com erros aqui, se necessário
-        console.error('Erro ao obter ID:', error);
+      if (questoes.length === 0) {
+        Alert.alert("Lista Vazia", "Esta lista não contém questões e portanto não pode ser acessada.");
+        return;
       }
+
+      onPressOne();
     };
 
     const fetchId = async () => {
-
       const id = await fetchQuestionIdByTitle(titulo, 'listas', referenciaCriador);
 
       return id;
@@ -161,26 +148,38 @@ export default function Listas() {
     }
 
     return (
-
       <TouchableOpacity style={Styles.lista} onPress={handleListNavigation}>
         <View style={Styles.containerInfo}>
           <TouchableOpacity style={{ marginLeft: 5, marginTop: 0 }} onPress={(handleBotaoPress)}>
             <FontAwesome5 name="ellipsis-h" size={20} color="#fff" />
           </TouchableOpacity>
-          <Text style={Styles.txtLista}> {titulo} </Text>
+          <Text style={Styles.txtLista}>
+            {titulo}
+          </Text>
           <TouchableOpacity style={{ backgroundColor: '#F54F59' }} onPress={handleDelete}>
             <EvilIcons name="close" size={30} color="#fff" />
           </TouchableOpacity>
+        </View>
+        <View>
+          <Text style={Styles.txtStatus}>
+            {finalizado ? "Status: Finalizada" : "Status: Não Finalizada"}
+          </Text>
         </View>
       </TouchableOpacity>
     );
   }
 
-  function Lista({ titulo1, onBotaoPress, onPressOne }) {
+  function Lista({ titulo1, finalizado, questoes, onBotaoPress, onPressOne }) {
 
     return (
       <View style={Styles.containerFilho}>
-        <BotaoLista titulo={titulo1} onBotaoPress={onBotaoPress} onPressOne={onPressOne} />
+        <BotaoLista
+          titulo={titulo1}
+          finalizado={finalizado}
+          questoes={questoes}
+          onBotaoPress={onBotaoPress}
+          onPressOne={onPressOne}
+        />
       </View>
     )
   }
@@ -229,26 +228,80 @@ export default function Listas() {
   }
 
   const ModalEditar = () => {
+    const confirmarFinalizacao = () => {
+      Alert.alert(
+        "Finalizar Lista",
+        "Tem certeza que deseja finalizar esta lista? Essa ação não pode ser desfeita.",
+        [
+          {
+            text: "Cancelar   ",
+            style: "cancel",
+          },
+          {
+            text: "Sim, finalizar",
+            onPress: () => finalizarLista(),
+          },
+        ]
+      );
+    };
+
+    const finalizarLista = async () => {
+      try {
+        const listasCollection = collection(getFirestore(), "listas");
+        const listasQuery = query(listasCollection, where("codigo", "==", itemId));
+        const listasSnapshot = await getDocs(listasQuery);
+        const doc = listasSnapshot.docs[0].ref;
+
+        await updateDoc(doc, { finalizado: true });
+
+        setVisibleEdit(false);
+        Alert.alert("Lista finalizada com sucesso!");
+        carregarListas();
+      } catch (error) {
+        console.log("Erro ao finalizar lista:", error);
+      }
+    };
+
     return (
       <Modal animationType="slide" transparent={true} visible={visibleEdit}>
         <View style={style.container}>
           <View style={style.boxGeral}>
             <View style={{ alignItems: "center" }}>
-
               <View style={{ justifyContent: "center", height: 185 }}>
-                <TouchableOpacity style={style.botaoEditar} onPress={() => { navigation.navigate('StackNav', { screen: 'Menu', params: { itemId } }); setVisibleEdit(false) }}>
-                  <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
-                </TouchableOpacity >
-                <TouchableOpacity style={style.botaoEditar} onPress={() => { setVisibleEdit(false); setVisibleCodigo(true) }}>
-                  <Text style={style.txtEditar}>Exibir código</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleEdit(false)}>
+                {itemFinalizado ? (
+                  <TouchableOpacity
+                    style={style.botaoEditar}
+                    onPress={() => { setVisibleEdit(false); setVisibleCodigo(true) }}
+                  >
+                    <Text style={style.txtEditar}>Exibir código</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      style={style.botaoEditar}
+                      onPress={() => { navigation.navigate('StackNav', { screen: 'Menu', params: { itemId } }); setVisibleEdit(false) }}
+                    >
+                      <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
+                    </TouchableOpacity >
+
+                    <TouchableOpacity
+                      style={style.botaoEditar}
+                      onPress={confirmarFinalizacao}
+                    >
+                      <Text style={style.txtEditar}>Finalizar</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+
+                <TouchableOpacity
+                  style={style.botaoEditar}
+                  onPress={() => setVisibleEdit(false)}
+                >
                   <Text style={style.txtEditar}>Fechar</Text>
                 </TouchableOpacity>
+
               </View>
-
             </View>
-
           </View>
         </View>
       </Modal>
@@ -302,7 +355,14 @@ export default function Listas() {
           data={listas}
           keyExtractor={(item) => String(item.codigo)}
           renderItem={({ item }) => (
-            <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} onPressOne={() => carregarLista(item.codigo)} />
+            <Lista
+              key={item.codigo}
+              titulo1={item.nomeLista}
+              questoes={item.questoes}
+              finalizado={item.finalizado}
+              onBotaoPress={() => carregarItemId(item.codigo, item.finalizado)}
+              onPressOne={() => carregarLista(item.codigo)}
+            />
           )}
         />
 
