@@ -250,9 +250,15 @@ export default function Listas() {
         const listasCollection = collection(getFirestore(), "listas");
         const listasQuery = query(listasCollection, where("codigo", "==", itemId));
         const listasSnapshot = await getDocs(listasQuery);
-        const doc = listasSnapshot.docs[0].ref;
+        const docData = listasSnapshot.docs[0].data();
+        const ref = listasSnapshot.docs[0].ref;
 
-        await updateDoc(doc, { finalizado: true });
+        if (docData.questoes.length === 0) {
+          Alert.alert("Lista Incompleta", "Esta lista não contém questões e portanto não pode ser finalizada.");
+          return;
+        }
+
+        await updateDoc(ref, { finalizado: true });
 
         setVisibleEdit(false);
         Alert.alert("Lista finalizada com sucesso!");
@@ -365,9 +371,6 @@ export default function Listas() {
             />
           )}
         />
-
-        {/* <Markdown>{copy}</Markdown> */}
-
       </View>
     </LinearGradient>
   );
