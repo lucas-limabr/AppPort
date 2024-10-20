@@ -112,11 +112,11 @@ export default StyleSheet.create({
     confirmar:{
         backgroundColor: '#F54F59',
         width: 300,
-        height: 35,
+        height: 45,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-        
+        marginTop: 10
     },
     ScrollViewContent:{
         flex:1

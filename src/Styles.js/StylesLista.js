@@ -66,6 +66,12 @@ export default StyleSheet.create({
         color: '#fff',
         fontFamily: 'Inder_400Regular',
     },
+    txtStatus: {
+        color: '#fff',
+        fontSize: 14,
+        marginTop: 5,
+        marginLeft: 10,
+    },
     containerInfo: {
         flexDirection: 'row',
         width: '100%',

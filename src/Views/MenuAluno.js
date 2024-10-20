@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, TouchableOpacity, Text, Modal, TextInput, FlatList, ScrollView } from "react-native";
+import { View, TouchableOpacity, Text, Modal, Alert, TextInput, FlatList } from "react-native";
 import Styles from "../Styles.js/StylesMenuAluno";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
-import {  doc, getFirestore, getId, where } from "firebase/firestore";
+import { doc, getFirestore, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
@@ -22,21 +22,21 @@ export default function MenuAluno() {
   const [id, setId] = useState('')
   const navigation = useNavigation()
 
-  
-  
-  
+
+
+
   const aluno = auth.currentUser.uid
 
   const referenceAluno = doc(db, 'users', aluno)
 
   const searchList = async (codigo) => {
-      try {
+    try {
       const listProfessor = collection(getFirestore(), 'listas')
       const listQuery = query(listProfessor, where("codigo", "==", codigo))
 
       const listSnapshot = await getDocs(listQuery)
-      
-      listSnapshot.forEach(async(doc) => {
+
+      listSnapshot.forEach(async (doc) => {
         const listData = doc.data();
 
         const newList = {
@@ -51,38 +51,38 @@ export default function MenuAluno() {
         setListas((prevListas) => [...prevListas, listData]);
         setVisible(false)
         setAtualizarDados(!atualizarDados)
-        
-        
+
+
       })
-      
-    }catch(error) {
+
+    } catch (error) {
       console.error(error)
     }
   }
   async function buscarListasDoFirestore() {
     try {
-    const usuarioLogadoReference = await userReference();
+      const usuarioLogadoReference = await userReference();
 
-    const listasCollection = collection(getFirestore(), "ListaAluno");
-    const listasQuery = query(listasCollection, where("aluno", "==", usuarioLogadoReference));
+      const listasCollection = collection(getFirestore(), "ListaAluno");
+      const listasQuery = query(listasCollection, where("aluno", "==", usuarioLogadoReference));
 
-    const listasSnapshot = await getDocs(listasQuery);
+      const listasSnapshot = await getDocs(listasQuery);
 
-    const listas = [];
+      const listas = [];
 
-    listasSnapshot.forEach((doc) => {
-      const listaData = doc.data();
-      listas.push(listaData);
-    });
+      listasSnapshot.forEach((doc) => {
+        const listaData = doc.data();
+        listas.push(listaData);
+      });
 
-    return listas;
-  } catch (error) {
-    console.error(error);
-    // Lidar com o erro conforme necessário
+      return listas;
+    } catch (error) {
+      console.error(error);
+      // Lidar com o erro conforme necessário
+    }
   }
-  }
 
-  
+
 
   useFocusEffect(
     useCallback(() => {
@@ -123,33 +123,34 @@ export default function MenuAluno() {
     );
   };
 
-  function ClickButton({ title, acertos, erros, onButtonPress }) {
-    //Função que cria o botão
-
+  function ClickButton({ title, questoes, acertos, erros }) {
     const handleListNavigation = async () => {
-      onButtonPress();
-
-      try{
+      try {
         const id = await fetchId()
         setId(id)
 
-        if(id){
-          
-          
-          navigation.navigate('StackNavAluno', {screen: 'QuestoesAluno', params: {itemId: id} })
+        if (questoes.length === 0) {
+          Alert.alert("Lista Vazia", "Esta lista não contém questões e portanto não pode ser acessada.");
+          return;
         }
-        
+
+        if (!id) {
+          return;
+        }
+
+        navigation.navigate('StackNavAluno', { screen: 'QuestoesAluno', params: { itemId: id } })
+
         return id;
-        }catch(error){
-          console.log("Erro ao obter ID:", error)
-        }
+      } catch (error) {
+        console.log("Erro ao obter ID:", error)
+      }
     }
 
     const fetchId = async () => {
       const id = await fetchIdList('nomeLista', 'ListaAluno', title, aluno)
       setId(id)
-      
-      
+
+
       return id
     }
 
@@ -164,7 +165,7 @@ export default function MenuAluno() {
 
           <Text style={Styles.styleFontContent}>Erros: {erros}</Text>
 
-          
+
         </View>
       </TouchableOpacity>
     );
@@ -200,12 +201,11 @@ export default function MenuAluno() {
 
       <View style={Styles.container}>
         <FlatList
-        
-        data={listas}
-        keyExtractor={(item) => item.codigo}
-        renderItem={({item}) => (
-          <ClickButton title={item.nomeLista} acertos={item.acertos} erros={item.erros} onButtonPress={() => console.log(item.id) } /> 
-        )}
+          data={listas}
+          keyExtractor={(item) => item.codigo}
+          renderItem={({ item }) => (
+            <ClickButton title={item.nomeLista} questoes={item.questoes} acertos={item.acertos} erros={item.erros}/>
+          )}
         />
       </View>
       <StatusBar style="auto" />
