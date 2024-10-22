@@ -94,38 +94,12 @@ export default function QuestoesLista() {
 
   useEffect(() => {
     obterQuestoes();
-
-    const time = 7000;
-
-    const timeoutId = setTimeout(() => {
-      if (questoesCarregadas) {
-        // Aqui, você sabe que as questões foram carregadas com sucesso
-      } else {
-        // Mostra o alerta se as questões não foram carregadas
-        Alert.alert(
-          "Aviso",
-          "A lista está vazia!",
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                clearTimeout(timeoutId); // Limpa o timeout antes de navegar de volta
-                navigation.goBack();
-              },
-            },
-          ],
-          { cancelable: false }
-        );
-      }
-    }, time);
-
-    return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
   }, [obterQuestoes, navigation, atualizar]);
-
+  
   const refreshComponent = () => {
     setAtualizar((prevKey) => prevKey + 1);
   };
-
+  
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       refreshComponent();
