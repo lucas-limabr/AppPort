@@ -176,8 +176,8 @@ export default function QuestoesLista() {
             </Markdown>
           </View>
 
-          <View style={styles.containerResposta}>
-            <ScrollView>
+          <View style={styles.container}>
+            <ScrollView  contentContainerStyle={styles.scrollViewContent}>
               {/* Mapear o array de respostas */}
               {questaoAtual.respostas.map((resposta, index) => (
                 <TouchableOpacity
