@@ -110,31 +110,6 @@ export default function QuestoesAluno() {
 
       obterQuestoes();
     }
-
-    const time = 7000;
-
-    const timeoutId = setTimeout(() => {
-      if (!questoesCarregadas) {
-        setIndice(0);
-        // Mostra o alerta se as questões não foram carregadas
-        Alert.alert(
-          "Aviso",
-          "A lista está vazia!",
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                clearTimeout(timeoutId); // Limpa o timeout antes de navegar de volta
-                navigation.goBack();
-              },
-            },
-          ],
-          { cancelable: false }
-        );
-      }
-    }, time);
-
-    return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
   }, [codigoLista, navigation, atualizar]);
 
   const refreshComponent = () => {
@@ -422,22 +397,19 @@ export default function QuestoesAluno() {
                       </View>
                     }
                     value={resposta}
-                    style={{ borderWidth: 1,borderColor: "#fff", left: 4, top: 3, backgroundColor:'#fff', width: 25, height:25  }}
+                    style={{ borderWidth: 1, borderColor: "#fff", left: 4, top: 3, backgroundColor: '#fff', width: 25, height: 25 }}
                   />
                 ))}
               </RadioButtonGroup>
+              <TouchableOpacity
+                style={styles.confirmar}
+                onPress={() =>
+                  conferirQuestao(questaoAtual.respostaCorreta, value)
+                }
+              >
+                <Text style={styles.label}>Confirmar</Text>
+              </TouchableOpacity>
             </ScrollView>
-          </View>
-
-          <View style={styles.containerContinuar}>
-            <TouchableOpacity
-              style={styles.confirmar}
-              onPress={() =>
-                conferirQuestao(questaoAtual.respostaCorreta, value)
-              }
-            >
-              <Text style={styles.label}>Confirmar</Text>
-            </TouchableOpacity>
           </View>
         </View>
       ) : (
