@@ -254,8 +254,8 @@ export default function Questoes() {
           </Markdown>
         </View>
 
-        <View style={styles.containerResposta}>
-          <ScrollView style={styles.scroll}>
+        <View style={styles.container}>
+          <ScrollView style={styles.ScrollViewContent}>
             <TouchableOpacity
               style={[
                 resposta[0] === respostaCorreta
