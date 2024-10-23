@@ -62,7 +62,6 @@ export default StyleSheet.create({
         color: '#fff',
         textAlign: "auto",
         borderWidth: 0
-        
     },
     selectLabel:{
         backgroundColor: '#F54F59'
@@ -83,7 +82,8 @@ export default StyleSheet.create({
         justifyContent: 'space-evenly',
         flexDirection: 'row',
         flex: 1,
-        position: "relative"
+        position: "relative",
+        marginVertical: 14,
     },
     containerContinuar:{
         top: 5,
@@ -100,14 +100,11 @@ export default StyleSheet.create({
     },
     containerSalvar:{
         width: '100%',
-        right: 30,
-        top: 30,
-        alignItems: 'flex-end',
+        right: 15,
+        top: 15,
+        alignItems: 'flex',
         justifyContent: 'flex-end',
         flexDirection: 'row',
-        flex: 1,
-       
-        
     },
     confirmar:{
         backgroundColor: '#F54F59',
@@ -123,7 +120,9 @@ export default StyleSheet.create({
     },
     
     
-    
+    containerResposta:{
+        backgroundColor: 'red'
+    }
     
 
 })
