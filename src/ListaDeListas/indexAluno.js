@@ -354,8 +354,8 @@ export default function QuestoesAluno() {
             </Markdown>
           </View>
 
-          <View style={styles.containerResposta}>
-            <ScrollView style={styles.scroll}>
+          <View style={styles.container}>
+            <ScrollView >
               <RadioButtonGroup
                 selected={value}
                 onSelected={(value) => setValue(value)}
