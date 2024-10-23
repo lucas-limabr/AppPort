@@ -83,7 +83,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         flex: 1,
         position: "relative",
-        marginTop: 10
+        marginVertical: 14,
     },
     containerContinuar:{
         top: 5,
