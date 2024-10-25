@@ -87,7 +87,8 @@ export default StyleSheet.create({
     },
     containerContinuar: {
         top: 5,
-        height: 45
+        height: 45,
+        marginBottom: 35,
     },
     btnSalvar: {
         backgroundColor: '#F54F59',
@@ -113,7 +114,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-        marginTop: 10
+        marginTop: 20
     },
     ScrollViewContent: {
         flex: 1

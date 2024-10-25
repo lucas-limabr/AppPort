@@ -64,7 +64,7 @@ export default StyleSheet.create({
     FontFormatButtom: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: 30,
+        fontSize: 17,
         fontFamily: 'Inder_400Regular',
     },
 
@@ -88,9 +88,9 @@ export default StyleSheet.create({
     buttom: {
         backgroundColor: '#F5505A',
         padding: 8,
-        margin: 10,
-        width: 250,
-        height: 100,
+        marginTop: 30,
+        width: 170,
+        height: 50,
         borderRadius: 20,
         alignItems: 'center',
         justifyContent: 'center'
