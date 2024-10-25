@@ -69,7 +69,7 @@ export default function QuestoesTrilha() {
         );
         setQuestoes(questoesValidas);
       } catch (error) {
-        
+
       }
     };
     fetchData();
@@ -106,7 +106,7 @@ export default function QuestoesTrilha() {
           concluido: true,
         });
       } catch (error) {
-        
+
       }
     }
     navigation.goBack({ reload: true });
@@ -135,36 +135,36 @@ export default function QuestoesTrilha() {
           style={StylesEnd.gradient}
         >
           <View style={StylesEnd.container}>
-            <View style={StylesEnd.boxTitle}>            
-            {acertouTodas ? (
-              <Text style={StylesEnd.Title}>
-                PERFEITO!!
-                <Text style={StylesEnd.SubTitle}>
-                  Você acertou todas as questões!
-                </Text>
-              </Text>
-            ) : acertosPercentual > 50 ? (
-              <Text style={StylesEnd.Title}>
-                PARABÉNS!!
-                <Text style={StylesEnd.SubTitle}>
-                  Você acertou boa parte das questões!
-                </Text>
-              </Text>
-            ) : (
-              <View>
+            <View style={StylesEnd.boxTitle}>
+              {acertouTodas ? (
                 <Text style={StylesEnd.Title}>
-                  FOI POR POUCO
+                  PERFEITO!!
+                  <Text style={StylesEnd.SubTitle}>
+                    Você acertou todas as questões!
+                  </Text>
                 </Text>
-                <Text style={StylesEnd.SubTitle}>
-                  Tente novamente...
+              ) : acertosPercentual > 50 ? (
+                <Text style={StylesEnd.Title}>
+                  PARABÉNS!!
+                  <Text style={StylesEnd.SubTitle}>
+                    Você acertou boa parte das questões!
+                  </Text>
                 </Text>
-              </View>
-)}
+              ) : (
+                <View>
+                  <Text style={StylesEnd.Title}>
+                    FOI POR POUCO
+                  </Text>
+                  <Text style={StylesEnd.SubTitle}>
+                    Tente novamente...
+                  </Text>
+                </View>
+              )}
             </View>
 
             <View style={StylesEnd.box}>
               <View style={StylesEnd.boxImage}>
-                {acertouTodas? (
+                {acertouTodas ? (
                   <Image
                     style={StylesEnd.ImageFormat}
                     source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
@@ -180,7 +180,7 @@ export default function QuestoesTrilha() {
                     source={require("../Imagens/animations/AnimacoesMascoteErrouMaioria.gif")}
                   />
                 )}
-                
+
               </View>
 
               <View style={StylesEnd.subDivTag}>
@@ -211,6 +211,8 @@ export default function QuestoesTrilha() {
     );
   };
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <ModalEnd />
@@ -218,11 +220,22 @@ export default function QuestoesTrilha() {
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              <Image
-                style={styles.imagem}
-                source={{ uri: questoes[indice].data.urlImagem }}
-                resizeMode="contain"
-              />
+              <TouchableOpacity onPress={() => setIsExpanded(true)}>
+                <Image
+                  style={styles.imagem}
+                  source={{ uri: questoes[indice].data.urlImagem }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+
+              {/* Modal para exibir a imagem expandida */}
+              <Modal visible={isExpanded} transparent={true} animationType="fade">
+                <View style={styles.modalContainer}>
+                  <TouchableOpacity onPress={() => setIsExpanded(false)}>
+                    <Image source={{ uri: questoes[indice].data.urlImagem }} style={styles.fullImage} />
+                  </TouchableOpacity>
+                </View>
+              </Modal>
             </View>
             <Markdown
               style={{
@@ -285,7 +298,7 @@ export default function QuestoesTrilha() {
                       </View>
                     }
                     value={resposta}
-                    style={{ borderWidth: 1,borderColor: "#fff", left: 4, top: 3, backgroundColor:'#fff', width: 25, height:25  }}
+                    style={{ borderWidth: 1, borderColor: "#fff", left: 4, top: 3, backgroundColor: '#fff', width: 25, height: 25 }}
                   />
                 ))}
               </RadioButtonGroup>
