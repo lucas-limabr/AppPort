@@ -3,7 +3,7 @@ node_modules/
 dist/
 npm-debug.*
 *.jks
-/.credentials
+/credentials/
 credentials.json
 *.p8
 *.p12
