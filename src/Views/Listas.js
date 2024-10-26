@@ -1,50 +1,33 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Modal,
-  Alert,
-  FlatList,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Modal, Alert, FlatList, } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesLista";
 import style from "../Styles.js/StylesModalLista";
-// import Lista from "../Componentes/ComponentLista";
 import { AntDesign } from "@expo/vector-icons";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { doc, getFirestore, getId, where } from "firebase/firestore";
-import { addDoc, collection, query, getDocs } from "firebase/firestore";
+import { addDoc, collection, query, getDocs, updateDoc } from "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
-import { EvilIcons, FontAwesome5  } from '@expo/vector-icons';
-
+import { EvilIcons, FontAwesome5 } from '@expo/vector-icons';
 import { useFocusEffect } from "@react-navigation/native";
-
-import {fetchIdList, deleteList, fetchQuestionIdByTitle} from '../FuncoesFirebase/Funcoes'
-
+import { validateListName, deleteList, fetchQuestionIdByTitle } from '../FuncoesFirebase/Funcoes'
 import { nanoid } from "nanoid";
 import "react-native-get-random-values";
-
 import { userReference } from "../FuncoesFirebase/Funcoes";
 
-
-
-
 export default function Listas() {
-  const [atualizarDados, setAtualizarDados] = useState();
+  const [atualizarDados, setAtualizarDados] = useState(false);
   const db = getFirestore(FIREBASE_APP);
   const auth = FIREBASE_AUTH;
   const collectionRef = collection(db, "listas");
 
   const [visible, setVisible] = useState(false);
   const [visibleEdit, setVisibleEdit] = useState(false)
-  const [visibleExcluir, setVisibleExcluir] = useState(false)
   const [visibleCodigo, setVisibleCodigo] = useState(false)
   const [itemId, setItemId] = useState('')
+  const [itemFinalizado, setItemFinalizado] = useState(false)
 
   const navigation = useNavigation()
-
 
   const [listas, setListas] = useState([]);
 
@@ -53,53 +36,71 @@ export default function Listas() {
 
   const codigo = nanoid(6);
 
+  //A função recupera as listas criadas pelo usuário logado
   async function buscarListasDoFirestore() {
+
     try {
-    const usuarioLogadoReference = await userReference();
+      const usuarioLogadoReference = await userReference();
 
-    const listasCollection = collection(getFirestore(), "listas");
-    const listasQuery = query(listasCollection, where("criador", "==", usuarioLogadoReference));
+      const listasCollection = collection(getFirestore(), "listas");
+      const listasQuery = query(listasCollection, where("criador", "==", usuarioLogadoReference));
 
-    const listasSnapshot = await getDocs(listasQuery);
+      const listasSnapshot = await getDocs(listasQuery);
 
-    const listas = [];
+      const listas = [];
 
-    listasSnapshot.forEach((doc) => {
-      const listaData = doc.data();
-      listas.push(listaData);
-    });
+      listasSnapshot.forEach((doc) => {
+        const listaData = doc.data();
+        listas.push(listaData);
+      });
 
-    return listas;
-  } catch (error) {
-    console.error(error);
-    // Lidar com o erro conforme necessário
+      return listas;
+    } catch (error) {
+      console.error(error);
+      // Lidar com o erro conforme necessário
+    }
   }
+
+  async function carregarListas() {
+    const listasDoFirestore = await buscarListasDoFirestore();
+    setListas(listasDoFirestore);
   }
 
   async function criarLista(nomeLista) {
-    
-    setVisible(false);
+    try {
+      try {
+        const usuarioLogadoReference = await userReference();
+        await validateListName(nomeLista, usuarioLogadoReference);
+      } catch (error) {
+        Alert.alert("Erro: " + error.message);
+        throw error;
+      }
 
-    const novaLista = {
-      criador: referenciaCriador,
-      codigo: codigo,
-      nomeLista,
-      questoes: [],
-    };
+      setVisible(false);
 
-    
-    const listaCriada = await addDoc(collectionRef, novaLista);
-    const listaId = docRef.id;
+      const novaLista = {
+        criador: referenciaCriador,
+        codigo: codigo,
+        nomeLista,
+        questoes: [],
+        finalizado: false,
+      };
 
-    setListas([...listas, { ...listas, novaLista }]);
-    setAtualizarDados(!atualizarDados);
-    Alert.alert("Lista criada com sucesso");
+
+      await addDoc(collectionRef, novaLista);
+
+      carregarListas();
+
+      Alert.alert("Lista criada com sucesso");
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  const carregarItemId = (id) => {
+  const carregarItemId = (id, finalizado) => {
     setVisibleEdit(true)
     setItemId(id)
-    
+    setItemFinalizado(finalizado)
   }
 
   const carregarLista = (id) => {
@@ -109,90 +110,77 @@ export default function Listas() {
 
   useFocusEffect(
     useCallback(() => {
-      async function carregarListas() {
-        const listasDoFirestore = await buscarListasDoFirestore();
-        setListas(listasDoFirestore);
-      } 
       carregarListas()
     }, [atualizarDados])
   );
 
-  const BotaoLista = ({ titulo, onBotaoPress, onPressOne  }) => {
-  
+  const BotaoLista = ({ titulo, finalizado, questoes, onBotaoPress, onPressOne }) => {
+
     const handleBotaoPress = async () => {
       onBotaoPress();
-    
-      try {
-        const id = await fetchId();
-        // console.log(id);
-        return id;
-      } catch (error) {
-        // Lide com erros aqui, se necessário
-        console.error('Erro ao obter ID:', error);
-      }
     };
 
 
     const handleListNavigation = async () => {
-      onPressOne();
-    
-      try {
-        const id = await fetchId();
-        console.log(id);
-        return id;
-      } catch (error) {
-        // Lide com erros aqui, se necessário
-        console.error('Erro ao obter ID:', error);
+      if (questoes.length === 0) {
+        Alert.alert("Lista Vazia", "Esta lista não contém questões e portanto não pode ser acessada.");
+        return;
       }
+
+      onPressOne();
     };
-  
-    const fetchId = async () =>{
-      const id = await fetchQuestionIdByTitle('nomeLista', 'listas', referenciaCriador)
 
-      console.log("id " + id)
+    const fetchId = async () => {
+      const id = await fetchQuestionIdByTitle(titulo, 'listas', referenciaCriador);
 
-      console.log(titulo)
-  
       return id;
     }
-  
-    
-  
+
+
+
     const handleDelete = async () => {
-     
+      const listId = await fetchId();
+      await deleteList(listId);
 
-      // console.log(referenciaCriador.id)
-      
-      await deleteList(titulo, referenciaCriador.id);
-      
-      setAtualizarDados(!atualizarDados)
+      carregarListas();
+
+      Alert.alert("Lista excluída com sucesso");
     }
-    
-    return(
-    
-    <TouchableOpacity style={Styles.lista} onPress={handleListNavigation}>
-      <View style={Styles.containerBotao}>
-        <TouchableOpacity style={{ marginLeft: 5, marginTop: 0}} onPress={(handleBotaoPress)}>
-        <FontAwesome5  name="ellipsis-h" size={20} color="#fff" />
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={{backgroundColor:'#F54F59'}} onPress={handleDelete}>
-        <EvilIcons name="close" size={30} color="#fff" />
-        </TouchableOpacity>
-      </View>
-      <View style={Styles.txt}>
-        <Text style={Styles.txtLista}> {titulo} </Text>
-  
-      </View>
-    </TouchableOpacity>
-  );}
 
-  function Lista({ titulo1, onBotaoPress, onPressOne}) {
-  
     return (
-    <View style = {Styles.containerFilho}>
-        <BotaoLista titulo={titulo1} onBotaoPress={onBotaoPress}  onPressOne={onPressOne} />
-    </View>
+      <TouchableOpacity style={Styles.lista} onPress={handleListNavigation}>
+        <View style={Styles.containerInfo}>
+          <TouchableOpacity style={{ marginLeft: 5, marginTop: 0 }} onPress={(handleBotaoPress)}>
+            <FontAwesome5 name="ellipsis-h" size={20} color="#fff" />
+          </TouchableOpacity>
+          <Text style={Styles.txtLista}>
+            {titulo}
+          </Text>
+          <TouchableOpacity style={{ backgroundColor: '#F54F59' }} onPress={handleDelete}>
+            <EvilIcons name="close" size={30} color="#fff" />
+          </TouchableOpacity>
+        </View>
+        <View>
+          <Text style={Styles.txtStatus}>
+            {finalizado ? "Status: Finalizada" : "Status: Não Finalizada"}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  }
+
+  function Lista({ titulo1, finalizado, questoes, onBotaoPress, onPressOne }) {
+
+    return (
+      <View style={Styles.containerFilho}>
+        <BotaoLista
+          titulo={titulo1}
+          finalizado={finalizado}
+          questoes={questoes}
+          onBotaoPress={onBotaoPress}
+          onPressOne={onPressOne}
+        />
+      </View>
     )
   }
 
@@ -240,52 +228,112 @@ export default function Listas() {
   }
 
   const ModalEditar = () => {
+    const confirmarFinalizacao = () => {
+      Alert.alert(
+        "Finalizar Lista",
+        "Tem certeza que deseja finalizar esta lista? Essa ação não pode ser desfeita.",
+        [
+          {
+            text: "Cancelar   ",
+            style: "cancel",
+          },
+          {
+            text: "Sim, finalizar",
+            onPress: () => finalizarLista(),
+          },
+        ]
+      );
+    };
+
+    const finalizarLista = async () => {
+      try {
+        const listasCollection = collection(getFirestore(), "listas");
+        const listasQuery = query(listasCollection, where("codigo", "==", itemId));
+        const listasSnapshot = await getDocs(listasQuery);
+        const docData = listasSnapshot.docs[0].data();
+        const ref = listasSnapshot.docs[0].ref;
+
+        if (docData.questoes.length === 0) {
+          Alert.alert("Lista Incompleta", "Esta lista não contém questões e portanto não pode ser finalizada.");
+          return;
+        }
+
+        await updateDoc(ref, { finalizado: true });
+
+        setVisibleEdit(false);
+        Alert.alert("Lista finalizada com sucesso!");
+        carregarListas();
+      } catch (error) {
+        console.log("Erro ao finalizar lista:", error);
+      }
+    };
+
     return (
       <Modal animationType="slide" transparent={true} visible={visibleEdit}>
         <View style={style.container}>
           <View style={style.boxGeral}>
             <View style={{ alignItems: "center" }}>
-              
-            <View style={{ justifyContent: "center", height: 185 }}>
-              <TouchableOpacity style={style.botaoEditar} onPress={() => {navigation.navigate('StackNav', { screen: 'Menu', params: {itemId } }); setVisibleEdit(false)}}>
-                <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
-              </TouchableOpacity >
-              <TouchableOpacity style={style.botaoEditar} onPress={() =>{setVisibleEdit(false); setVisibleCodigo(true)}}>
-                <Text style={style.txtEditar}>Exibir código</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={style.botaoEditar} onPress={() => setVisibleEdit(false)}>
-                <Text style={style.txtEditar}>Fechar</Text>
-              </TouchableOpacity>
-            </View>
+              <View style={{ justifyContent: "center", height: 185 }}>
+                {itemFinalizado ? (
+                  <TouchableOpacity
+                    style={style.botaoEditar}
+                    onPress={() => { setVisibleEdit(false); setVisibleCodigo(true) }}
+                  >
+                    <Text style={style.txtEditar}>Exibir código</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <>
+                    <TouchableOpacity
+                      style={style.botaoEditar}
+                      onPress={() => { navigation.navigate('StackNav', { screen: 'Menu', params: { itemId } }); setVisibleEdit(false) }}
+                    >
+                      <Text style={style.txtEditar}>Adicionar/Remover questões</Text>
+                    </TouchableOpacity >
 
+                    <TouchableOpacity
+                      style={style.botaoEditar}
+                      onPress={confirmarFinalizacao}
+                    >
+                      <Text style={style.txtEditar}>Finalizar</Text>
+                    </TouchableOpacity>
+                  </>
+                )}
+
+                <TouchableOpacity
+                  style={style.botaoEditar}
+                  onPress={() => setVisibleEdit(false)}
+                >
+                  <Text style={style.txtEditar}>Fechar</Text>
+                </TouchableOpacity>
+
+              </View>
             </View>
-           
           </View>
         </View>
       </Modal>
     );
   };
-  
+
   const ModalCodigo = () => {
-    
+
     return (
       <Modal animationType="slide" transparent={true} visible={visibleCodigo}>
         <View style={style.container}>
           <View style={style.boxGeral}>
             <View style={{ alignItems: "center" }}>
-              
-            <View style={{ justifyContent: "center", height: 185 }}>
-              <TouchableOpacity style={style.botaoEditar} >
-                <Text style={style.txtEditar}>Código: {itemId}</Text>
-              </TouchableOpacity >
-              <TouchableOpacity style={style.botaoEditar} onPress={() => {setVisibleCodigo(false); setVisibleEdit(false)}} >
-                <Text style={style.txtEditar}>Fechar</Text>
-              </TouchableOpacity >
-              
-            </View>
+
+              <View style={{ justifyContent: "center", height: 185 }}>
+                <TouchableOpacity style={style.botaoEditar} >
+                  <Text style={style.txtEditar}>Código: {itemId}</Text>
+                </TouchableOpacity >
+                <TouchableOpacity style={style.botaoEditar} onPress={() => { setVisibleCodigo(false); setVisibleEdit(false) }} >
+                  <Text style={style.txtEditar}>Fechar</Text>
+                </TouchableOpacity >
+
+              </View>
 
             </View>
-           
+
           </View>
         </View>
       </Modal>
@@ -296,13 +344,9 @@ export default function Listas() {
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
       <ModalLista />
       <ModalEditar />
-      <ModalCodigo/>
+      <ModalCodigo />
 
       <View style={Styles.container}>
-        {/* <View style={Styles.containerBusca}>
-          <TextInput style={Styles.textInput}></TextInput>
-        </View> */}
-
         <View style={Styles.containerList}>
           <TouchableOpacity
             style={Styles.addLista}
@@ -315,14 +359,18 @@ export default function Listas() {
         <FlatList
           style={Styles.flatlist}
           data={listas}
-          keyExtractor={(item) => item.codigo}
+          keyExtractor={(item) => String(item.codigo)}
           renderItem={({ item }) => (
-              <Lista key={item.codigo} titulo1={item.nomeLista} onBotaoPress={() => carregarItemId(item.codigo)} onPressOne={() => carregarLista(item.codigo)}/>
-            )}
+            <Lista
+              key={item.codigo}
+              titulo1={item.nomeLista}
+              questoes={item.questoes}
+              finalizado={item.finalizado}
+              onBotaoPress={() => carregarItemId(item.codigo, item.finalizado)}
+              onPressOne={() => carregarLista(item.codigo)}
+            />
+          )}
         />
-        
-        {/* <Markdown>{copy}</Markdown> */}
-        
       </View>
     </LinearGradient>
   );

@@ -1,0 +1,1 @@
+### Este é um projeto de desenvolvimento de um app (Portuguito) educacional voltado para a língua portuguesa. Faz parte de um projeto de extensão acadêmico, o qual, eu e mais alguns colaboradores, temos a responsabilidade de dar manutenção e adicionar novos recursos. Este repositório é um fork, e eu fui selecionado para ficar à frente deste projeto por cerca de 5 meses.

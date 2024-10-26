@@ -2,16 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
-import {
-  getFirestore,
-  query,
-  where,
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { getFirestore, query, where, collection, getDocs, doc, getDoc, updateDoc, } from "firebase/firestore";
 import { FIREBASE_APP } from "../../FirebaseConfig";
 import { useRoute } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
@@ -23,7 +14,6 @@ import "firebase/firestore";
 import Markdown from "react-native-markdown-display";
 
 export default function Questoes() {
-  const [value, setValue] = useState("first");
   const [pergunta, setPergunta] = useState(null);
   const [respostaCorreta, setRespostaCorreta] = useState(null);
   const [id, setId] = useState(null);
@@ -31,8 +21,9 @@ export default function Questoes() {
   const [urlImagem, setUrlImagem] = useState(null);
   const [indice, setIndice] = useState(0);
   const [atualizarDados, setAtualizarDados] = useState(false);
-  const route = useRoute();
   const [questaoEstaNaLista, setQuestaoEstaNaLista] = useState(false);
+
+  const route = useRoute();
 
   const navigation = useNavigation();
 
@@ -163,7 +154,7 @@ export default function Questoes() {
     }
   };
 
-  const verirficarEAtualizarEstado = async () => {
+  const verificarEAtualizarEstado = async () => {
     const estaNaLista = await verificarArray(id);
     setQuestaoEstaNaLista(estaNaLista);
   };
@@ -171,17 +162,30 @@ export default function Questoes() {
   function continuar() {
     setIndice(indice + 1);
     setAtualizarDados(!atualizarDados);
-    verirficarEAtualizarEstado()
-    
   }
 
   function voltar() {
-    verirficarEAtualizarEstado()
     if (indice != 0) {
       setIndice(indice - 1);
       setAtualizarDados(!atualizarDados);
     }
   }
+
+  useEffect(() => {
+    const limparEstado = () => {
+      setQuestaoEstaNaLista(false); // Limpa temporariamente o estado
+    };
+
+    const atualizarEstadoQuestao = async () => {
+      if (id) {
+        await verificarEAtualizarEstado();
+      }
+    };
+
+    limparEstado();
+    atualizarEstadoQuestao();
+  }, [id]);
+
 
   useEffect(() => {
     fetchData().then((result) => {
@@ -192,8 +196,6 @@ export default function Questoes() {
       setId(result.id);
     });
 
-    
-
     const obterIdLista = async () => {
       const idListaObtido = await obterIdPorCodigo(codigo, "listas");
       setIdLista(idListaObtido);
@@ -201,7 +203,7 @@ export default function Questoes() {
 
     // Utilize uma função async dentro do useEffect
     const executarEfeitos = async () => {
-      await verirficarEAtualizarEstado(); // Aguarde a verificação do estado
+      await verificarEAtualizarEstado(); // Aguarde a verificação do estado
       await obterIdLista(); // Aguarde a obtenção do idLista
     };
 
@@ -216,7 +218,7 @@ export default function Questoes() {
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-      <View style={styles.containerSalvar}>
+        <View style={styles.containerSalvar}>
           <TouchableOpacity
             style={styles.btnSalvar}
             onPress={() => selecionarQuestao(id)}
@@ -252,8 +254,8 @@ export default function Questoes() {
           </Markdown>
         </View>
 
-        <View style={styles.containerResposta}>
-          <ScrollView style={styles.scroll}>
+        <View style={styles.container}>
+          <ScrollView style={styles.ScrollViewContent}>
             <TouchableOpacity
               style={[
                 resposta[0] === respostaCorreta
@@ -351,27 +353,25 @@ export default function Questoes() {
               </Markdown>
             </TouchableOpacity>
             <View style={styles.containerContinuarProfessor}>
-          {indice > 0 ? (
-            <TouchableOpacity style={styles.btnContinuar} onPress={voltar}>
-              <Text style={styles.label}>Voltar</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={[styles.btnContinuar, { backgroundColor: "#767577" }]}
-              disabled={true}
-              onPress={voltar}
-            >
-              <Text style={styles.label}>Voltar</Text>
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity style={styles.btnContinuar} onPress={continuar}>
-            <Text style={styles.label}>Continuar</Text>
-          </TouchableOpacity>
-        </View>
+              {indice > 0 ? (
+                <TouchableOpacity style={styles.btnContinuar} onPress={voltar}>
+                  <Text style={styles.label}>Voltar</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.btnContinuar, { backgroundColor: "#767577" }]}
+                  disabled={true}
+                  onPress={voltar}
+                >
+                  <Text style={styles.label}>Voltar</Text>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity style={styles.btnContinuar} onPress={continuar}>
+                <Text style={styles.label}>Continuar</Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
         </View>
-
-        
       </View>
     </LinearGradient>
   );

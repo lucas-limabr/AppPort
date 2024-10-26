@@ -94,38 +94,12 @@ export default function QuestoesLista() {
 
   useEffect(() => {
     obterQuestoes();
-
-    const time = 7000;
-
-    const timeoutId = setTimeout(() => {
-      if (questoesCarregadas) {
-        // Aqui, você sabe que as questões foram carregadas com sucesso
-      } else {
-        // Mostra o alerta se as questões não foram carregadas
-        Alert.alert(
-          "Aviso",
-          "A lista está vazia!",
-          [
-            {
-              text: "OK",
-              onPress: () => {
-                clearTimeout(timeoutId); // Limpa o timeout antes de navegar de volta
-                navigation.goBack();
-              },
-            },
-          ],
-          { cancelable: false }
-        );
-      }
-    }, time);
-
-    return () => clearTimeout(timeoutId); // Limpa o timeout ao desmontar o componente
   }, [obterQuestoes, navigation, atualizar]);
-
+  
   const refreshComponent = () => {
     setAtualizar((prevKey) => prevKey + 1);
   };
-
+  
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       refreshComponent();
@@ -202,8 +176,8 @@ export default function QuestoesLista() {
             </Markdown>
           </View>
 
-          <View style={styles.containerResposta}>
-            <ScrollView>
+          <View style={styles.container}>
+            <ScrollView  contentContainerStyle={styles.scrollViewContent}>
               {/* Mapear o array de respostas */}
               {questaoAtual.respostas.map((resposta, index) => (
                 <TouchableOpacity
@@ -274,7 +248,7 @@ export default function QuestoesLista() {
               height: undefined,
               aspectRatio: 1,
             }}
-            source={require("../Imagens/Nuvem_3(uPDATE).gif")}
+            source={require("../Imagens/AnimaFinal.gif")}
             resizeMode="contain"
           />
         </View>

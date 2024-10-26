@@ -69,7 +69,7 @@ export default function QuestoesTrilha() {
         );
         setQuestoes(questoesValidas);
       } catch (error) {
-        
+
       }
     };
     fetchData();
@@ -106,7 +106,7 @@ export default function QuestoesTrilha() {
           concluido: true,
         });
       } catch (error) {
-        
+
       }
     }
     navigation.goBack({ reload: true });
@@ -126,6 +126,8 @@ export default function QuestoesTrilha() {
   };
 
   const ModalEnd = () => {
+    const acertosPercentual = acertos / questoes.length * 100
+    const acertouTodas = acertos === questoes.length
     return (
       <Modal animationType="fade" transparent={false} visible={end}>
         <LinearGradient
@@ -134,18 +136,51 @@ export default function QuestoesTrilha() {
         >
           <View style={StylesEnd.container}>
             <View style={StylesEnd.boxTitle}>
-              <Text style={StylesEnd.Title}>
-                PARABÉNS!!
-                <Text style={StylesEnd.SubTitle}>Você terminou a fase!!</Text>
-              </Text>
+              {acertouTodas ? (
+                <Text style={StylesEnd.Title}>
+                  PERFEITO!!
+                  <Text style={StylesEnd.SubTitle}>
+                    Você acertou todas as questões!
+                  </Text>
+                </Text>
+              ) : acertosPercentual > 50 ? (
+                <Text style={StylesEnd.Title}>
+                  PARABÉNS!!
+                  <Text style={StylesEnd.SubTitle}>
+                    Você acertou boa parte das questões!
+                  </Text>
+                </Text>
+              ) : (
+                <View>
+                  <Text style={StylesEnd.Title}>
+                    FOI POR POUCO
+                  </Text>
+                  <Text style={StylesEnd.SubTitle}>
+                    Tente novamente...
+                  </Text>
+                </View>
+              )}
             </View>
 
             <View style={StylesEnd.box}>
               <View style={StylesEnd.boxImage}>
-                <Image
-                  style={StylesEnd.ImageFormat}
-                  source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
-                />
+                {acertouTodas ? (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
+                  />
+                ) : acertosPercentual > 50 ? (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteAcimaDaMedia.gif")}
+                  />
+                ) : (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteErrouMaioria.gif")}
+                  />
+                )}
+
               </View>
 
               <View style={StylesEnd.subDivTag}>
@@ -176,18 +211,35 @@ export default function QuestoesTrilha() {
     );
   };
 
+  const [isExpanded, setIsExpanded] = useState(false);
+ 
+  const[btnRadioClicado, setbtnRadioClicado] = useState(true);
+  
+
   return (
+   
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <ModalEnd />
       {questoes && questoes[indice] ? (
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              <Image
-                style={styles.imagem}
-                source={{ uri: questoes[indice].data.urlImagem }}
-                resizeMode="contain"
-              />
+              <TouchableOpacity onPress={() => setIsExpanded(true)}>
+                <Image
+                  style={styles.imagem}
+                  source={{ uri: questoes[indice].data.urlImagem }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+
+              {/* Modal para exibir a imagem expandida */}
+              <Modal visible={isExpanded} transparent={true} animationType="fade">
+                <View style={styles.modalContainer}>
+                  <TouchableOpacity onPress={() => setIsExpanded(false)}>
+                    <Image source={{ uri: questoes[indice].data.urlImagem }} style={styles.fullImage} />
+                  </TouchableOpacity>
+                </View>
+              </Modal>
             </View>
             <Markdown
               style={{
@@ -207,19 +259,23 @@ export default function QuestoesTrilha() {
             </Markdown>
           </View>
 
-          <View style={styles.containerResposta}>
-            <ScrollView>
+          <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.ScrollViewContent}>
               <RadioButtonGroup
                 selected={value}
-                onSelected={(value) => setValue(value)}
+                onSelected={(value) => 
+                  {setValue(value)
+                    setbtnRadioClicado(false)
+                  }}
                 radioBackground="#F54F59"
               >
+          
                 {questoes[indice].data.respostas.map((resposta, index) => (
                   <RadioButtonItem
                     key={index}
                     label={
                       <View
-                        style={{
+                      style={{
                           flexDirection: "row-reverse",
                           backgroundColor: "#ffb9bd",
                           borderRadius: 50,
@@ -250,19 +306,21 @@ export default function QuestoesTrilha() {
                       </View>
                     }
                     value={resposta}
-                    style={{ borderWidth: 1,borderColor: "#fff", left: 4, top: 3, backgroundColor:'#fff', width: 25, height:25  }}
+                    style={{ borderWidth: 1, borderColor: "#fff", left: 4, top: 3, backgroundColor: '#fff', width: 25, height: 25 }}
                   />
                 ))}
               </RadioButtonGroup>
               <View style={styles.containerContinuar}>
                 <TouchableOpacity
-                  style={styles.confirmar}
-                  onPress={() =>
+                  style={[styles.confirmar, btnRadioClicado ? styles.btnDesativado : styles.btnAtivado]}
+                  disabled={btnRadioClicado}
+                  onPress={() => {
                     conferirQuestao(
                       questoes[indice].data.respostaCorreta,
                       value
                     )
-                  }
+                    setbtnRadioClicado(true)
+                  }}
                 >
                   <Text style={styles.label}>Confirmar</Text>
                 </TouchableOpacity>
@@ -281,7 +339,7 @@ export default function QuestoesTrilha() {
               height: undefined,
               aspectRatio: 1,
             }}
-            source={require("../Imagens/Nuvem_3(uPDATE).gif")}
+            source={require("../Imagens/AnimaFinal.gif")}
             resizeMode="contain"
           />
         </View>

@@ -1,26 +1,16 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Text,
-  Alert,
-  ScrollView,
-  Modal,
-} from "react-native";
+import { View, TextInput, TouchableOpacity, Text, Alert, ScrollView, Modal } from "react-native";
 import Styles from "../Styles.js/StylesCadastro";
 import { LinearGradient } from "expo-linear-gradient";
 import { Switch } from "react-native-gesture-handler";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection, setDoc, doc, getDocs } from "firebase/firestore";
+import { collection, setDoc, doc, getDocs } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import styles from "../Styles.js/StylesTermoDeUso";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { userVerification } from "../FuncoesFirebase/Funcoes";
+import TextPolicyPrivacy from "./TextPolicyPrivacy";
 
-export default function Cadastro({ navigation }) {
+export default function Cadastro() {
   const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [confimarEmail, setConfirmarEmail] = useState("");
@@ -47,64 +37,7 @@ export default function Cadastro({ navigation }) {
           <View style={styles.center}>
             <View style={styles.telaDoTermo}>
               <ScrollView>
-                <Text style={styles.termoDeUso}>
-                  Política de privacidade e Termos de uso do Portuguito
-                  {"\n"}O Portuguito foi desenvolvido para ser utilizado por
-                  professores e por alunos de escolas públicas e privadas do
-                  Brasil. De todo modo, o software pode ser utilizado para
-                  quaisquer outros fins de aprendizado de Língua Portuguesa,
-                  desde que seja direcionado para a educação. Seu caráter é
-                  eminentemente educativo, não devendo ser usado para outras
-                  finalidades. O objetivo do desenvolvimento deste aplicativo é
-                  o ensino de Língua Portuguesa. Os textos dos itens (os
-                  suportes) foram retirados de sites, revistas, jornais e blogs
-                  embora o enunciado e as alternativas sejam autorais. Sendo
-                  assim, os itens não devem ser passíveis de cópias sem
-                  autorização expressa de seus criadores. Os desenhos e as
-                  ilustrações deste software são autoriais e, portanto, não
-                  passíveis de cópias sem a autorização expressa de seus
-                  criadores. Os direitos de uso dos itens criados são
-                  EXCLUSIVAMENTE dos criadores deste software, não podendo ser
-                  usado em outros âmbitos que não sejam os do aplicativo. Sendo
-                  assim, cabe SOMENTE aos autores o direito exclusivo de adaptar
-                  e reproduzir parcial ou integralmente as questões criadas. Os
-                  usuários do Portuguito têm direito de utilizar e fazer os
-                  exercícios, sendo vedada a reprodução destes em quaisquer
-                  outros meios. Nossos termos proíbem que nossos usuários, aos
-                  usar nossos serviços, violem os direitos de propriedade
-                  intelectual de um indivíduo, incluindo seus direitos autorais
-                  e marcas registradas. O Portuguito precisa receber ou coletar
-                  algumas informações para operar, melhorar, entender,
-                  personalizar seus serviços e oferecer suporte para suas
-                  ferramentas, principalmente quando o usuário os instala,
-                  acessa ou usa. A proteção, a segurança e a integridade são
-                  essenciais para nossos serviços. Usamos as informações que
-                  temos para verificar as contas e as atividades, combater
-                  condutas nocivas, proteger usuários de experiências ruins,
-                  mensagens indesejadas, promover a proteção, a segurança e a
-                  integridade dentro de nossos serviços, investigando atividades
-                  suspeitas e/ou violações de nossos termos e políticas. Os
-                  dados coletados pelo software como nome, idade, endereço de
-                  e-mails não serão divulgados em quaisquer meios de forma que
-                  cause constrangimento para os usuários. A identidade dos
-                  usuários será SEMPRE mantida em sigilo. Como explicado
-                  detalhadamente, reiteramos que, ao fornecermos nossos
-                  serviços, não armazenamos as mensagens de nossos usuários. No
-                  entanto, armazenamos as informações de conta de nossos
-                  usuários, como foto e nome de perfil, caso os usuários decidam
-                  usá-las como parte das informações de suas contas. Para
-                  denunciar violações de direitos autorais e solicitar que o
-                  Portuguito remova qualquer conteúdo armazenado que esteja
-                  violando estes direitos (por exemplo, foto, nome de perfil e
-                  endereço de e-mail), envie e-mail para o endereço:
-                  portuguitobrasil@gmail.com . Podemos alterar ou atualizar
-                  nossa Política de Privacidade. Caso isso aconteça,
-                  notificaremos o usuário sobre alterações feitas na Política de
-                  Privacidade e nos Termos de Uso. Se houver quaisquer dúvidas
-                  ou preocupações sobre nossa Política de Privacidade e/ou sobre
-                  os Termos de Uso, entre em contato pelo e-mail:
-                  portuguitobrasil@gmail.com .
-                </Text>
+                <TextPolicyPrivacy />
               </ScrollView>
             </View>
           </View>
@@ -136,31 +69,33 @@ export default function Cadastro({ navigation }) {
     );
   }
 
+  //3º função chamada. Tenta criar um novo usuário no Firebase
   const signUp = async () => {
     try {
       const resposta = await createUserWithEmailAndPassword(auth, email, senha);
       await cadastroBD(resposta.user.uid);
-      if(!souProfessor){
+      if (!souProfessor) {
 
         await cadastroFases(resposta.user.uid)
       }
-      const login = await signInWithEmailAndPassword(auth, email, senha)
+
     } catch (error) {
-      if(error.code === "auth/invalid-email"){
+      if (error.code === "auth/invalid-email") {
         Alert.alert("Email inválido.")
       }
-      if(error.code === "auth/weak-password"){
+      if (error.code === "auth/weak-password") {
         Alert.alert("Sua senha necessita de pelo menos 6 caracteres.")
       }
-      if(error.code === "auth/email-already-in-use"){
+      if (error.code === "auth/email-already-in-use") {
         Alert.alert("Email já cadastrado.")
       }
-      
+
       console.log(error);
       setVisible(false);
     }
   };
 
+  //4º função chamada. Ela cria o objeto usuário no banco de dados (Firestore) 
   async function cadastroBD(userId) {
     const data = new Date
 
@@ -175,37 +110,57 @@ export default function Cadastro({ navigation }) {
     });
   }
 
+  //5º função chamada. Se o usuário for um aluno, essa função cria as fases no Firestore para o usuário
   const cadastroFases = async (userId) => {
+    //a subcoleção userFases será criada dinamicamente
+    //referência para a subcoleção 'userFases' dentro do documento do usuário
     const userCollectionRef = collection(db, "users", userId, "userFases");
+
+    //referência para a coleção original de fases ('fase'), de onde os dados serão copiados
     const colecaoOriginal = collection(db, "fase");
+
+    //obtém todos os documentos da coleção 'fase'
     const querySnapshot = await getDocs(colecaoOriginal);
-  
+
+    //itera sobre cada documento (fase) encontrado na coleção original
     querySnapshot.forEach(async (docOriginal) => {
-      const newDocRef = doc(userCollectionRef, docOriginal.id);
-      const newDocData = {
-        ...docOriginal.data(),
-        userId: userId,
-        concluido: false,
-        id: newDocRef.id 
-      };
-      await setDoc(newDocRef, newDocData);
-  
-      console.log("Novo documento criado:", newDocData);
+      //cria uma referência para um novo documento na coleção 'userFases' usando o mesmo ID do documento original
+      try {
+        const newDocRef = doc(userCollectionRef, docOriginal.id);
+
+        // Prepara os dados do novo documento que será inserido, copiando os dados do original e adicionando campos personalizados
+        const newDocData = {
+          ...docOriginal.data(), //copia todos os dados do documento original
+          userId: userId, //adiciona o ID do usuário para vincular a fase a esse usuário
+          concluido: false, //adiciona o campo 'concluido' para marcar o progresso da fase (inicialmente false)
+          id: newDocRef.id //o ID do novo documento é o mesmo do original
+        };
+
+        //insere o novo documento na subcoleção 'userFases' com os dados preparados
+        await setDoc(newDocRef, newDocData);
+
+        console.log("Novo documento criado:", newDocData);
+      }
+      catch (error) {
+        console.error("Erro ao criar fase:", error)
+      }
     });
   }
 
+  //2º função chamada. Ela validará o email informado pelo usuário, retorna true se o formato é válido 
   const validarEmail = (email) => {
     const regex = new RegExp(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/);
     console.log(regex.test(email))
     return regex.test(email);
   }
 
+  //1º função chamada. Ela verificará se os inputs do usuário estão adequados
   function cadastrar() {
-    if(!validarEmail(email)){
+    if (!validarEmail(email)) {
       Alert.alert("Email inválido")
       return
     }
-    
+
     if (
       email != confimarEmail ||
       email == "" ||
@@ -286,6 +241,7 @@ export default function Cadastro({ navigation }) {
           <TouchableOpacity style={Styles.botao} onPress={cadastrar}>
             <Text style={Styles.textBotao}>CADASTRAR</Text>
           </TouchableOpacity>
+          {/* componente funcional que renderiza o modal (termo de uso). Sua exibição é controlada por um useState */}
           <CustomModal />
         </View>
       </ScrollView>
