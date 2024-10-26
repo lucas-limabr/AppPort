@@ -248,7 +248,7 @@ export default function QuestoesLista() {
               height: undefined,
               aspectRatio: 1,
             }}
-            source={require("../Imagens/Nuvem_3(uPDATE).gif")}
+            source={require("../Imagens/AnimaFinal.gif")}
             resizeMode="contain"
           />
         </View>
