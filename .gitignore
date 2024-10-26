@@ -3,6 +3,8 @@ node_modules/
 dist/
 npm-debug.*
 *.jks
+.env
+FirebaseConfig.js
 /credentials/
 credentials.json
 *.p8
