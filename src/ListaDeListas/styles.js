@@ -108,7 +108,6 @@ export default StyleSheet.create({
         flexDirection: 'row',
     },
     confirmar: {
-        backgroundColor: '#F54F59',
         width: 300,
         height: 45,
         alignItems: 'center',
@@ -116,6 +115,15 @@ export default StyleSheet.create({
         borderRadius: 20,
         marginTop: 20
     },
+
+    btnAtivado:{
+        backgroundColor: '#F54F59'
+    },
+    
+    btnDesativado:{
+        backgroundColor: '#848484'
+    },
+
     ScrollViewContent: {
         flex: 1
     },

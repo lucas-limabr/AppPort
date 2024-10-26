@@ -212,8 +212,12 @@ export default function QuestoesTrilha() {
   };
 
   const [isExpanded, setIsExpanded] = useState(false);
+ 
+  const[btnRadioClicado, setbtnRadioClicado] = useState(true);
+  
 
   return (
+   
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <ModalEnd />
       {questoes && questoes[indice] ? (
@@ -256,18 +260,22 @@ export default function QuestoesTrilha() {
           </View>
 
           <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView contentContainerStyle={styles.ScrollViewContent}>
               <RadioButtonGroup
                 selected={value}
-                onSelected={(value) => setValue(value)}
+                onSelected={(value) => 
+                  {setValue(value)
+                    setbtnRadioClicado(false)
+                  }}
                 radioBackground="#F54F59"
               >
+          
                 {questoes[indice].data.respostas.map((resposta, index) => (
                   <RadioButtonItem
                     key={index}
                     label={
                       <View
-                        style={{
+                      style={{
                           flexDirection: "row-reverse",
                           backgroundColor: "#ffb9bd",
                           borderRadius: 50,
@@ -304,13 +312,15 @@ export default function QuestoesTrilha() {
               </RadioButtonGroup>
               <View style={styles.containerContinuar}>
                 <TouchableOpacity
-                  style={styles.confirmar}
-                  onPress={() =>
+                  style={[styles.confirmar, btnRadioClicado ? styles.btnDesativado : styles.btnAtivado]}
+                  disabled={btnRadioClicado}
+                  onPress={() => {
                     conferirQuestao(
                       questoes[indice].data.respostaCorreta,
                       value
                     )
-                  }
+                    setbtnRadioClicado(true)
+                  }}
                 >
                   <Text style={styles.label}>Confirmar</Text>
                 </TouchableOpacity>
