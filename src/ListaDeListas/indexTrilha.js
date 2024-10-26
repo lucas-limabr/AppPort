@@ -260,7 +260,7 @@ export default function QuestoesTrilha() {
           </View>
 
           <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.ScrollViewContent}>
+            <ScrollView>
               <RadioButtonGroup
                 selected={value}
                 onSelected={(value) => 

@@ -124,11 +124,6 @@ export default StyleSheet.create({
         backgroundColor: '#848484'
     },
 
-    ScrollViewContent: {
-        flex: 1
-    },
-
-
     containerResposta: {
         backgroundColor: 'red'
     },
