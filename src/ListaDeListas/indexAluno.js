@@ -1,39 +1,20 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Image,
-  Alert,
-  Modal,
-} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
+import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { FIREBASE_APP } from "../../FirebaseConfig";
 import { useRoute } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
 import Styles from "../Styles.js/StylesRespostaCorretaAluno";
 import Styless from "../Styles.js/StylesRespostaIncorretaAluno";
 import StylesEnd from "../Styles.js/StylesTerminouListaAluno";
 import "firebase/firestore";
-import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
 
 import Markdown from "react-native-markdown-display";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
-import {
-  getFirestore,
-  collection,
-  where,
-  doc,
-  get,
-  query,
-  getDocs,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
+import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 export default function QuestoesAluno() {
@@ -59,13 +40,10 @@ export default function QuestoesAluno() {
   const questoesCarregadasRef = useRef(questoesCarregadas);
 
   useEffect(() => {
-    setIndice(0);
-  }, []);
-
-  useEffect(() => {
     codigoLista = route.params.itemId;
 
     setIndice(0);
+    setQuestoesCarregadas(false);
 
     if (codigoLista) {
       const obterQuestoes = async () => {
@@ -326,7 +304,7 @@ export default function QuestoesAluno() {
       <ModalHappy />
       <ModalSad />
       <ModalEnd />
-      {questaoAtual ? (
+      {questoesCarregadas && questaoAtual ? (
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
