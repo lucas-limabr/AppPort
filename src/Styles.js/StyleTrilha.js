@@ -1,4 +1,3 @@
-import React from "react";
 import { StyleSheet } from "react-native"
 
 export default StyleSheet.create({
@@ -15,7 +14,7 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         flexDirection: 'column',
-        padding:10,
+        padding: 10,
 
     },
 
@@ -25,7 +24,7 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
-        margin:10,
+        margin: 10,
 
     },
 
@@ -59,8 +58,8 @@ export default StyleSheet.create({
     boxImage: {
         height: '100%',
         width: '40%',
-        justifyContent:"center",
-        alignItems:"center",
+        justifyContent: "center",
+        alignItems: "center",
 
     },
 
@@ -69,23 +68,62 @@ export default StyleSheet.create({
         width: 120,
 
     },
-    
+
     boxImageButton: {
         height: 120,
         width: 120,
-        alignItems:'center',
-        justifyContent:'center',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     boxImageButtonText: {
-        color:'#fff',
-        fontSize:16,
-        position:'absolute',
-        top:94,
+        color: '#fff',
+        fontSize: 16,
+        position: 'absolute',
+        top: 94,
         fontFamily: 'Inder_400Regular',
 
     },
 
-    
+    paginationContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+    },
+
+    paginationButton: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        backgroundColor: "#ff8c90",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+
+    iconStyle: {
+        color: "#FFFFFF",
+        fontSize: 24,
+    },
+
+    topButtonContainer: {
+        position: "absolute",
+        top: 30,
+        alignSelf: "center",
+        zIndex: 1,
+    },
+
+    bottomButtonContainer: {
+        position: "absolute",
+        bottom: 30,
+        alignSelf: "center",
+        zIndex: 1,
+    },
+
+    loadingGif: {
+        width: 100, // Ajuste conforme necessário
+        height: 100, // Ajuste conforme necessário
+    },
 
 });
