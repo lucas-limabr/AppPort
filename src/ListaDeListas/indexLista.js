@@ -8,23 +8,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { AntDesign } from "@expo/vector-icons";
 import Styles from "../Styles.js/StylesDescritores";
 import "firebase/firestore";
-import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
-
-import { useFocusEffect } from "@react-navigation/native";
 
 import Markdown from "react-native-markdown-display";
 
-import {
-  getFirestore,
-  collection,
-  where,
-  doc,
-  get,
-  query,
-  getDocs,
-  getDoc,
-} from "firebase/firestore";
+import { getFirestore, collection, where, query, getDocs, getDoc} from "firebase/firestore";
 
 export default function QuestoesLista() {
   const route = useRoute();
@@ -36,15 +24,10 @@ export default function QuestoesLista() {
 
   const navigation = useNavigation();
 
-  const questoesCarregadasRef = useRef(questoesCarregadas);
-
-  useEffect(() => {
-    questoesCarregadasRef.current = questoesCarregadas;
-  }, [questoesCarregadas]);
-
   const obterQuestoes = useCallback(async () => {
     try {
       setIndice(0);
+      setQuestoesCarregadas(false);
       const db = getFirestore(FIREBASE_APP);
       const listaCollectionRef = collection(db, "listas");
       const q = query(listaCollectionRef, where("codigo", "==", codigoLista));
@@ -80,9 +63,9 @@ export default function QuestoesLista() {
           );
 
           setQuestoes(questoesFiltradas);
-          // Utilize o callback de estado para garantir que está atualizado
-          setQuestoesCarregadas((prevState) => !prevState);
+          setQuestoesCarregadas(true);
         } else {
+          setQuestoesCarregadas(false)
         }
       } else {
         console.log("Documento não encontrado.");
@@ -146,7 +129,7 @@ export default function QuestoesLista() {
           <AntDesign name="caretleft" size={50} color="#F54F59" />
         </TouchableOpacity>
       </View>
-      {questaoAtual ? (
+      {questoesCarregadas && questaoAtual ? (
         <View style={styles.container}>
           <View style={styles.containerSalvar}></View>
 
