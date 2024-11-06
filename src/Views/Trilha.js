@@ -127,28 +127,37 @@ export default function Trilha() {
       )}
 
       <View style={Styles.divTela}>
-        {currentFases.map((fase, index) => {
-          const { id, concluido } = fase;
+      {currentFases.map((fase, index) => {
+        const { id, concluido } = fase;
 
-          const allPreviousCompleted = orderedFases
-            .slice(0, startIndex + index)
-            .every((prevFase) => prevFase.concluido);
+        const allPreviousCompleted = orderedFases
+        .slice(0, startIndex + index)
+        .every((prevFase) => prevFase.concluido);
 
-          const faseLiberada = index === 0 ? allPreviousCompleted : orderedFases[startIndex + index - 1].concluido;
+        const faseLiberada = index === 0 ? allPreviousCompleted : orderedFases[startIndex + index - 1].concluido;
 
-          const getRandonPosition = () => {
-            const randomNum = Math.floor(Math.random() * 3);
-            switch (randomNum) {
+        const getPositionFase = () => {
+          const totalFases = currentFases.length;
+
+          if (totalFases === 1) {
+            return Styles.AjustItens_center;
+          } else if (totalFases === 2) {
+            return index === 0 ? Styles.AjustItens_2Fases_high : Styles.AjustItens_2Fases_low;
+          } else if (totalFases === 3) {
+            switch (index) {
               case 0:
-                return Styles.AjustItens_left;
+                return Styles.AjustItens_high;
               case 1:
                 return Styles.AjustItens_center;
+              case 2:
+                return Styles.AjustItens_low;
               default:
-                return Styles.AjustItens_right;
+                return Styles.AjustItens_center;
             }
-          };
+          }
+        };
 
-          let style = getRandonPosition();
+          let style = getPositionFase();
 
           return (
             <View style={Styles.box} key={id}>

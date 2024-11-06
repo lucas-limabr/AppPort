@@ -28,20 +28,39 @@ export default StyleSheet.create({
 
     },
 
-    AjustItens_left: {
+    AjustItens_2Fases_high: {
         height: '100%',
         width: '100%',
         flex: 1,
-        justifyContent: "flex-end",
+        // justifyContent: "flex-end",
+        position: 'absolute',
+        // backgroundColor: 'red',
+        left: 80,
+        bottom: 40,
         flexDirection: 'row',
-
+    },
+    
+    AjustItens_2Fases_low: {
+        height: '100%',
+        width: '100%',
+        flex: 1,
+        // justifyContent: "flex-end",
+        position: 'absolute',
+        // backgroundColor: 'red',
+        left: 80,
+        top: 40,
+        flexDirection: 'row',
     },
 
-    AjustItens_right: {
+    AjustItens_high: {
         height: '100%',
         width: '100%',
         flex: 1,
-        justifyContent: "flex-start",
+        // justifyContent: "flex-end",
+        position: 'absolute',
+        // backgroundColor: 'red',
+        left: 80,
+        top: 20,
         flexDirection: 'row',
 
     },
@@ -50,7 +69,23 @@ export default StyleSheet.create({
         height: '100%',
         width: '100%',
         flex: 1,
-        justifyContent: "center",
+        // justifyContent: "center",
+        position: "absolute",
+        left: 150,
+        // backgroundColor: 'red',
+        flexDirection: 'row',
+
+    },
+
+    AjustItens_low: {
+        height: '100%',
+        width: '100%',
+        flex: 1,
+        // justifyContent: "flex-start",
+        position: "absolute",
+        // backgroundColor: 'red',
+        left: 80,
+        bottom: 20,
         flexDirection: 'row',
 
     },
