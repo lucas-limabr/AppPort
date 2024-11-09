@@ -1,12 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Image,
-  Alert,
-  Modal,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import StylesEnd from "../Styles.js/StylesTerminouListaAluno";
@@ -19,18 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import Markdown from "react-native-markdown-display";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
-import {
-  getFirestore,
-  collection,
-  where,
-  doc,
-  get,
-  query,
-  getDocs,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
 
 export default function QuestoesTrilha() {
   const route = useRoute();
@@ -41,38 +23,15 @@ export default function QuestoesTrilha() {
   const [value, setValue] = useState("");
   const [acertos, setAcertos] = useState(0);
   const [erros, setErros] = useState(0);
-  const [correct, setCorrect] = useState(false);
-  const [incorrect, setIncorrect] = useState(false);
   const [end, setEnd] = useState(false);
-  const [atualizar, setAtualizar] = useState(true);
 
   const userId = route.params.params.info.userId;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const db = getFirestore(FIREBASE_APP);
-        const questoesRefs = route.params.params.info.questoes;
+      const db = getFirestore(FIREBASE_APP);
+      const questoes = route.params.params.info;
 
-        const questoesDocs = await Promise.all(
-          questoesRefs.map(async (ref) => {
-            const questaoDoc = await getDoc(ref);
-            if (questaoDoc.exists()) {
-              return { id: questaoDoc.id, data: questaoDoc.data() };
-            } else {
-              return null;
-            }
-          })
-        );
-        const questoesValidas = questoesDocs.filter(
-          (questao) => questao !== null
-        );
-        setQuestoes(questoesValidas);
-      } catch (error) {
-
-      }
-    };
-    fetchData();
+      setQuestoes(questoes);
   }, [route.params.params.questoes]);
 
   const conferirQuestao = (respostaCorreta, respostaAluno) => {
@@ -110,19 +69,6 @@ export default function QuestoesTrilha() {
       }
     }
     navigation.goBack({ reload: true });
-  };
-
-  const MarkdownRadioButton = ({ label, value, checked, onChange }) => {
-    return (
-      <View>
-        <RadioButton.Item
-          label={<Markdown>{label}</Markdown>}
-          value={value}
-          status={checked === value ? "checked" : "unchecked"}
-          onPress={() => onChange(value)}
-        />
-      </View>
-    );
   };
 
   const ModalEnd = () => {
@@ -227,7 +173,7 @@ export default function QuestoesTrilha() {
               <TouchableOpacity onPress={() => setIsExpanded(true)}>
                 <Image
                   style={styles.imagem}
-                  source={{ uri: questoes[indice].data.urlImagem }}
+                  source={{ uri: questoes[indice].urlImagem }}
                   resizeMode="contain"
                 />
               </TouchableOpacity>
@@ -236,7 +182,7 @@ export default function QuestoesTrilha() {
               <Modal visible={isExpanded} transparent={true} animationType="fade">
                 <View style={styles.modalContainer}>
                   <TouchableOpacity onPress={() => setIsExpanded(false)}>
-                    <Image source={{ uri: questoes[indice].data.urlImagem }} style={styles.fullImage} />
+                    <Image source={{ uri: questoes[indice].urlImagem }} style={styles.fullImage} />
                   </TouchableOpacity>
                 </View>
               </Modal>
@@ -255,7 +201,7 @@ export default function QuestoesTrilha() {
                 },
               }}
             >
-              {questoes[indice].data.pergunta}
+              {questoes[indice].pergunta}
             </Markdown>
           </View>
 
@@ -270,7 +216,7 @@ export default function QuestoesTrilha() {
                 radioBackground="#F54F59"
               >
           
-                {questoes[indice].data.respostas.map((resposta, index) => (
+                {questoes[indice].respostas.map((resposta, index) => (
                   <RadioButtonItem
                     key={index}
                     label={
@@ -316,7 +262,7 @@ export default function QuestoesTrilha() {
                   disabled={btnRadioClicado}
                   onPress={() => {
                     conferirQuestao(
-                      questoes[indice].data.respostaCorreta,
+                      questoes[indice].respostaCorreta,
                       value
                     )
                     setbtnRadioClicado(true)
