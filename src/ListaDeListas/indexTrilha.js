@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import Markdown from "react-native-markdown-display";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
-import { getFirestore, doc, getDoc, updateDoc } from "firebase/firestore";
+import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 export default function QuestoesTrilha() {
   const route = useRoute();
@@ -28,10 +28,9 @@ export default function QuestoesTrilha() {
   const userId = route.params.params.info.userId;
 
   useEffect(() => {
-      const db = getFirestore(FIREBASE_APP);
-      const questoes = route.params.params.info;
+    const questoes = route.params.params.info;
 
-      setQuestoes(questoes);
+    setQuestoes(questoes);
   }, [route.params.params.questoes]);
 
   const conferirQuestao = (respostaCorreta, respostaAluno) => {
@@ -52,27 +51,26 @@ export default function QuestoesTrilha() {
   };
 
   const finishActivity = async () => {
-    if (acertos >= questoes.length - 2) {
+    if (acertos > 6) {
       try {
-        const db = getFirestore(FIREBASE_APP);
-        const documentoRef = doc(db, "users", userId);
-        const usuarioRef = doc(
-          documentoRef,
-          "userFases",
-          route.params.params.info.id
-        );
-        await updateDoc(usuarioRef, {
-          concluido: true,
-        });
-      } catch (error) {
+        const subTemaDoc = route.params.params.subTemaDoc;
+        const faseAtual = questoes[0].fase;
+        const lastCompletedFase = subTemaDoc.data().ultimaFaseConcluida;
 
+        if (faseAtual > lastCompletedFase) {
+          const docRef = doc(trilhaInfoCollectionRef, subTemaDoc.id);
+  
+          await updateDoc(docRef, { ultimaFaseConcluida: lastCompletedFase + 1 });
+        }
+
+      } catch (error) {
+        console.error("Erro ao atualizar a última fase concluída:", error);
       }
     }
     navigation.goBack({ reload: true });
   };
 
   const ModalEnd = () => {
-    const acertosPercentual = acertos / questoes.length * 100
     const acertouTodas = acertos === questoes.length
     return (
       <Modal animationType="fade" transparent={false} visible={end}>
@@ -86,14 +84,14 @@ export default function QuestoesTrilha() {
                 <Text style={StylesEnd.Title}>
                   PERFEITO!!
                   <Text style={StylesEnd.SubTitle}>
-                    Você acertou todas as questões!
+                    Você acertou todas as questões e passou de fase!
                   </Text>
                 </Text>
-              ) : acertosPercentual > 50 ? (
+              ) : acertos > 6 ? (
                 <Text style={StylesEnd.Title}>
                   PARABÉNS!!
                   <Text style={StylesEnd.SubTitle}>
-                    Você acertou boa parte das questões!
+                    Você passou de fase!
                   </Text>
                 </Text>
               ) : (
@@ -115,7 +113,7 @@ export default function QuestoesTrilha() {
                     style={StylesEnd.ImageFormat}
                     source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
                   />
-                ) : acertosPercentual > 50 ? (
+                ) : acertos > 6 ? (
                   <Image
                     style={StylesEnd.ImageFormat}
                     source={require("../Imagens/animations/AnimacoesMascoteAcimaDaMedia.gif")}
@@ -158,12 +156,12 @@ export default function QuestoesTrilha() {
   };
 
   const [isExpanded, setIsExpanded] = useState(false);
- 
-  const[btnRadioClicado, setbtnRadioClicado] = useState(true);
-  
+
+  const [btnRadioClicado, setbtnRadioClicado] = useState(true);
+
 
   return (
-   
+
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <ModalEnd />
       {questoes && questoes[indice] ? (
@@ -209,19 +207,19 @@ export default function QuestoesTrilha() {
             <ScrollView>
               <RadioButtonGroup
                 selected={value}
-                onSelected={(value) => 
-                  {setValue(value)
-                    setbtnRadioClicado(false)
-                  }}
+                onSelected={(value) => {
+                  setValue(value)
+                  setbtnRadioClicado(false)
+                }}
                 radioBackground="#F54F59"
               >
-          
+
                 {questoes[indice].respostas.map((resposta, index) => (
                   <RadioButtonItem
                     key={index}
                     label={
                       <View
-                      style={{
+                        style={{
                           flexDirection: "row-reverse",
                           backgroundColor: "#ffb9bd",
                           borderRadius: 50,
