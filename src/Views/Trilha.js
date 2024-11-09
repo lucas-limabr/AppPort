@@ -29,27 +29,40 @@ export default function Trilha() {
       const fetchData = async () => {
         try {
           const db = getFirestore(FIREBASE_APP);
-          const userDocRef = doc(db, "users", userId);
-          const fasesCollectionRef = collection(userDocRef, "userFases");
+          const questoesCollectionRef = collection(db, "questoesAluno");
+  
           const subtemaQuery = query(
-            fasesCollectionRef,
+            questoesCollectionRef,
             where("subTema", "==", subTema)
           );
           const querySnapshot = await getDocs(subtemaQuery);
-          const fasesData = querySnapshot.docs.map((doc) => doc.data());
-          setFases(fasesData);
+  
+          const fasesData = querySnapshot.docs
+            .map((doc) => doc.data())
+            .reduce((acc, questao) => {
+              const fase = parseInt(questao.fase);
+              if (!acc[fase]) {
+                acc[fase] = { fase, questoes: [] };
+              }
+              acc[fase].questoes.push(questao);
+              return acc;
+            }, {});
+  
+          const orderedFases = Object.values(fasesData).sort((a, b) => a.fase - b.fase);
+  
+          setFases(orderedFases);
         } catch (error) {
           console.error("Error fetching fases:", error);
         }
       };
-
+  
       fetchData();
-    }, [userId, subTema])
+    }, [subTema])
   );
 
   useEffect(() => {
     const fasesAbertas = fases.reduce((acc, fase, index) => {
-      if (index === 0 || fases[index - 1].concluido) {
+      if (index === 0) {
         return [...acc, index];
       } else {
         return acc;
@@ -164,7 +177,7 @@ export default function Trilha() {
               <View style={style}>
                 <View style={Styles.boxImage}>
                   {faseLiberada ? (
-                    <FreeFased txt={fase.fase} info={fase} />
+                    <FreeFased txt={fase.fase} info={fase.questoes} />
                   ) : (
                     <ClosedFased txt={fase.fase} />
                   )}
