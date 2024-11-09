@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, TouchableOpacity, Text, Image, Alert } from "react-native";
+import { View, TouchableOpacity, Text, Image, Alert, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { FIREBASE_APP } from "../../FirebaseConfig";
@@ -12,7 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import Markdown from "react-native-markdown-display";
 
-import { getFirestore, collection, where, query, getDocs, getDoc} from "firebase/firestore";
+import { getFirestore, collection, where, query, getDocs, getDoc } from "firebase/firestore";
 
 export default function QuestoesLista() {
   const route = useRoute();
@@ -78,11 +78,11 @@ export default function QuestoesLista() {
   useEffect(() => {
     obterQuestoes();
   }, [obterQuestoes, navigation, atualizar]);
-  
+
   const refreshComponent = () => {
     setAtualizar((prevKey) => prevKey + 1);
   };
-  
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       refreshComponent();
@@ -116,6 +116,7 @@ export default function QuestoesLista() {
   }
 
   const questaoAtual = questoes[indice];
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
@@ -135,11 +136,23 @@ export default function QuestoesLista() {
 
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              <Image
-                style={styles.imagem}
-                source={{ uri: questaoAtual.urlImagem }}
-                resizeMode="contain"
-              />
+              <TouchableOpacity onPress={() => { setIsExpanded(true) }}>
+                <Image
+                  style={styles.imagem}
+                  source={{ uri: questaoAtual.urlImagem }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+
+              {/* Modal para exibir a imagem expandida */}
+              <Modal visible={isExpanded} transparent={true} animationType="fade">
+                <View style={styles.modalContainer}>
+                  <TouchableOpacity onPress={() => setIsExpanded(false)}>
+                    <Image source={{ uri: questaoAtual.urlImagem }} style={styles.fullImage} />
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+
             </View>
             <Markdown
               style={{
@@ -160,7 +173,7 @@ export default function QuestoesLista() {
           </View>
 
           <View style={styles.container}>
-            <ScrollView  contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
               {/* Mapear o array de respostas */}
               {questaoAtual.respostas.map((resposta, index) => (
                 <TouchableOpacity
@@ -228,7 +241,6 @@ export default function QuestoesLista() {
             style={{
               flex: 1,
               width: "100%",
-              height: undefined,
               aspectRatio: 1,
             }}
             source={require("../Imagens/AnimaFinal.gif")}

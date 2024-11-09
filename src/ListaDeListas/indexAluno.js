@@ -298,6 +298,8 @@ export default function QuestoesAluno() {
   };
 
   const questaoAtual = questoes[indice];
+  const[btnRadioClicado, setbtnRadioClicado] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
@@ -308,11 +310,23 @@ export default function QuestoesAluno() {
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              <Image
-                style={styles.imagem}
-                source={{ uri: questaoAtual.urlImagem }}
-                resizeMode="contain"
-              />
+              <TouchableOpacity onPress={()=> setIsExpanded(true)}>
+                <Image
+                  style={styles.imagem}
+                  source={{ uri: questaoAtual.urlImagem }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+
+               {/* Modal para exibir a imagem expandida */}
+               <Modal visible={isExpanded} transparent={true} animationType="fade">
+                <View style={styles.modalContainer}>
+                  <TouchableOpacity onPress={() => setIsExpanded(false)}>
+                    <Image source={{uri: questaoAtual.urlImagem }} style={styles.fullImage} />
+                  </TouchableOpacity>
+                </View>
+              </Modal>
+
             </View>
             <Markdown
               style={{
@@ -336,7 +350,10 @@ export default function QuestoesAluno() {
             <ScrollView >
               <RadioButtonGroup
                 selected={value}
-                onSelected={(value) => setValue(value)}
+                onSelected={(value) => {
+                  setValue(value)
+                  setbtnRadioClicado(false)
+                }}
                 radioBackground="#F54F59"
               >
                 {questaoAtual.respostas.map((resposta, index) => (
@@ -380,10 +397,12 @@ export default function QuestoesAluno() {
                 ))}
               </RadioButtonGroup>
               <TouchableOpacity
-                style={styles.confirmar}
-                onPress={() =>
+                style={[styles.confirmar, btnRadioClicado ? styles.btnDesativado : styles.btnAtivado]}
+                onPress={() => {
                   conferirQuestao(questaoAtual.respostaCorreta, value)
-                }
+                  setbtnRadioClicado(true)
+                }}
+                disabled={btnRadioClicado}
               >
                 <Text style={styles.label}>Confirmar</Text>
               </TouchableOpacity>

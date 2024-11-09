@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, Image } from "react-native";
+import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { getFirestore, query, where, collection, getDocs, doc, getDoc, updateDoc, } from "firebase/firestore";
@@ -210,6 +210,8 @@ export default function Questoes() {
     executarEfeitos();
   }, [atualizarDados]);
 
+  const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <View style={Styles.voltar}>
@@ -230,11 +232,23 @@ export default function Questoes() {
         </View>
         <View style={styles.enunciado}>
           <View style={styles.backgroundImagem}>
-            <Image
-              style={styles.imagem}
-              source={{ uri: urlImagem }}
-              resizeMode="contain"
-            />
+            <TouchableOpacity onPress={() => { setIsExpanded(true) }}>
+              <Image
+                style={styles.imagem}
+                source={{ uri: urlImagem }}
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
+
+            {/* Modal para exibir a imagem expandida */}
+            <Modal visible={isExpanded} transparent={true} animationType="fade">
+              <View style={styles.modalContainer}>
+                <TouchableOpacity onPress={() => setIsExpanded(false)}>
+                  <Image source={{ uri: urlImagem }} style={styles.fullImage} />
+                </TouchableOpacity>
+              </View>
+            </Modal>
+
           </View>
           <Markdown
             style={{

@@ -113,14 +113,14 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-        marginTop: 20
+        marginVertical: 20
     },
 
-    btnAtivado:{
+    btnAtivado: {
         backgroundColor: '#F54F59'
     },
-    
-    btnDesativado:{
+
+    btnDesativado: {
         backgroundColor: '#848484'
     },
 
@@ -134,8 +134,9 @@ export default StyleSheet.create({
     },
 
     fullImage: {
+        marginTop: "15%",
         height: '100%',
         resizeMode: 'contain',
         top: -200
-    }
+    },
 })
