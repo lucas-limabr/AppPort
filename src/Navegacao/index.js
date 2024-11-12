@@ -49,7 +49,7 @@ export default function Navegacao() {
                     flex: 1,
                     width: "100%",
                     height: undefined,
-                    aspectRatio: 0.5,
+                    aspectRatio: 1,
                   }}
                   source={require("../Imagens/animation.gif")}
                   resizeMode="contain"
