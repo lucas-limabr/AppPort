@@ -124,12 +124,13 @@ export default StyleSheet.create({
         color:'#3E1E1E',
     },
 
+    ///////////////////////////////////////////
+
     container: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'flex-start',
         flexDirection: "column",
-        marginBottom: "25%",
     },
 
     box: {

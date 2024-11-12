@@ -10,7 +10,9 @@ export default StyleSheet.create({
     },
     containerFilho:{
         alignItems: 'flex-end',
-        top: -190
+        top: -190,
+        zIndex: 1,
+        
     },
     botaoGrande:{
         backgroundColor:'#FFB9BD',
@@ -68,9 +70,15 @@ export default StyleSheet.create({
 
     imageLogo:{
         position: 'absolute',
-        bottom: "-25%",
+        bottom: -22,
         width: '100%', 
-        height: '100%',
+        height: '40%',
        resizeMode: "contain",
-    }, 
+       overflow: "hidden",
+       
+       
+       
+    },
+    
+    
 })
