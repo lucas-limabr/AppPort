@@ -4,60 +4,89 @@ import { View, Text, ImageBackground, TouchableOpacity, Image } from "react-nati
 import { Ionicons } from "react-native-vector-icons";
 import Styles from "../Styles.js/StyleTrilha.js";
 import { useRoute } from "@react-navigation/native";
-import { getDocs, collection, doc, query, where } from "firebase/firestore";
+import { doc, getDocs, collection, query, where } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { FIREBASE_APP, FIREBASE_AUTH } from "../../FirebaseConfig.js";
 import { useNavigation } from "@react-navigation/native";
 import { useFocusEffect } from "@react-navigation/native";
 
 export default function Trilha() {
-  const route = useRoute();
-  const subTema = route.params.params;
   const auth = FIREBASE_AUTH;
+  const db = getFirestore(FIREBASE_APP);
+  const route = useRoute();
   const navigation = useNavigation();
+
+  const subTema = route.params.params;
 
   const userId = auth.currentUser.uid;
 
   const [fases, setFases] = useState([]);
-  const [fasesAbertas, setFasesAbertas] = useState([]);
+  const [currentFases, setCurrentFases] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
+  const [lastCompletedFase, setLastCompletedFase] = useState(1);
+  const [subTemaDoc, setSubTemaDoc] = useState(null);
 
   const fasesPerPage = 3;
+
+  const totalPages = Math.ceil(fases.length / fasesPerPage);
 
   useFocusEffect(
     useCallback(() => {
       const fetchData = async () => {
         try {
-          const db = getFirestore(FIREBASE_APP);
-          const userDocRef = doc(db, "users", userId);
-          const fasesCollectionRef = collection(userDocRef, "userFases");
+          const questoesCollectionRef = collection(db, "questoesAluno");
+
           const subtemaQuery = query(
-            fasesCollectionRef,
+            questoesCollectionRef,
             where("subTema", "==", subTema)
           );
           const querySnapshot = await getDocs(subtemaQuery);
-          const fasesData = querySnapshot.docs.map((doc) => doc.data());
-          setFases(fasesData);
+
+          const fasesData = querySnapshot.docs
+            .map((doc) => doc.data())
+            .reduce((acc, questao) => {
+              const fase = parseInt(questao.fase);
+              if (!acc[fase]) {
+                acc[fase] = { fase, questoes: [] };
+              }
+              acc[fase].questoes.push(questao);
+              return acc;
+            }, {});
+
+          const orderedFases = Object.values(fasesData).sort((a, b) => a.fase - b.fase);
+
+          setFases(orderedFases);
         } catch (error) {
           console.error("Error fetching fases:", error);
         }
       };
 
       fetchData();
-    }, [userId, subTema])
+    }, [subTema])
   );
 
   useEffect(() => {
-    const fasesAbertas = fases.reduce((acc, fase, index) => {
-      if (index === 0 || fases[index - 1].concluido) {
-        return [...acc, index];
-      } else {
-        return acc;
-      }
-    }, []);
+    const fetchData = async () => {
+      const userRef = doc(db, "users", userId);
 
-    setFasesAbertas(fasesAbertas);
+      const trilhaInfoCollectionRef = collection(userRef, "trilhaInfo");
+
+      const subtemaQuery = query(trilhaInfoCollectionRef, where("subtema", "==", subTema));
+      const querySnapshot = await getDocs(subtemaQuery);
+
+      const subTemaDoc = querySnapshot.docs[0];
+      setSubTemaDoc(subTemaDoc);
+
+      setLastCompletedFase(subTemaDoc.data().ultimaFaseConcluida);
+    }
+
+    fetchData();
   }, [fases]);
+
+  useEffect(() => {
+    const startIndex = currentPage * fasesPerPage;
+    setCurrentFases(fases.slice(startIndex, startIndex + fasesPerPage));
+  }, [fases, currentPage]);
 
   const FreeFased = ({ txt, info }) => {
     return (
@@ -66,7 +95,7 @@ export default function Trilha() {
         onPress={() =>
           navigation.navigate("QuestoesTrilha", {
             screen: "QuestoesTrilha",
-            params: { info: info, userId: userId },
+            params: { info: info, userId: userId , subTemaDoc: subTemaDoc},
           })
         }
       >
@@ -90,14 +119,6 @@ export default function Trilha() {
       </TouchableOpacity>
     );
   };
-
-  const orderedFases = fases.sort(
-    (a, b) => parseInt(a.fase) - parseInt(b.fase)
-  );
-
-  const totalPages = Math.ceil(orderedFases.length / fasesPerPage);
-  const startIndex = currentPage * fasesPerPage;
-  const currentFases = orderedFases.slice(startIndex, startIndex + fasesPerPage);
 
   const goToNextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -127,52 +148,47 @@ export default function Trilha() {
       )}
 
       <View style={Styles.divTela}>
-      {currentFases.map((fase, index) => {
-        const { id, concluido } = fase;
+        {
+          currentFases.map((fase, index) => {
+            const absoluteFaseIndex = index + currentPage * fasesPerPage;
 
-        const allPreviousCompleted = orderedFases
-        .slice(0, startIndex + index)
-        .every((prevFase) => prevFase.concluido);
+            const getPositionFase = () => {
+              const totalPageFases = currentFases.length;
 
-        const faseLiberada = index === 0 ? allPreviousCompleted : orderedFases[startIndex + index - 1].concluido;
-
-        const getPositionFase = () => {
-          const totalFases = currentFases.length;
-
-          if (totalFases === 1) {
-            return Styles.AjustItens_center;
-          } else if (totalFases === 2) {
-            return index === 0 ? Styles.AjustItens_2Fases_high : Styles.AjustItens_2Fases_low;
-          } else if (totalFases === 3) {
-            switch (index) {
-              case 0:
-                return Styles.AjustItens_high;
-              case 1:
+              if (totalPageFases === 1) {
                 return Styles.AjustItens_center;
-              case 2:
-                return Styles.AjustItens_low;
-              default:
-                return Styles.AjustItens_center;
-            }
-          }
-        };
+              } else if (totalPageFases === 2) {
+                return index === 0 ? Styles.AjustItens_2Fases_high : Styles.AjustItens_2Fases_low;
+              } else if (totalPageFases === 3) {
+                switch (index) {
+                  case 0:
+                    return Styles.AjustItens_high;
+                  case 1:
+                    return Styles.AjustItens_center;
+                  case 2:
+                    return Styles.AjustItens_low;
+                  default:
+                    return Styles.AjustItens_center;
+                }
+              }
+            };
 
-          let style = getPositionFase();
+            let style = getPositionFase();
 
-          return (
-            <View style={Styles.box} key={id}>
-              <View style={style}>
-                <View style={Styles.boxImage}>
-                  {faseLiberada ? (
-                    <FreeFased txt={fase.fase} info={fase} />
-                  ) : (
-                    <ClosedFased txt={fase.fase} />
-                  )}
+            return (
+              <View style={Styles.box}>
+                <View style={style}>
+                  <View style={Styles.boxImage}>
+                    {absoluteFaseIndex < lastCompletedFase + 1 ? (
+                      <FreeFased txt={fase.fase} info={fase.questoes} />
+                    ) : (
+                      <ClosedFased txt={fase.fase} />
+                    )}
+                  </View>
                 </View>
               </View>
-            </View>
-          );
-        })}
+            );
+          })}
       </View>
 
       {currentPage < totalPages - 1 && (

@@ -1,12 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Text,
-  Image,
-  Alert,
-  Modal,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import StylesEnd from "../Styles.js/StylesTerminouListaAluno";
@@ -19,18 +12,7 @@ import { useNavigation } from "@react-navigation/native";
 import Markdown from "react-native-markdown-display";
 import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
-import {
-  getFirestore,
-  collection,
-  where,
-  doc,
-  get,
-  query,
-  getDocs,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { FIREBASE_AUTH } from "../../FirebaseConfig";
+import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
 export default function QuestoesTrilha() {
   const route = useRoute();
@@ -41,38 +23,14 @@ export default function QuestoesTrilha() {
   const [value, setValue] = useState("");
   const [acertos, setAcertos] = useState(0);
   const [erros, setErros] = useState(0);
-  const [correct, setCorrect] = useState(false);
-  const [incorrect, setIncorrect] = useState(false);
   const [end, setEnd] = useState(false);
-  const [atualizar, setAtualizar] = useState(true);
 
   const userId = route.params.params.info.userId;
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const db = getFirestore(FIREBASE_APP);
-        const questoesRefs = route.params.params.info.questoes;
+    const questoes = route.params.params.info;
 
-        const questoesDocs = await Promise.all(
-          questoesRefs.map(async (ref) => {
-            const questaoDoc = await getDoc(ref);
-            if (questaoDoc.exists()) {
-              return { id: questaoDoc.id, data: questaoDoc.data() };
-            } else {
-              return null;
-            }
-          })
-        );
-        const questoesValidas = questoesDocs.filter(
-          (questao) => questao !== null
-        );
-        setQuestoes(questoesValidas);
-      } catch (error) {
-
-      }
-    };
-    fetchData();
+    setQuestoes(questoes);
   }, [route.params.params.questoes]);
 
   const conferirQuestao = (respostaCorreta, respostaAluno) => {
@@ -93,40 +51,26 @@ export default function QuestoesTrilha() {
   };
 
   const finishActivity = async () => {
-    if (acertos >= questoes.length - 2) {
+    if (acertos > 6) {
       try {
-        const db = getFirestore(FIREBASE_APP);
-        const documentoRef = doc(db, "users", userId);
-        const usuarioRef = doc(
-          documentoRef,
-          "userFases",
-          route.params.params.info.id
-        );
-        await updateDoc(usuarioRef, {
-          concluido: true,
-        });
-      } catch (error) {
+        const subTemaDoc = route.params.params.subTemaDoc;
+        const faseAtual = questoes[0].fase;
+        const lastCompletedFase = subTemaDoc.data().ultimaFaseConcluida;
 
+        if (faseAtual > lastCompletedFase) {
+          const docRef = doc(trilhaInfoCollectionRef, subTemaDoc.id);
+  
+          await updateDoc(docRef, { ultimaFaseConcluida: lastCompletedFase + 1 });
+        }
+
+      } catch (error) {
+        console.error("Erro ao atualizar a última fase concluída:", error);
       }
     }
     navigation.goBack({ reload: true });
   };
 
-  const MarkdownRadioButton = ({ label, value, checked, onChange }) => {
-    return (
-      <View>
-        <RadioButton.Item
-          label={<Markdown>{label}</Markdown>}
-          value={value}
-          status={checked === value ? "checked" : "unchecked"}
-          onPress={() => onChange(value)}
-        />
-      </View>
-    );
-  };
-
   const ModalEnd = () => {
-    const acertosPercentual = acertos / questoes.length * 100
     const acertouTodas = acertos === questoes.length
     return (
       <Modal animationType="fade" transparent={false} visible={end}>
@@ -140,14 +84,14 @@ export default function QuestoesTrilha() {
                 <Text style={StylesEnd.Title}>
                   PERFEITO!!
                   <Text style={StylesEnd.SubTitle}>
-                    Você acertou todas as questões!
+                    Você acertou todas as questões e passou de fase!
                   </Text>
                 </Text>
-              ) : acertosPercentual > 50 ? (
+              ) : acertos > 6 ? (
                 <Text style={StylesEnd.Title}>
                   PARABÉNS!!
                   <Text style={StylesEnd.SubTitle}>
-                    Você acertou boa parte das questões!
+                    Você passou de fase!
                   </Text>
                 </Text>
               ) : (
@@ -169,7 +113,7 @@ export default function QuestoesTrilha() {
                     style={StylesEnd.ImageFormat}
                     source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
                   />
-                ) : acertosPercentual > 50 ? (
+                ) : acertos > 6 ? (
                   <Image
                     style={StylesEnd.ImageFormat}
                     source={require("../Imagens/animations/AnimacoesMascoteAcimaDaMedia.gif")}
@@ -212,12 +156,12 @@ export default function QuestoesTrilha() {
   };
 
   const [isExpanded, setIsExpanded] = useState(false);
- 
-  const[btnRadioClicado, setbtnRadioClicado] = useState(true);
-  
+
+  const [btnRadioClicado, setbtnRadioClicado] = useState(true);
+
 
   return (
-   
+
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <ModalEnd />
       {questoes && questoes[indice] ? (
@@ -227,7 +171,7 @@ export default function QuestoesTrilha() {
               <TouchableOpacity onPress={() => setIsExpanded(true)}>
                 <Image
                   style={styles.imagem}
-                  source={{ uri: questoes[indice].data.urlImagem }}
+                  source={{ uri: questoes[indice].urlImagem }}
                   resizeMode="contain"
                 />
               </TouchableOpacity>
@@ -236,7 +180,7 @@ export default function QuestoesTrilha() {
               <Modal visible={isExpanded} transparent={true} animationType="fade">
                 <View style={styles.modalContainer}>
                   <TouchableOpacity onPress={() => setIsExpanded(false)}>
-                    <Image source={{ uri: questoes[indice].data.urlImagem }} style={styles.fullImage} />
+                    <Image source={{ uri: questoes[indice].urlImagem }} style={styles.fullImage} />
                   </TouchableOpacity>
                 </View>
               </Modal>
@@ -255,7 +199,7 @@ export default function QuestoesTrilha() {
                 },
               }}
             >
-              {questoes[indice].data.pergunta}
+              {questoes[indice].pergunta}
             </Markdown>
           </View>
 
@@ -263,19 +207,19 @@ export default function QuestoesTrilha() {
             <ScrollView>
               <RadioButtonGroup
                 selected={value}
-                onSelected={(value) => 
-                  {setValue(value)
-                    setbtnRadioClicado(false)
-                  }}
+                onSelected={(value) => {
+                  setValue(value)
+                  setbtnRadioClicado(false)
+                }}
                 radioBackground="#F54F59"
               >
-          
-                {questoes[indice].data.respostas.map((resposta, index) => (
+
+                {questoes[indice].respostas.map((resposta, index) => (
                   <RadioButtonItem
                     key={index}
                     label={
                       <View
-                      style={{
+                        style={{
                           flexDirection: "row-reverse",
                           backgroundColor: "#ffb9bd",
                           borderRadius: 50,
@@ -316,7 +260,7 @@ export default function QuestoesTrilha() {
                   disabled={btnRadioClicado}
                   onPress={() => {
                     conferirQuestao(
-                      questoes[indice].data.respostaCorreta,
+                      questoes[indice].respostaCorreta,
                       value
                     )
                     setbtnRadioClicado(true)
