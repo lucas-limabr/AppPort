@@ -243,7 +243,7 @@ export default function QuestoesLista() {
               width: "100%",
               aspectRatio: 1,
             }}
-            source={require("../Imagens/AnimaFinal.gif")}
+            source={require("../Imagens/animation.gif")}
             resizeMode="contain"
           />
         </View>

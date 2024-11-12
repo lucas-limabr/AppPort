@@ -49,9 +49,9 @@ export default function Navegacao() {
                     flex: 1,
                     width: "100%",
                     height: undefined,
-                    aspectRatio: 1,
+                    aspectRatio: 0.5,
                   }}
-                  source={require("../Imagens/AnimaFinal.gif")}
+                  source={require("../Imagens/animation.gif")}
                   resizeMode="contain"
                 />
               </View>

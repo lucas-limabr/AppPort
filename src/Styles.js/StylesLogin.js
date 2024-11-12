@@ -4,13 +4,13 @@ import { StyleSheet } from "react-native" // aqui voce tem que importar so o sty
 
 export default StyleSheet.create({
     container:{
-        flex:1,
-        marginTop:100,        
-
+        flex:1, 
+        marginTop: 100,
+        justifyContent: "space-around",       
     },
     containerFilho:{
+        marginTop: 140,
         alignItems: 'flex-end',
-        top: -190,
         zIndex: 1,
         
     },
@@ -19,7 +19,7 @@ export default StyleSheet.create({
         marginLeft:30,
         marginRight: 30,
         borderRadius:10,   
-        top: -180
+        marginTop: 140,
     },
     botaoPequeno:{
         backgroundColor:'#ff8c90',
@@ -28,9 +28,9 @@ export default StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         marginLeft:30,
-        marginTop: 30,
         marginRight: 30,
         borderRadius:10,
+        marginTop: 60,
         
     },
     textBotao:{
@@ -50,9 +50,9 @@ export default StyleSheet.create({
     frase:{
         color: '#fff',
         textAlign:'center',
-        marginTop: -140,
-        marginBottom: 18,
+        marginTop: 250,
         fontSize:25,
+
         fontFamily: 'Inder_400Regular',
 
     },
@@ -62,23 +62,15 @@ export default StyleSheet.create({
     },
     imageNome:{
         marginLeft: 0,
-        marginTop: -250,
         width: '100%', 
         height: '100%', 
         resizeMode: 'contain',
     },
 
     imageLogo:{
-        position: 'absolute',
-        bottom: -22,
+        bottom: 1,
         width: '100%', 
         height: '40%',
        resizeMode: "contain",
-       overflow: "hidden",
-       
-       
-       
-    },
-    
-    
+    }
 })
