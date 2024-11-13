@@ -24,6 +24,7 @@ export default function QuestoesTrilha() {
   const [acertos, setAcertos] = useState(0);
   const [erros, setErros] = useState(0);
   const [end, setEnd] = useState(false);
+  const [showInitialAnimation, setShowInitialAnimation] = useState(true);
 
   const userId = route.params.params.info.userId;
 
@@ -31,6 +32,10 @@ export default function QuestoesTrilha() {
     const questoes = route.params.params.info;
 
     setQuestoes(questoes);
+
+    const animationTimeout = setTimeout(() => {
+      setShowInitialAnimation(false);
+    }, 1250);
   }, [route.params.params.questoes]);
 
   const conferirQuestao = (respostaCorreta, respostaAluno) => {
@@ -59,7 +64,7 @@ export default function QuestoesTrilha() {
 
         if (faseAtual > lastCompletedFase) {
           const docRef = doc(trilhaInfoCollectionRef, subTemaDoc.id);
-  
+
           await updateDoc(docRef, { ultimaFaseConcluida: lastCompletedFase + 1 });
         }
 
@@ -164,7 +169,7 @@ export default function QuestoesTrilha() {
 
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <ModalEnd />
-      {questoes && questoes[indice] ? (
+      {questoes && questoes[indice] && !showInitialAnimation ? (
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
@@ -274,7 +279,7 @@ export default function QuestoesTrilha() {
         </View>
       ) : (
         <View
-          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <Image
             style={{
