@@ -41,4 +41,19 @@ export default StyleSheet.create({
         zIndex: 1,
         
     },
+
+    iconStyle:{
+        color: "#FFFFFF",
+        fontSize: 24,
+    },
+
+    paginationButton:{
+        marginTop: 12,
+        width: 42,
+        height: 42,
+        borderRadius: 25,
+        backgroundColor: "#ff8c90",
+        justifyContent: "center",
+        alignItems: "center",
+    },
 })

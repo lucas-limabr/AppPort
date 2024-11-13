@@ -35,7 +35,7 @@ export default function QuestoesTrilha() {
 
     const animationTimeout = setTimeout(() => {
       setShowInitialAnimation(false);
-    }, 1500);
+    }, 1250);
   }, [route.params.params.questoes]);
 
   const conferirQuestao = (respostaCorreta, respostaAluno) => {

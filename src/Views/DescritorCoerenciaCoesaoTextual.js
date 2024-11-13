@@ -1,29 +1,28 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { View, Image, Text, TouchableOpacity, Alert } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Descritores from "../Buttons/Descritores";
 import Styles from "../Styles.js/StylesDescritores";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
-
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DescritorCoerenciaCoesaoTextual() {
-    const navigation = useNavigation();
+  const navigation = useNavigation();
 
-    const route = useRoute()
+  const route = useRoute()
 
-    const id = route.params.id
-    
+  const id = route.params.id
+
   useEffect(() => {
     navigation.setOptions({ tabBarVisible: false });
   });
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
       <View style={Styles.container}>
-      <View style={Styles.voltar}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="caretleft" size={50} color="#F54F59" />
+        <View style={Styles.voltar}>
+          <TouchableOpacity style={Styles.paginationButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" style={Styles.iconStyle} />
           </TouchableOpacity>
         </View>
         <Descritores
@@ -32,17 +31,17 @@ export default function DescritorCoerenciaCoesaoTextual() {
           id={id}
         />
         <Descritores
-          titulo="Identificação do confilito gerador do enredo"
+          titulo="Identificação do conflito gerador do enredo e os elementos que constroem a narrativa"
           descritor="D7"
           id={id}
         />
         <Descritores
-          titulo="Estabelecimento de relação e causa entre partes e elementos do texto"
+          titulo="Estabelecimento de relação causa/consequência entre partes e elementos do texto"
           descritor="D8"
           id={id}
         />
         <Descritores
-          titulo="Estabelecimento das relações lógico-discursivas"
+          titulo="Estabelecimento das relações lógico-discursivas presentes no texto"
           descritor="D12"
           id={id}
         />

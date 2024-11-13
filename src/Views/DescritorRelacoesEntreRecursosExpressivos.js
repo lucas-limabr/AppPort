@@ -5,8 +5,7 @@ import Descritores from "../Buttons/Descritores";
 import Styles from "../Styles.js/StylesDescritores";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
-
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DescritorRelacoesEntreRecursosExpressivos() {
     const navigation = useNavigation();
@@ -24,8 +23,8 @@ export default function DescritorRelacoesEntreRecursosExpressivos() {
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
       <View style={Styles.container}>
       <View style={Styles.voltar}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="caretleft" size={50} color="#F54F59" />
+      <TouchableOpacity style={Styles.paginationButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" style={Styles.iconStyle} />
           </TouchableOpacity>
         </View>
         <Descritores
@@ -34,7 +33,7 @@ export default function DescritorRelacoesEntreRecursosExpressivos() {
           id={id}
         />
         <Descritores
-          titulo="Identificação do efeito de sentido decorrente do uso da pontuação"
+          titulo="Identificação do efeito de sentido decorrente do uso da pontuação e de outras notações"
           descritor="D14"
           id={id}
         />

@@ -6,7 +6,7 @@ import { getFirestore, query, where, collection, getDocs, doc, getDoc, updateDoc
 import { FIREBASE_APP } from "../../FirebaseConfig";
 import { useRoute } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from "react-native-vector-icons";
 import Styles from "../Styles.js/StylesDescritores";
 import { useNavigation } from "@react-navigation/native";
 import "firebase/firestore";
@@ -213,8 +213,8 @@ export default function Questoes() {
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <View style={Styles.voltar}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <AntDesign name="caretleft" size={50} color="#F54F59" />
+        <TouchableOpacity style={styles.paginationButton} onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" style={styles.iconStyle} />
         </TouchableOpacity>
       </View>
       <View style={styles.container}>

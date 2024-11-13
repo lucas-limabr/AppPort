@@ -5,8 +5,7 @@ import Descritores from "../Buttons/Descritores";
 import Styles from "../Styles.js/StylesDescritores";
 import { useNavigation } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
-
-import { AntDesign } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DescritoresProcedimentoLeitura() {
   const navigation = useNavigation();
@@ -25,8 +24,8 @@ export default function DescritoresProcedimentoLeitura() {
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
       <View style={Styles.container}>
         <View style={Styles.voltar}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <AntDesign name="caretleft" size={50} color="#F54F59" />
+          <TouchableOpacity style={Styles.paginationButton} onPress={() => navigation.goBack()}>
+            <Ionicons name="arrow-back" style={Styles.iconStyle} />
           </TouchableOpacity>
         </View>
         <Descritores
@@ -34,14 +33,14 @@ export default function DescritoresProcedimentoLeitura() {
           descritor="D1"
           id={id}
         />
-        <Descritores titulo="Inferência de sentido" descritor="D3" id={id}/>
+        <Descritores titulo="Inferência de sentido" descritor="D3" id={id} />
         <Descritores
           titulo="Inferência de informação implícita"
           descritor="D4"
           id={id}
         />
-        <Descritores titulo="Identificação do tema do texto" descritor="D6" id={id}/>
-        <Descritores titulo="Distinção entre fato e opinião" descritor="D11" id={id}/>
+        <Descritores titulo="Identificação do tema do texto" descritor="D6" id={id} />
+        <Descritores titulo="Distinção entre fato e opinião" descritor="D11" id={id} />
       </View>
     </LinearGradient>
   );
