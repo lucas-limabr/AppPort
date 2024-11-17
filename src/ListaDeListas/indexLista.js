@@ -21,6 +21,7 @@ export default function QuestoesLista() {
   const [indice, setIndice] = useState(0);
   const [questoesCarregadas, setQuestoesCarregadas] = useState(false);
   const [atualizar, setAtualizar] = useState(true);
+  const [showInitialAnimation, setShowInitialAnimation] = useState(true);
 
   const navigation = useNavigation();
 
@@ -76,7 +77,13 @@ export default function QuestoesLista() {
   }, [codigoLista]);
 
   useEffect(() => {
+    setShowInitialAnimation(true);
+
     obterQuestoes();
+
+    setTimeout(() => {
+      setShowInitialAnimation(false);
+    }, 700);
   }, [obterQuestoes, navigation, atualizar]);
 
   const refreshComponent = () => {
@@ -90,6 +97,29 @@ export default function QuestoesLista() {
 
     return unsubscribe;
   }, [navigation]);
+
+  const hasImage = (question) => {
+    if (!question.hasOwnProperty('urlImagem')) {
+      return true;
+    }
+    if (question.urlImagem !=
+      'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
+    ) {
+      return true;
+    }
+
+    const noImageAnimations = [
+      require('../Imagens/noImageAnimations/Alertinha.gif'),
+      require('../Imagens/noImageAnimations/Lupinha.gif'),
+    ];
+
+    const randomImage = noImageAnimations[
+      Math.floor(Math.random() * noImageAnimations.length)
+    ];
+
+    question.urlImagem = randomImage;
+    return false;
+  };
 
   function continuar() {
     if (indice < questoes.length - 1) {
@@ -128,22 +158,32 @@ export default function QuestoesLista() {
             navigation.goBack();
           }}
         >
-           <Ionicons name="arrow-back" style={styles.iconStyle} />
+          <Ionicons name="arrow-back" style={styles.iconStyle} />
         </TouchableOpacity>
       </View>
-      {questoesCarregadas && questaoAtual ? (
+      {questoesCarregadas && questaoAtual && !showInitialAnimation ? (
         <View style={styles.container}>
           <View style={styles.containerSalvar}></View>
-
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              <TouchableOpacity onPress={() => { setIsExpanded(true) }}>
-                <Image
-                  style={styles.imagem}
-                  source={{ uri: questaoAtual.urlImagem }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
+              {hasImage(questaoAtual) ? (
+                <TouchableOpacity onPress={() => { setIsExpanded(true) }}>
+                  <Image
+                    style={styles.imagem}
+                    source={{ uri: questaoAtual.urlImagem }}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity>
+                  <Image
+                    style={styles.imagem}
+                    source={questaoAtual.urlImagem}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              )
+              }
 
               {/* Modal para exibir a imagem expandida */}
               <Modal visible={isExpanded} transparent={true} animationType="fade">

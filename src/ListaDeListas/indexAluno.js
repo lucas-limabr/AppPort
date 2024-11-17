@@ -30,6 +30,7 @@ export default function QuestoesAluno() {
   const [incorrect, setIncorrect] = useState(false);
   const [end, setEnd] = useState(false);
   const [atualizar, setAtualizar] = useState(true);
+  const [showInitialAnimation, setShowInitialAnimation] = useState(true);
 
   const auth = FIREBASE_AUTH;
 
@@ -40,6 +41,7 @@ export default function QuestoesAluno() {
   const questoesCarregadasRef = useRef(questoesCarregadas);
 
   useEffect(() => {
+    setShowInitialAnimation(true);
     codigoLista = route.params.itemId;
 
     setIndice(0);
@@ -88,6 +90,10 @@ export default function QuestoesAluno() {
 
       obterQuestoes();
     }
+
+    setTimeout(() => {
+      setShowInitialAnimation(false);
+    }, 700);
   }, [codigoLista, navigation, atualizar]);
 
   const refreshComponent = () => {
@@ -129,6 +135,30 @@ export default function QuestoesAluno() {
 
     }
   };
+
+  const hasImage = (question) => {
+    if (!question.hasOwnProperty('urlImagem')) {
+      return true;
+    } 
+    if (question.urlImagem != 
+      'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
+    ) {
+      return true;
+    }
+
+    const noImageAnimations = [
+      require('../Imagens/noImageAnimations/Alertinha.gif'),
+      require('../Imagens/noImageAnimations/Lupinha.gif'),
+    ];
+
+    const randomImage = noImageAnimations[
+      Math.floor(Math.random() * noImageAnimations.length)
+    ];
+
+    question.urlImagem = randomImage;
+    return false;
+  };
+
 
   const proximaQuestao = () => {
     if (indice < questoes.length - 1) {
@@ -298,7 +328,7 @@ export default function QuestoesAluno() {
   };
 
   const questaoAtual = questoes[indice];
-  const[btnRadioClicado, setbtnRadioClicado] = useState(true);
+  const [btnRadioClicado, setbtnRadioClicado] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -306,27 +336,37 @@ export default function QuestoesAluno() {
       <ModalHappy />
       <ModalSad />
       <ModalEnd />
-      {questoesCarregadas && questaoAtual ? (
+      {questoesCarregadas && questaoAtual && !showInitialAnimation ? (
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              <TouchableOpacity onPress={()=> setIsExpanded(true)}>
-                <Image
-                  style={styles.imagem}
-                  source={{ uri: questaoAtual.urlImagem }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
+              {hasImage(questaoAtual) ? (
+                <TouchableOpacity onPress={() => setIsExpanded(true)}>
+                  <Image
+                    style={styles.imagem}
+                    source={{ uri: questaoAtual.urlImagem }}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity>
+                  <Image
+                    style={styles.imagem}
+                    source={ questaoAtual.urlImagem }
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              )
+              }
 
-               {/* Modal para exibir a imagem expandida */}
-               <Modal visible={isExpanded} transparent={true} animationType="fade">
+              {/* Modal para exibir a imagem expandida */}
+              <Modal visible={isExpanded} transparent={true} animationType="fade">
                 <View style={styles.modalContainer}>
                   <TouchableOpacity onPress={() => setIsExpanded(false)}>
-                    <Image source={{uri: questaoAtual.urlImagem }} style={styles.fullImage} />
+                    <Image source={{ uri: questaoAtual.urlImagem }} style={styles.fullImage} />
                   </TouchableOpacity>
                 </View>
               </Modal>
-
             </View>
             <Markdown
               style={{
