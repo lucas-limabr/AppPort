@@ -38,6 +38,28 @@ export default function QuestoesTrilha() {
     }, 1100);
   }, [route.params.params.questoes]);
 
+  const hasImage = (question) => {
+    if (question.hasOwnProperty('urlImagem')) {
+      if (question.urlImagem !=
+        'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
+      ) {
+        return true;
+      }
+    }
+
+    const noImageAnimations = [
+      require('../Imagens/noImageAnimations/Alertinha.gif'),
+      require('../Imagens/noImageAnimations/Lupinha.gif'),
+    ];
+
+    const randomImage = noImageAnimations[
+      Math.floor(Math.random() * noImageAnimations.length)
+    ];
+
+    question.urlImagem = randomImage;
+    return false;
+  };
+
   const conferirQuestao = (respostaCorreta, respostaAluno) => {
     if (respostaCorreta === respostaAluno) {
       setAcertos(acertos + 1);
@@ -173,13 +195,24 @@ export default function QuestoesTrilha() {
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              <TouchableOpacity onPress={() => setIsExpanded(true)}>
-                <Image
-                  style={styles.imagem}
-                  source={{ uri: questoes[indice].urlImagem }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
+              {hasImage(questoes[indice]) ? (
+                <TouchableOpacity onPress={() => setIsExpanded(true)}>
+                  <Image
+                    style={styles.imagem}
+                    source={{ uri: questoes[indice].urlImagem }}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity>
+                  <Image
+                    style={styles.imagem}
+                    source={questoes[indice].urlImagem}
+                    resizeMode="contain"
+                  />
+                </TouchableOpacity>
+              )
+              }
 
               {/* Modal para exibir a imagem expandida */}
               <Modal visible={isExpanded} transparent={true} animationType="fade">
@@ -279,7 +312,7 @@ export default function QuestoesTrilha() {
         </View>
       ) : (
         <View
-        style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
           <Image
             style={{

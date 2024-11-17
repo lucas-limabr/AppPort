@@ -137,13 +137,12 @@ export default function QuestoesAluno() {
   };
 
   const hasImage = (question) => {
-    if (!question.hasOwnProperty('urlImagem')) {
-      return true;
-    } 
-    if (question.urlImagem != 
-      'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
-    ) {
-      return true;
+    if (question.hasOwnProperty('urlImagem')) {
+      if (question.urlImagem !=
+        'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
+      ) {
+        return true;
+      }
     }
 
     const noImageAnimations = [
@@ -352,7 +351,7 @@ export default function QuestoesAluno() {
                 <TouchableOpacity>
                   <Image
                     style={styles.imagem}
-                    source={ questaoAtual.urlImagem }
+                    source={questaoAtual.urlImagem}
                     resizeMode="contain"
                   />
                 </TouchableOpacity>
