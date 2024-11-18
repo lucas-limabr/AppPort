@@ -25,7 +25,7 @@ export default StyleSheet.create({
     textButtom: {
         color: '#fff',
         textAlign: 'center',
-        fontSize: 23,
+        fontSize: 19,
         fontFamily: 'Inder_400Regular',
         top:-10,
 
@@ -34,7 +34,7 @@ export default StyleSheet.create({
     buttom: {
         padding: 8,
         margin: 8, 
-        width: 160,
+        width: 180,
         height: 140,
         alignItems: 'center',
         justifyContent: 'center'
