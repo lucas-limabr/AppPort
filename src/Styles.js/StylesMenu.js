@@ -20,7 +20,7 @@ export default StyleSheet.create({
     descritores:{
         backgroundColor:'#ff8c90',
         paddingHorizontal: 12,
-        width: 140,
+        width: 180,
         height: 100,
         borderRadius: 5,
         elevation: 10,
