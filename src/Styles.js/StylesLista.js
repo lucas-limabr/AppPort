@@ -88,6 +88,15 @@ export default StyleSheet.create({
         position: 'absolute',
         bottom: 90,
         top: 150
-    }
+    },
 
+    criarLista: {
+        color: "#F54F59",
+        textTransform: "uppercase",
+        fontWeight: "bold",
+        marginBottom: 10,
+        textShadowColor: '#acacac', // Cor da sombra
+        textShadowOffset: { width: 1, height: 1}, // Deslocamento da sombra
+        textShadowRadius: 7, // Desfoque da sombra
+    }
 })
