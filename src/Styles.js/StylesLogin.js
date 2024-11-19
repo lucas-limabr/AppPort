@@ -4,12 +4,14 @@ import { StyleSheet } from "react-native" // aqui voce tem que importar so o sty
 
 export default StyleSheet.create({
     container:{
+        height: "100%",
         flex:1, 
-        marginTop: 100,
-        justifyContent: "space-around",       
+        marginTop: 50,
+        justifyContent: "space-around",  
+             
     },
     containerFilho:{
-        marginTop: 140,
+       marginTop: 140,
         alignItems: 'flex-end',
         zIndex: 1,
         
@@ -18,8 +20,7 @@ export default StyleSheet.create({
         backgroundColor:'#FFB9BD',
         marginLeft:30,
         marginRight: 30,
-        borderRadius:10,   
-        marginTop: 140,
+        borderRadius:10, 
     },
     botaoPequeno:{
         backgroundColor:'#ff8c90',
@@ -30,7 +31,6 @@ export default StyleSheet.create({
         marginLeft:30,
         marginRight: 30,
         borderRadius:10,
-        marginTop: 60,
         
     },
     textBotao:{
@@ -50,7 +50,7 @@ export default StyleSheet.create({
     frase:{
         color: '#fff',
         textAlign:'center',
-        marginTop: 250,
+        marginTop: 150,
         fontSize:25,
 
         fontFamily: 'Inder_400Regular',

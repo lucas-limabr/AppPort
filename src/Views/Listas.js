@@ -352,6 +352,7 @@ export default function Listas() {
             style={Styles.addLista}
             onPress={() => setVisible(true)}
           >
+            <Text style={Styles.criarLista}>Criar lista</Text>
             <AntDesign name="plus" size={50} color="#F54F59" />
           </TouchableOpacity>
         </View>
