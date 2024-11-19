@@ -51,7 +51,7 @@ export default function Navegacao() {
                     height: undefined,
                     aspectRatio: 1,
                   }}
-                  source={require("../Imagens/animation.gif")}
+                  source={require("../Imagens/TranFinal.gif")}
                   resizeMode="contain"
                 />
               </View>
