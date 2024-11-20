@@ -225,6 +225,7 @@ export default function Questoes() {
     const noImageAnimations = [
       require('../Imagens/noImageAnimations/Alertinha.gif'),
       require('../Imagens/noImageAnimations/Lupinha.gif'),
+      require('../Imagens/noImageAnimations/Aflito.gif'),
     ];
 
     const randomImage = noImageAnimations[
