@@ -45,7 +45,7 @@ export default function QuestoesTrilha() {
 
     setTimeout(() => {
       setShowInitialAnimation(false);
-    }, 1100);
+    }, 2050);
   }, [route.params.params.questoes]);
 
   const hasImage = (question) => {
@@ -60,6 +60,7 @@ export default function QuestoesTrilha() {
     const noImageAnimations = [
       require('../Imagens/noImageAnimations/Alertinha.gif'),
       require('../Imagens/noImageAnimations/Lupinha.gif'),
+      require('../Imagens/noImageAnimations/Aflito.gif'),
     ];
 
     const randomImage = noImageAnimations[
@@ -439,7 +440,7 @@ export default function QuestoesTrilha() {
               height: undefined,
               aspectRatio: 1,
             }}
-            source={require("../Imagens/animation.gif")}
+            source={require("../Imagens/TranFinal.gif")}
             resizeMode="contain"
           />
         </View>

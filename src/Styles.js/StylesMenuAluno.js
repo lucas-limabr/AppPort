@@ -38,8 +38,6 @@ export default StyleSheet.create({
         marginBottom: 5,
         fontFamily: 'Inder_400Regular',
     },
-
-    ///////////////////////////////////////////
     
     ButtomAddList:{
         backgroundColor:'rgba(255,141,148,0.2)',
@@ -57,9 +55,6 @@ export default StyleSheet.create({
         color: '#F54F59',
         fontSize: 40,
     },
-
-    ///////////////////////////////////////////
-
     
     viewInput: {
         backgroundColor: '#FFB9BD',
@@ -170,4 +165,13 @@ export default StyleSheet.create({
         justifyContent: 'center',       
         alignItems: 'center'
     },
+
+    criarLista: {
+        color: "#F54F59",
+        textTransform: "uppercase",
+        fontWeight: "bold",
+        textShadowColor: '#acacac',
+        textShadowOffset: { width: 1, height: 1}, 
+        textShadowRadius: 7, 
+    }
 });

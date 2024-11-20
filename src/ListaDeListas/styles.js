@@ -15,7 +15,7 @@ export default StyleSheet.create({
         backgroundColor: '#ff8c90',
         height: 'auto',
         width: 300,
-        marginTop: 40,
+        marginTop: 60,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center'
@@ -145,7 +145,7 @@ export default StyleSheet.create({
     },
 
     paginationButton:{
-        marginTop: 12,
+        marginTop: 5,
         width: 42,
         height: 42,
         borderRadius: 25,

@@ -93,7 +93,7 @@ export default function QuestoesAluno() {
 
     setTimeout(() => {
       setShowInitialAnimation(false);
-    }, 700);
+    }, 2050);
   }, [codigoLista, navigation, atualizar]);
 
   const refreshComponent = () => {
@@ -148,6 +148,7 @@ export default function QuestoesAluno() {
     const noImageAnimations = [
       require('../Imagens/noImageAnimations/Alertinha.gif'),
       require('../Imagens/noImageAnimations/Lupinha.gif'),
+      require('../Imagens/noImageAnimations/Aflito.gif'),
     ];
 
     const randomImage = noImageAnimations[
@@ -497,7 +498,7 @@ export default function QuestoesAluno() {
               height: undefined,
               aspectRatio: 1,
             }}
-            source={require("../Imagens/animation.gif")}
+            source={require("../Imagens/TranFinal.gif")}
             resizeMode="contain"
           />
         </View>

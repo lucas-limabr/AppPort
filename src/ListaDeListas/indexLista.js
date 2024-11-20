@@ -83,7 +83,7 @@ export default function QuestoesLista() {
 
     setTimeout(() => {
       setShowInitialAnimation(false);
-    }, 700);
+    }, 2050);
   }, [obterQuestoes, navigation, atualizar]);
 
   const refreshComponent = () => {
@@ -110,6 +110,7 @@ export default function QuestoesLista() {
     const noImageAnimations = [
       require('../Imagens/noImageAnimations/Alertinha.gif'),
       require('../Imagens/noImageAnimations/Lupinha.gif'),
+      require('../Imagens/noImageAnimations/Aflito.gif'),
     ];
 
     const randomImage = noImageAnimations[
@@ -283,7 +284,7 @@ export default function QuestoesLista() {
               width: "100%",
               aspectRatio: 1,
             }}
-            source={require("../Imagens/animation.gif")}
+            source={require("../Imagens/TranFinal.gif")}
             resizeMode="contain"
           />
         </View>
