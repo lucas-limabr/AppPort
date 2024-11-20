@@ -14,11 +14,16 @@ import RadioButtonGroup, { RadioButtonItem } from "expo-radio-button";
 
 import { getFirestore, doc, updateDoc } from "firebase/firestore";
 
+
+
 export default function QuestoesTrilha() {
   const route = useRoute();
   const navigation = useNavigation();
 
+  const db = getFirestore(FIREBASE_APP);
+
   const [questoes, setQuestoes] = useState([]);
+  const [faseAtual, setFaseAtual] = useState(0);
   const [indice, setIndice] = useState(0);
   const [value, setValue] = useState("");
   const [acertos, setAcertos] = useState(0);
@@ -29,9 +34,10 @@ export default function QuestoesTrilha() {
   const userId = route.params.params.info.userId;
 
   useEffect(() => {
-    const questoes = route.params.params.info;
+    const questoesParam = route.params.params.info;
 
-    setQuestoes(questoes);
+    setQuestoes(questoesParam);
+    setFaseAtual(questoesParam[0].fase);
 
     setTimeout(() => {
       setShowInitialAnimation(false);
@@ -80,22 +86,25 @@ export default function QuestoesTrilha() {
   const finishActivity = async () => {
     if (acertos > 6) {
       try {
+        const userId = route.params.params.userId;
         const subTemaDoc = route.params.params.subTemaDoc;
-        const faseAtual = questoes[0].fase;
+
+        const subTemaRef = doc(db, "users", userId, "trilhaInfo", subTemaDoc.id);
+  
         const lastCompletedFase = subTemaDoc.data().ultimaFaseConcluida;
-
+        const faseAtual = questoes[0].fase;
+  
         if (faseAtual > lastCompletedFase) {
-          const docRef = doc(trilhaInfoCollectionRef, subTemaDoc.id);
-
-          await updateDoc(docRef, { ultimaFaseConcluida: lastCompletedFase + 1 });
+          await updateDoc(subTemaRef, { ultimaFaseConcluida: lastCompletedFase + 1 });
         }
-
       } catch (error) {
-        console.error("Erro ao atualizar a última fase concluída:", error);
+        console.error("Erro ao atualizar a última fase concluída: ", error.message);
       }
     }
+  
     navigation.goBack({ reload: true });
   };
+  
 
   const ModalEnd = () => {
     const acertouTodas = acertos === questoes.length
