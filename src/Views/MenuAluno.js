@@ -177,9 +177,8 @@ export default function MenuAluno() {
         style={Styles.ButtomAddList}
         onPress={() => setVisible(true)}
       >
-        <View>
-          <Text style={Styles.ButtomAddListText}>{title}</Text>
-        </View>
+        <Text style={Styles.criarLista}>Adicionar lista</Text>
+        <Text style={Styles.ButtomAddListText}>{title}</Text>
       </TouchableOpacity>
     );
   }
@@ -204,7 +203,7 @@ export default function MenuAluno() {
           data={listas}
           keyExtractor={(item) => item.codigo}
           renderItem={({ item }) => (
-            <ClickButton title={item.nomeLista} questoes={item.questoes} acertos={item.acertos} erros={item.erros}/>
+            <ClickButton title={item.nomeLista} questoes={item.questoes} acertos={item.acertos} erros={item.erros} />
           )}
         />
       </View>
