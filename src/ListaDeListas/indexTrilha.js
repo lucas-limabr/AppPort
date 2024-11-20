@@ -122,8 +122,11 @@ export default function QuestoesTrilha() {
           style={Styless.gradient}
         >
           <View style={Styless.container}>
-            <View style={Styless.boxTitle}>
-              <Text style={Styless.Title}>Resposta incorreta</Text>
+            <View style={Styles.boxTitle}>
+              <Text style={Styles.Title}>
+                QUE PENA
+                <Text style={Styles.SubTitle}>{'\n'}Resposta Incorreta</Text>
+              </Text>
             </View>
 
             <View style={Styless.box}>
@@ -170,7 +173,7 @@ export default function QuestoesTrilha() {
             <View style={Styles.boxTitle}>
               <Text style={Styles.Title}>
                 MUITO BEM!
-                <Text style={Styles.SubTitle}>Certa Resposta</Text>
+                <Text style={Styles.SubTitle}>{'\n'}Certa Resposta</Text>
               </Text>
             </View>
 
@@ -222,16 +225,16 @@ export default function QuestoesTrilha() {
             <View style={StylesEnd.boxTitle}>
               {acertouTodas ? (
                 <Text style={StylesEnd.Title}>
-                  PERFEITO!!
+                  PERFEITO!
                   <Text style={StylesEnd.SubTitle}>
-                    Você acertou todas as questões e passou de fase!
+                    {'\n'}Você acertou todas as questões e passou de fase!
                   </Text>
                 </Text>
               ) : acertos > 6 ? (
                 <Text style={StylesEnd.Title}>
-                  PARABÉNS!!
+                  PARABÉNS!
                   <Text style={StylesEnd.SubTitle}>
-                    Você passou de fase!
+                    {'\n'}Você passou de fase!
                   </Text>
                 </Text>
               ) : (
@@ -240,7 +243,7 @@ export default function QuestoesTrilha() {
                     FOI POR POUCO
                   </Text>
                   <Text style={StylesEnd.SubTitle}>
-                    Tente novamente...
+                    {'\n'}Tente novamente...
                   </Text>
                 </View>
               )}
