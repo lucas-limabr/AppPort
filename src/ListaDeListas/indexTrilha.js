@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
+import Styles from "../Styles.js/StylesRespostaCorretaAluno";
+import Styless from "../Styles.js/StylesRespostaIncorretaAluno";
 import StylesEnd from "../Styles.js/StylesTerminouListaAluno";
 import { FIREBASE_APP } from "../../FirebaseConfig";
 import { useRoute } from "@react-navigation/native";
@@ -28,6 +30,8 @@ export default function QuestoesTrilha() {
   const [value, setValue] = useState("");
   const [acertos, setAcertos] = useState(0);
   const [erros, setErros] = useState(0);
+  const [correct, setCorrect] = useState(false);
+  const [incorrect, setIncorrect] = useState(false);
   const [end, setEnd] = useState(false);
   const [showInitialAnimation, setShowInitialAnimation] = useState(true);
 
@@ -69,13 +73,16 @@ export default function QuestoesTrilha() {
   const conferirQuestao = (respostaCorreta, respostaAluno) => {
     if (respostaCorreta === respostaAluno) {
       setAcertos(acertos + 1);
+      setCorrect(true);
     } else {
       setErros(erros + 1);
+      setIncorrect(true);
     }
-    proximaQuestao();
   };
 
   const proximaQuestao = () => {
+    setCorrect(false);
+    setIncorrect(false);
     if (indice < questoes.length - 1) {
       setIndice(indice + 1);
     } else {
@@ -84,16 +91,18 @@ export default function QuestoesTrilha() {
   };
 
   const finishActivity = async () => {
+    setCorrect(false);
+    setIncorrect(false);
     if (acertos > 6) {
       try {
         const userId = route.params.params.userId;
         const subTemaDoc = route.params.params.subTemaDoc;
 
         const subTemaRef = doc(db, "users", userId, "trilhaInfo", subTemaDoc.id);
-  
+
         const lastCompletedFase = subTemaDoc.data().ultimaFaseConcluida;
         const faseAtual = questoes[0].fase;
-  
+
         if (faseAtual > lastCompletedFase) {
           await updateDoc(subTemaRef, { ultimaFaseConcluida: lastCompletedFase + 1 });
         }
@@ -101,10 +110,105 @@ export default function QuestoesTrilha() {
         console.error("Erro ao atualizar a última fase concluída: ", error.message);
       }
     }
-  
+
     navigation.goBack({ reload: true });
   };
-  
+
+  const ModalSad = () => {
+    return (
+      <Modal animationType="fade" transparent={false} visible={incorrect}>
+        <LinearGradient
+          colors={["#D5D4FB", "#9B98FC"]}
+          style={Styless.gradient}
+        >
+          <View style={Styless.container}>
+            <View style={Styless.boxTitle}>
+              <Text style={Styless.Title}>Resposta incorreta</Text>
+            </View>
+
+            <View style={Styless.box}>
+              <View style={Styless.boxImage}>
+                <Image
+                  style={Styless.ImageFormat}
+                  source={require("../Imagens/animations/AnimacoesMascoteErrouMaioria.gif")}
+                />
+              </View>
+
+              <View style={Styless.subDivTag}>
+                <View style={Styless.subSubDivTag}>
+                  <View style={Styless.tagText}>
+                    <Text style={Styless.FontFormat}>Acertos:</Text>
+                  </View>
+                  <View style={Styless.tagText}>
+                    <Text style={Styless.FontFormat}>Erros:</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={Styless.buttomBox}>
+                <TouchableOpacity
+                  style={Styless.buttom}
+                  onPress={() => proximaQuestao()}
+                >
+                  <Text style={[Styless.FontFormatButtom, Styless.shadow]}>
+                    Próxima questão
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
+      </Modal>
+    );
+  };
+
+  const ModalHappy = () => {
+    return (
+      <Modal animationType="fade" transparent={false} visible={correct}>
+        <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
+          <View style={Styles.container}>
+            <View style={Styles.boxTitle}>
+              <Text style={Styles.Title}>
+                MUITO BEM!
+                <Text style={Styles.SubTitle}>Certa Resposta</Text>
+              </Text>
+            </View>
+
+            <View style={Styles.box}>
+              <View style={Styles.boxImage}>
+                <Image
+                  style={Styles.ImageFormat}
+                  source={require("../Imagens/animations/AnimacoesMascoteAcimaDaMedia.gif")}
+                />
+              </View>
+
+              <View style={Styles.subDivTag}>
+                <View style={Styles.subSubDivTag}>
+                  <View style={Styles.tagText}>
+                    <Text style={Styles.FontFormat}>Acertos:</Text>
+                  </View>
+                  <View style={Styles.tagText}>
+                    <Text style={Styles.FontFormat}>Erros:</Text>
+                  </View>
+                </View>
+              </View>
+
+              <View style={Styles.buttomBox}>
+                <TouchableOpacity
+                  style={Styles.buttom}
+                  onPress={() => proximaQuestao()}
+                >
+                  <Text style={[Styles.FontFormatButtom, Styles.shadow]}>
+                    Próxima questão
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </LinearGradient>
+      </Modal>
+    );
+  };
 
   const ModalEnd = () => {
     const acertouTodas = acertos === questoes.length
@@ -199,6 +303,8 @@ export default function QuestoesTrilha() {
   return (
 
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
+      <ModalHappy />
+      <ModalSad />
       <ModalEnd />
       {questoes && questoes[indice] && !showInitialAnimation ? (
         <View style={styles.container}>
