@@ -187,8 +187,11 @@ export default function QuestoesAluno() {
           style={Styless.gradient}
         >
           <View style={Styless.container}>
-            <View style={Styless.boxTitle}>
-              <Text style={Styless.Title}>Resposta incorreta</Text>
+            <View style={Styles.boxTitle}>
+              <Text style={Styles.Title}>
+                QUE PENA
+                <Text style={Styles.SubTitle}>{'\n'}Resposta Incorreta</Text>
+              </Text>
             </View>
 
             <View style={Styless.box}>
@@ -235,7 +238,7 @@ export default function QuestoesAluno() {
             <View style={Styles.boxTitle}>
               <Text style={Styles.Title}>
                 MUITO BEM!
-                <Text style={Styles.SubTitle}>Certa Resposta</Text>
+                <Text style={Styles.SubTitle}>{'\n'}Certa Resposta</Text>
               </Text>
             </View>
 
@@ -276,6 +279,8 @@ export default function QuestoesAluno() {
   };
 
   const ModalEnd = () => {
+    const acertouTodas = acertos === questoes.length
+    const acertouMaioria = acertos > questoes.length / 2;
     return (
       <Modal animationType="fade" transparent={false} visible={end}>
         <LinearGradient
@@ -284,18 +289,51 @@ export default function QuestoesAluno() {
         >
           <View style={StylesEnd.container}>
             <View style={StylesEnd.boxTitle}>
-              <Text style={StylesEnd.Title}>
-                PARABÉNS!!
-                <Text style={StylesEnd.SubTitle}>Você terminou a lista</Text>
-              </Text>
+              {acertouTodas ? (
+                <Text style={StylesEnd.Title}>
+                  PERFEITO!
+                  <Text style={StylesEnd.SubTitle}>
+                    {'\n'}Você acertou todas as questões e passou de fase!
+                  </Text>
+                </Text>
+              ) : acertouMaioria ? (
+                <Text style={StylesEnd.Title}>
+                  PARABÉNS!
+                  <Text style={StylesEnd.SubTitle}>
+                    {'\n'}Você acertou a maioria da lista!
+                  </Text>
+                </Text>
+              ) : (
+                <View>
+                  <Text style={StylesEnd.Title}>
+                    POR POUCO
+                  </Text>
+                  <Text style={StylesEnd.SubTitle}>
+                    {'\n'}Tente novamente...
+                  </Text>
+                </View>
+              )}
             </View>
 
             <View style={StylesEnd.box}>
               <View style={StylesEnd.boxImage}>
-                <Image
-                  style={StylesEnd.ImageFormat}
-                  source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
-                />
+                {acertouTodas ? (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteAcertatudo.gif")}
+                  />
+                ) : acertos > questoes.length * 0.6 ? (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteAcimaDaMedia.gif")}
+                  />
+                ) : (
+                  <Image
+                    style={StylesEnd.ImageFormat}
+                    source={require("../Imagens/animations/AnimacoesMascoteErrouMaioria.gif")}
+                  />
+                )}
+
               </View>
 
               <View style={StylesEnd.subDivTag}>

@@ -19,6 +19,7 @@ export default function Questoes() {
   const [id, setId] = useState(null);
   const [resposta, setResposta] = useState([]);
   const [urlImagem, setUrlImagem] = useState(null);
+  const [hasImage, setHasImage] = useState(false);
   const [indice, setIndice] = useState(0);
   const [atualizarDados, setAtualizarDados] = useState(false);
   const [questaoEstaNaLista, setQuestaoEstaNaLista] = useState(false);
@@ -47,6 +48,7 @@ export default function Questoes() {
       const firstDocument = querySnapshot.docs[indice];
       const data = firstDocument.data();
       const questaoId = firstDocument.id;
+      data.urlImagem = setQuestionImage(data);
 
       return {
         id: questaoId,
@@ -210,13 +212,36 @@ export default function Questoes() {
     executarEfeitos();
   }, [atualizarDados]);
 
+  const setQuestionImage = (question) => {
+    if (question.hasOwnProperty('urlImagem')) {
+      if (question.urlImagem !=
+        'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
+      ) {
+        setHasImage(true);
+        return(question.urlImagem);
+      }
+    }
+
+    const noImageAnimations = [
+      require('../Imagens/noImageAnimations/Alertinha.gif'),
+      require('../Imagens/noImageAnimations/Lupinha.gif'),
+    ];
+
+    const randomImage = noImageAnimations[
+      Math.floor(Math.random() * noImageAnimations.length)
+    ];
+
+    setHasImage(false);
+    return randomImage;
+  };
+
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={styles.gradient}>
       <View style={Styles.voltar}>
         <TouchableOpacity style={styles.paginationButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" style={styles.iconStyle} />
+          <Ionicons name="arrow-back" style={styles.iconStyle} />
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
@@ -232,13 +257,24 @@ export default function Questoes() {
         </View>
         <View style={styles.enunciado}>
           <View style={styles.backgroundImagem}>
-            <TouchableOpacity onPress={() => { setIsExpanded(true) }}>
-              <Image
-                style={styles.imagem}
-                source={{ uri: urlImagem }}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+            {hasImage ? (
+              <TouchableOpacity onPress={() => { setIsExpanded(true) }}>
+                <Image
+                  style={styles.imagem}
+                  source={{ uri: urlImagem }}
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity>
+                <Image
+                  style={styles.imagem}
+                  source={ urlImagem }
+                  resizeMode="contain"
+                />
+              </TouchableOpacity>
+            )
+            }
 
             {/* Modal para exibir a imagem expandida */}
             <Modal visible={isExpanded} transparent={true} animationType="fade">
