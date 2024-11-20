@@ -132,7 +132,7 @@ export default function Cadastro() {
     await Promise.all(arraySubtema.map(async (subtema) => {
       const trilhaInfoData = {
         subtema: subtema,
-        ultimaFaseConcluida: 1,
+        ultimaFaseConcluida: 0,
       };
 
       const docRef = doc(trilhaInfoRef);
