@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
+import { View, TouchableOpacity, Text, Modal } from "react-native";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import Styles from "../Styles.js/StylesRespostaCorretaAluno";
@@ -34,6 +35,7 @@ export default function QuestoesTrilha() {
   const [incorrect, setIncorrect] = useState(false);
   const [end, setEnd] = useState(false);
   const [showInitialAnimation, setShowInitialAnimation] = useState(true);
+  const [noImage, setNoImage] = useState(null);
 
   const userId = route.params.params.info.userId;
 
@@ -48,28 +50,22 @@ export default function QuestoesTrilha() {
     }, 2050);
   }, [route.params.params.questoes]);
 
-  const hasImage = (question) => {
-    if (question.hasOwnProperty('urlImagem')) {
-      if (question.urlImagem !=
-        'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
-      ) {
-        return true;
-      }
-    }
-
+  useEffect(() => {
     const noImageAnimations = [
       require('../Imagens/noImageAnimations/Alertinha.gif'),
       require('../Imagens/noImageAnimations/Lupinha.gif'),
       require('../Imagens/noImageAnimations/Aflito.gif'),
     ];
 
-    const randomImage = noImageAnimations[
-      Math.floor(Math.random() * noImageAnimations.length)
-    ];
-
-    question.urlImagem = randomImage;
-    return false;
-  };
+    if (
+      !questoes[indice]?.urlImagem
+    ) {
+      const randomImage = noImageAnimations[
+        Math.floor(Math.random() * noImageAnimations.length)
+      ];
+      setNoImage(randomImage);
+    }
+  }, [indice]);
 
   const conferirQuestao = (respostaCorreta, respostaAluno) => {
     if (respostaCorreta === respostaAluno) {
@@ -314,7 +310,7 @@ export default function QuestoesTrilha() {
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              {hasImage(questoes[indice]) ? (
+              {questoes[indice]?.urlImagem && questoes[indice].urlImagem.startsWith('http')  ? (
                 <TouchableOpacity onPress={() => setIsExpanded(true)}>
                   <Image
                     style={styles.imagem}
@@ -326,7 +322,7 @@ export default function QuestoesTrilha() {
                 <TouchableOpacity>
                   <Image
                     style={styles.imagem}
-                    source={questoes[indice].urlImagem}
+                    source={ noImage }
                     resizeMode="contain"
                   />
                 </TouchableOpacity>

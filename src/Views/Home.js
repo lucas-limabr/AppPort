@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Image, Text, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesHome";
 import { signInWithEmailAndPassword } from "firebase/auth";

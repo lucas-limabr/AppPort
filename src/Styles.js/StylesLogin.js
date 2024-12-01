@@ -11,7 +11,7 @@ export default StyleSheet.create({
              
     },
     containerFilho:{
-       marginTop: 140,
+       marginTop: -50,
         alignItems: 'flex-end',
         zIndex: 1,
         
@@ -28,6 +28,7 @@ export default StyleSheet.create({
         height:30,
         justifyContent:'center',
         alignItems:'center',
+        marginTop:70,
         marginLeft:30,
         marginRight: 30,
         borderRadius:10,
@@ -50,7 +51,7 @@ export default StyleSheet.create({
     frase:{
         color: '#fff',
         textAlign:'center',
-        marginTop: 150,
+        marginTop: 30,
         fontSize:25,
 
         fontFamily: 'Inder_400Regular',

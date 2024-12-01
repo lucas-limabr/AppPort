@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
+import { View, TouchableOpacity, Text, Modal } from "react-native";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { getFirestore, query, where, collection, getDocs, doc, getDoc, updateDoc, } from "firebase/firestore";
