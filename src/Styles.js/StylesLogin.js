@@ -3,74 +3,74 @@ import { StyleSheet } from "react-native" // aqui voce tem que importar so o sty
 
 
 export default StyleSheet.create({
-    container:{
+    container: {
         height: "100%",
-        flex:1, 
+        flex: 1,
         marginTop: 50,
-        justifyContent: "space-around",  
-             
+        justifyContent: "space-around",
+
     },
-    containerFilho:{
-       marginTop: 140,
+    containerFilho: {
+        marginTop: 140,
         alignItems: 'flex-end',
         zIndex: 1,
-        
+
     },
-    botaoGrande:{
-        backgroundColor:'#FFB9BD',
-        marginLeft:30,
+    botaoGrande: {
+        backgroundColor: '#FFB9BD',
+        marginLeft: 30,
         marginRight: 30,
-        borderRadius:10, 
+        borderRadius: 10,
     },
-    botaoPequeno:{
-        backgroundColor:'#ff8c90',
+    botaoPequeno: {
+        backgroundColor: '#ff8c90',
         width: 120,
-        height:30,
-        justifyContent:'center',
-        alignItems:'center',
-        marginLeft:30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginLeft: 30,
         marginRight: 30,
-        borderRadius:10,
-        
+        borderRadius: 10,
+
     },
-    textBotao:{
+    textBotao: {
         color: '#fff',
         textAlign: 'center',
         padding: 35,
-        fontSize:25,
-        fontFamily: 'Inder_400Regular',     
+        fontSize: 25,
+        fontFamily: 'Inder_400Regular',
     },
-    textBotaoPequeno:{
+    textBotaoPequeno: {
         color: '#fff',
         textAlign: 'center',
         padding: 0,
-        fontFamily: 'Inder_400Regular',   
-        
+        fontFamily: 'Inder_400Regular',
+
     },
-    frase:{
+    frase: {
         color: '#fff',
-        textAlign:'center',
+        textAlign: 'center',
         marginTop: 150,
-        fontSize:25,
+        fontSize: 25,
 
         fontFamily: 'Inder_400Regular',
 
     },
     gradient: {
         ...StyleSheet.absoluteFillObject,
-        
+
     },
-    imageNome:{
+    imageNome: {
         marginLeft: 0,
-        width: '100%', 
-        height: '100%', 
+        width: '100%',
+        height: '100%',
         resizeMode: 'contain',
     },
 
-    imageLogo:{
+    imageLogo: {
         bottom: 1,
-        width: '100%', 
+        width: '100%',
         height: '40%',
-       resizeMode: "contain",
+        resizeMode: "contain",
     }
 })

@@ -5,7 +5,8 @@ import { NavigationContainer } from '@react-navigation/native'
 import TabNav from "./TabNav";
 import LoginNav from "./LoginNav";
 import TabNavAluno from "./TabNavAluno";
-import { View, Image } from "react-native";
+import { View } from "react-native";
+import { Image } from "expo-image";
 import { useAuthentication } from "../hooks/useAutentication";
 import { userVerification } from "../FuncoesFirebase/Funcoes";
 import { updateDay } from "../FuncoesFirebase/Funcoes";

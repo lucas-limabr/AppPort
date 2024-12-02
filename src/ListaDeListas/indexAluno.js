@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
+import { View, TouchableOpacity, Text, Modal } from "react-native";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { FIREBASE_APP } from "../../FirebaseConfig";
@@ -31,6 +32,7 @@ export default function QuestoesAluno() {
   const [end, setEnd] = useState(false);
   const [atualizar, setAtualizar] = useState(true);
   const [showInitialAnimation, setShowInitialAnimation] = useState(true);
+  const [noImage, setNoImage] = useState(null);
 
   const auth = FIREBASE_AUTH;
 
@@ -108,6 +110,23 @@ export default function QuestoesAluno() {
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    const noImageAnimations = [
+      require('../Imagens/noImageAnimations/Alertinha.gif'),
+      require('../Imagens/noImageAnimations/Lupinha.gif'),
+      require('../Imagens/noImageAnimations/Aflito.gif'),
+    ];
+
+    if (
+      !questaoAtual?.urlImagem
+    ) {
+      const randomImage = noImageAnimations[
+        Math.floor(Math.random() * noImageAnimations.length)
+      ];
+      setNoImage(randomImage);
+    }
+  }, [questaoAtual]);
+
   const conferirQuestao = async (respostaCorreta, respostaALuno) => {
     try {
       const novosAcertos =
@@ -135,30 +154,6 @@ export default function QuestoesAluno() {
 
     }
   };
-
-  const hasImage = (question) => {
-    if (question.hasOwnProperty('urlImagem')) {
-      if (question.urlImagem !=
-        'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
-      ) {
-        return true;
-      }
-    }
-
-    const noImageAnimations = [
-      require('../Imagens/noImageAnimations/Alertinha.gif'),
-      require('../Imagens/noImageAnimations/Lupinha.gif'),
-      require('../Imagens/noImageAnimations/Aflito.gif'),
-    ];
-
-    const randomImage = noImageAnimations[
-      Math.floor(Math.random() * noImageAnimations.length)
-    ];
-
-    question.urlImagem = randomImage;
-    return false;
-  };
-
 
   const proximaQuestao = () => {
     if (indice < questoes.length - 1) {
@@ -378,7 +373,7 @@ export default function QuestoesAluno() {
         <View style={styles.container}>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              {hasImage(questaoAtual) ? (
+              {questaoAtual?.urlImagem && questaoAtual.urlImagem.startsWith('http') ? (
                 <TouchableOpacity onPress={() => setIsExpanded(true)}>
                   <Image
                     style={styles.imagem}
@@ -390,7 +385,7 @@ export default function QuestoesAluno() {
                 <TouchableOpacity>
                   <Image
                     style={styles.imagem}
-                    source={questaoAtual.urlImagem}
+                    source={ noImage }
                     resizeMode="contain"
                   />
                 </TouchableOpacity>
