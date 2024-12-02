@@ -378,7 +378,7 @@ export default function QuestoesAluno() {
                   <Image
                     style={styles.imagem}
                     source={{ uri: questaoAtual.urlImagem }}
-                    resizeMode="contain"
+                    contentFit="contain"
                   />
                 </TouchableOpacity>
               ) : (
@@ -386,7 +386,7 @@ export default function QuestoesAluno() {
                   <Image
                     style={styles.imagem}
                     source={ noImage }
-                    resizeMode="contain"
+                    contentFit="contain"
                   />
                 </TouchableOpacity>
               )
@@ -494,7 +494,7 @@ export default function QuestoesAluno() {
               aspectRatio: 1,
             }}
             source={require("../Imagens/TranFinal.gif")}
-            resizeMode="contain"
+            contentFit="contain"
           />
         </View>
       )}

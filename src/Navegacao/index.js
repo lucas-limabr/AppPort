@@ -53,7 +53,7 @@ export default function Navegacao() {
                     aspectRatio: 1,
                   }}
                   source={require("../Imagens/TranFinal.gif")}
-                  resizeMode="contain"
+                  contentFit="contain"
                 />
               </View>
 
