@@ -4,37 +4,32 @@ import { LinearGradient } from "expo-linear-gradient";
 import { View, TouchableOpacity, Text, Modal, Alert, TextInput, FlatList } from "react-native";
 import Styles from "../Styles.js/StylesMenuAluno";
 import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
-import { doc, getFirestore, getId, where } from "firebase/firestore";
+import { doc, getFirestore, deleteDoc, getId, where } from "firebase/firestore";
 import { addDoc, collection, query, getDocs } from "firebase/firestore";
 import { userReference } from "../FuncoesFirebase/Funcoes";
 import { useNavigation } from "@react-navigation/native";
 import { fetchIdList } from "../FuncoesFirebase/Funcoes";
 import { useFocusEffect } from "@react-navigation/native";
-
-
+import { Ionicons } from "react-native-vector-icons";
 
 export default function MenuAluno() {
   const db = getFirestore(FIREBASE_APP);
   const auth = FIREBASE_AUTH;
   const [visible, setVisible] = useState(false);
-  const [listas, setListas] = useState([])
-  const [atualizarDados, setAtualizarDados] = useState()
-  const [id, setId] = useState('')
-  const navigation = useNavigation()
+  const [listas, setListas] = useState([]);
+  const [atualizarDados, setAtualizarDados] = useState();
+  const [id, setId] = useState('');
+  const navigation = useNavigation();
 
-
-
-
-  const aluno = auth.currentUser.uid
-
-  const referenceAluno = doc(db, 'users', aluno)
+  const aluno = auth.currentUser.uid;
+  const referenceAluno = doc(db, 'users', aluno);
 
   const searchList = async (codigo) => {
     try {
-      const listProfessor = collection(getFirestore(), 'listas')
-      const listQuery = query(listProfessor, where("codigo", "==", codigo))
+      const listProfessor = collection(getFirestore(), 'listas');
+      const listQuery = query(listProfessor, where('codigo', '==', codigo));
 
-      const listSnapshot = await getDocs(listQuery)
+      const listSnapshot = await getDocs(listQuery);
 
       listSnapshot.forEach(async (doc) => {
         const listData = doc.data();
@@ -44,27 +39,25 @@ export default function MenuAluno() {
           aluno: referenceAluno,
           respostaAluno: [],
           acertos: 0,
-          erros: 0
-        }
-        const listAluno = collection(getFirestore(), "ListaAluno")
-        await addDoc(listAluno, newList)
+          erros: 0,
+        };
+        const listAluno = collection(getFirestore(), 'ListaAluno');
+        await addDoc(listAluno, newList);
         setListas((prevListas) => [...prevListas, listData]);
-        setVisible(false)
-        setAtualizarDados(!atualizarDados)
-
-
-      })
-
+        setVisible(false);
+        setAtualizarDados(!atualizarDados);
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
+
   async function buscarListasDoFirestore() {
     try {
       const usuarioLogadoReference = await userReference();
 
-      const listasCollection = collection(getFirestore(), "ListaAluno");
-      const listasQuery = query(listasCollection, where("aluno", "==", usuarioLogadoReference));
+      const listasCollection = collection(getFirestore(), 'ListaAluno');
+      const listasQuery = query(listasCollection, where('aluno', '==', usuarioLogadoReference));
 
       const listasSnapshot = await getDocs(listasQuery);
 
@@ -78,11 +71,8 @@ export default function MenuAluno() {
       return listas;
     } catch (error) {
       console.error(error);
-      // Lidar com o erro conforme necessário
     }
   }
-
-
 
   useFocusEffect(
     useCallback(() => {
@@ -95,15 +85,13 @@ export default function MenuAluno() {
   );
 
   const ModalList = () => {
-    const [codigo, setCodigo] = useState('')
+    const [codigo, setCodigo] = useState('');
     return (
       <Modal animationType="slide" transparent={true} visible={visible}>
         <View style={Styles.containerModal}>
           <View style={Styles.viewInput}>
             <View style={Styles.titleInputStyle}>
-              <Text style={Styles.titleInputStyleFont}>
-                Informe o código da lista
-              </Text>
+              <Text style={Styles.titleInputStyleFont}>Informe o código da lista</Text>
             </View>
 
             <TextInput style={Styles.inputStyle} onChangeText={(text) => setCodigo(text)}></TextInput>
@@ -123,14 +111,14 @@ export default function MenuAluno() {
     );
   };
 
-  function ClickButton({ title, questoes, acertos, erros }) {
+  function ClickButton({ title, questoes, acertos, erros, codigo }) {
     const handleListNavigation = async () => {
       try {
-        const id = await fetchId()
-        setId(id)
+        const id = await fetchId();
+        setId(id);
 
         if (questoes.length === 0) {
-          Alert.alert("Lista Vazia", "Esta lista não contém questões e portanto não pode ser acessada.");
+          Alert.alert('Lista Vazia', 'Esta lista não contém questões e portanto não pode ser acessada.');
           return;
         }
 
@@ -138,34 +126,59 @@ export default function MenuAluno() {
           return;
         }
 
-        navigation.navigate('StackNavAluno', { screen: 'QuestoesAluno', params: { itemId: id } })
+        navigation.navigate('StackNavAluno', { screen: 'QuestoesAluno', params: { itemId: id } });
 
         return id;
       } catch (error) {
-        console.log("Erro ao obter ID:", error)
+        console.log('Erro ao obter ID:', error);
       }
-    }
+    };
 
     const fetchId = async () => {
-      const id = await fetchIdList('nomeLista', 'ListaAluno', title, aluno)
-      setId(id)
+      const id = await fetchIdList('nomeLista', 'ListaAluno', title, aluno);
+      setId(id);
+      console.log(`Função fetchId: ${id}`);
 
+      return id;
+    };
 
-      return id
+    async function deleteList(codigo) {
+      try {
+        const usuarioLogadoReference = await userReference();
+        const listaRef = collection(getFirestore(), 'ListaAluno');
+
+        const listasQuery = query(listaRef, where('codigo', '==', codigo), where('aluno', '==', usuarioLogadoReference));
+        const listasSnapshot = await getDocs(listasQuery);
+
+        if (!listasSnapshot.empty) {
+          const docId = listasSnapshot.docs[0].id;
+          const docRef = doc(getFirestore(), 'ListaAluno', docId);
+
+          await deleteDoc(docRef);
+
+          setListas((prevListas) => prevListas.filter((lista) => lista.codigo !== codigo));
+
+          Alert.alert('Sucesso', 'Lista excluída com sucesso!');
+        } else {
+          Alert.alert('Erro', 'Lista não encontrada.');
+        }
+      } catch (error) {
+        console.error('Erro ao excluir a lista:', error);
+        Alert.alert('Erro', 'Não foi possível excluir a lista.');
+      }
     }
-
 
     return (
       <TouchableOpacity style={Styles.buttom} onPress={handleListNavigation}>
         <View style={Styles.titleStyle}>
           <Text style={Styles.titleStyleFont}>{title}</Text>
+          <TouchableOpacity onPress={() => deleteList(codigo)} style={Styles.btnDeleteList}>
+            <Ionicons name="close" style={Styles.iconeDelete} />
+          </TouchableOpacity>
         </View>
         <View>
           <Text style={Styles.styleFontContent}>Acertos: {acertos}</Text>
-
           <Text style={Styles.styleFontContent}>Erros: {erros}</Text>
-
-
         </View>
       </TouchableOpacity>
     );
@@ -173,10 +186,7 @@ export default function MenuAluno() {
 
   function ClickButton1({ title }) {
     return (
-      <TouchableOpacity
-        style={Styles.ButtomAddList}
-        onPress={() => setVisible(true)}
-      >
+      <TouchableOpacity style={Styles.ButtomAddList} onPress={() => setVisible(true)}>
         <Text style={Styles.criarLista}>Adicionar lista</Text>
         <Text style={Styles.ButtomAddListText}>{title}</Text>
       </TouchableOpacity>
@@ -192,7 +202,7 @@ export default function MenuAluno() {
   }
 
   return (
-    <LinearGradient colors={["#D5D4FB", "#9B98FC"]} style={Styles.gradient}>
+    <LinearGradient colors={['#D5D4FB', '#9B98FC']} style={Styles.gradient}>
       <ModalList />
       <View style={Styles.containerTitle}>
         <ButtonAdd title="+" />
@@ -203,7 +213,13 @@ export default function MenuAluno() {
           data={listas}
           keyExtractor={(item) => item.codigo}
           renderItem={({ item }) => (
-            <ClickButton title={item.nomeLista} questoes={item.questoes} acertos={item.acertos} erros={item.erros} />
+            <ClickButton
+              title={item.nomeLista}
+              questoes={item.questoes}
+              acertos={item.acertos}
+              erros={item.erros}
+              codigo={item.codigo}
+            />
           )}
         />
       </View>
