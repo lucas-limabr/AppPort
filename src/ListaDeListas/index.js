@@ -264,7 +264,7 @@ export default function Questoes() {
                 <Image
                   style={styles.imagem}
                   source={{ uri: urlImagem }}
-                  resizeMode="contain"
+                  contentFit="contain"
                 />
               </TouchableOpacity>
             ) : (
@@ -272,7 +272,7 @@ export default function Questoes() {
                 <Image
                   style={styles.imagem}
                   source={ urlImagem }
-                  resizeMode="contain"
+                  contentFit="contain"
                 />
               </TouchableOpacity>
             )

@@ -7,9 +7,6 @@ import Styles from "../Styles.js/StylesLogin"; // isso aqui importa o arquivo de
 export default function Login({ navigation }) {
     return (
 
-        // essas tags sao do react native e funcionam como se fossem tags de html, so tem nomes diferentes por ser mobile.
-        // a view é como se fosse a div da web
-
         <LinearGradient colors={['#D5D4FB', '#9B98FC']}
             style={Styles.gradient} >
 
@@ -18,17 +15,19 @@ export default function Login({ navigation }) {
                 <Image style={Styles.imageNome} source={require('../Imagens/NomePortuguito.png')} />
 
                 <View style={Styles.containerFilho}>
-                    <TouchableOpacity style={Styles.botaoGrande} onPress={() => { navigation.navigate('Home') }}>
-                        <Text style={Styles.textBotao}>Login</Text>
-                    </TouchableOpacity>
-                </View>
+                    <View style={Styles.botaoContainer}>
+                        <TouchableOpacity style={Styles.botaoGrande} onPress={() => { navigation.navigate('Home') }}>
+                            <Text style={Styles.textBotao}>Login</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                <View style={Styles.containerFilho}>
-                    <TouchableOpacity style={Styles.botaoPequeno} onPress={() => {
-                        navigation.navigate('Cadastro')
-                    }}>
-                        <Text style={Styles.textBotaoPequeno}>Cadastrar</Text>
-                    </TouchableOpacity>
+                    <View style={Styles.containerFilho}>
+                        <TouchableOpacity style={Styles.botaoPequeno} onPress={() => {
+                            navigation.navigate('Cadastro')
+                        }}>
+                            <Text style={Styles.textBotaoPequeno}>Cadastrar</Text>
+                        </TouchableOpacity>
+                    </View>
 
                 </View>
 

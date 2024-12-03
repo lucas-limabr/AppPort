@@ -315,7 +315,7 @@ export default function QuestoesTrilha() {
                   <Image
                     style={styles.imagem}
                     source={{ uri: questoes[indice].urlImagem }}
-                    resizeMode="contain"
+                    contentFit="contain"
                   />
                 </TouchableOpacity>
               ) : (
@@ -323,7 +323,7 @@ export default function QuestoesTrilha() {
                   <Image
                     style={styles.imagem}
                     source={ noImage }
-                    resizeMode="contain"
+                    contentFit="contain"
                   />
                 </TouchableOpacity>
               )
@@ -437,7 +437,7 @@ export default function QuestoesTrilha() {
               aspectRatio: 1,
             }}
             source={require("../Imagens/TranFinal.gif")}
-            resizeMode="contain"
+            contentFit="contain"
           />
         </View>
       )}
