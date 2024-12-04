@@ -105,7 +105,7 @@ export default function PerfilAluno() {
         </View>
 
         <View style={Styles.containerFilho}>
-          <View style={Styles.viewOptions}>
+          <View style={[Styles.viewOptions, Styles.campoEmail]}>
             <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""} </Text>
           </View>
         </View>

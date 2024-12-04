@@ -420,7 +420,7 @@ export default function QuestoesAluno() {
           </View>
 
           <View style={styles.container}>
-            <ScrollView >
+            <ScrollView style={styles.questoes}>
               <RadioButtonGroup
                 selected={value}
                 onSelected={(value) => {

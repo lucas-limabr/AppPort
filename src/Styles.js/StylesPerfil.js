@@ -50,11 +50,14 @@ export default StyleSheet.create({
     input:{
         backgroundColor: '#EFEFFE',
         marginTop: 5,
-        height: 50,
         width: 300,
         borderRadius: 10,
         justifyContent: "center",
         padding: 10
+    },
+    campoEmail:{
+        paddingTop: 10,
+        paddingBottom: 10
     },
     txtInput:{
         color: '#ff8c90',

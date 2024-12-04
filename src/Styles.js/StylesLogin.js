@@ -34,6 +34,7 @@ export default StyleSheet.create({
     width: "80%",
     marginBottom: 15, // Diminui o espaçamento entre os botões
     marginRight: 40,
+    zIndex: 1,
   },
   textBotao: {
     fontFamily: 'Inder_400Regular',

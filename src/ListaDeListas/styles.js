@@ -9,7 +9,13 @@ export default StyleSheet.create({
     container: {
         marginTop: 10,
         alignItems: 'center',
-        flex: 1
+        flex: 1,
+    },
+    questoes: {
+        marginLeft: "4%",
+    },
+    ScrollViewContent: {
+        marginLeft: "4%",
     },
     enunciado: {
         backgroundColor: '#ff8c90',
@@ -139,12 +145,12 @@ export default StyleSheet.create({
         resizeMode: 'contain',
         top: -200
     },
-    iconStyle:{
+    iconStyle: {
         color: "#FFFFFF",
         fontSize: 24,
     },
 
-    paginationButton:{
+    paginationButton: {
         marginTop: 5,
         width: 42,
         height: 42,
