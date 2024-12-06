@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { View, Image, Text, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert, ScrollView } from "react-native";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import Styles from "../Styles.js/StylesHome";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 
 export default function Home() {
@@ -29,6 +30,32 @@ export default function Home() {
   const [senha, setSenha] = useState('')
 
   const auth = FIREBASE_AUTH
+
+  // Função para redefinir senha
+  const resetPassword = async (auth, email) => {
+    if (!email) {
+      Alert.alert('Por favor, insira o e-mail para redefinição de senha.');
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      Alert.alert(
+        'E-mail enviado',
+        'Um link para redefinição de senha foi enviado para o endereço fornecido. Por favor, verifique sua caixa de entrada.'
+      );
+    } catch (error) {
+      console.log(error);
+      if (error.code === "auth/invalid-email") {
+        Alert.alert('Formato de e-mail inválido.');
+      } else if (error.code === "auth/user-not-found") {
+        Alert.alert('Usuário não encontrado.');
+        console.log(error)
+      } else {
+        Alert.alert('Erro ao enviar o e-mail. Tente novamente mais tarde.');
+      }
+    }
+  };
 
   return (
     <LinearGradient colors={["#D5D4FB",
@@ -63,6 +90,12 @@ export default function Home() {
           <View style={Styles.containerBotao}>
             <TouchableOpacity style={Styles.botao} onPress={() => signIn(auth, email, senha)}>
               <Text style={Styles.txtBotao}>Login</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={Styles.containerSmallButton}>
+            <TouchableOpacity style={Styles.btnEsqueciSenha} onPress={() => resetPassword(auth, email)}>
+              <Text style={Styles.txtEsqueciSenha}>Esqueci minha senha</Text>
             </TouchableOpacity>
           </View>
 

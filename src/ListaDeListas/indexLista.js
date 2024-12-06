@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { View, TouchableOpacity, Text, Image, Alert, Modal } from "react-native";
+import { View, TouchableOpacity, Text, Alert, Modal } from "react-native";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { FIREBASE_APP } from "../../FirebaseConfig";
@@ -22,6 +23,7 @@ export default function QuestoesLista() {
   const [questoesCarregadas, setQuestoesCarregadas] = useState(false);
   const [atualizar, setAtualizar] = useState(true);
   const [showInitialAnimation, setShowInitialAnimation] = useState(true);
+  const [noImage, setNoImage] = useState(null);
 
   const navigation = useNavigation();
 
@@ -98,28 +100,22 @@ export default function QuestoesLista() {
     return unsubscribe;
   }, [navigation]);
 
-  const hasImage = (question) => {
-    if (question.hasOwnProperty('urlImagem')) {
-      if (question.urlImagem !=
-        'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
-      ) {
-        return true;
-      }
-    }
-
+  useEffect(() => {
     const noImageAnimations = [
       require('../Imagens/noImageAnimations/Alertinha.gif'),
       require('../Imagens/noImageAnimations/Lupinha.gif'),
       require('../Imagens/noImageAnimations/Aflito.gif'),
     ];
 
-    const randomImage = noImageAnimations[
-      Math.floor(Math.random() * noImageAnimations.length)
-    ];
-
-    question.urlImagem = randomImage;
-    return false;
-  };
+    if (
+      !questoes[indice]?.urlImagem
+    ) {
+      const randomImage = noImageAnimations[
+        Math.floor(Math.random() * noImageAnimations.length)
+      ];
+      setNoImage(randomImage);
+    }
+  }, [indice]);
 
   function continuar() {
     if (indice < questoes.length - 1) {
@@ -145,7 +141,6 @@ export default function QuestoesLista() {
     }
   }
 
-  const questaoAtual = questoes[indice];
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -161,25 +156,25 @@ export default function QuestoesLista() {
           <Ionicons name="arrow-back" style={styles.iconStyle} />
         </TouchableOpacity>
       </View>
-      {questoesCarregadas && questaoAtual && !showInitialAnimation ? (
+      {questoesCarregadas && questoes[indice] && !showInitialAnimation ? (
         <View style={styles.container}>
           <View style={styles.containerSalvar}></View>
           <View style={styles.enunciado}>
             <View style={styles.backgroundImagem}>
-              {hasImage(questaoAtual) ? (
+              {questoes[indice]?.urlImagem && questoes[indice].urlImagem.startsWith('http') ? (
                 <TouchableOpacity onPress={() => { setIsExpanded(true) }}>
                   <Image
                     style={styles.imagem}
-                    source={{ uri: questaoAtual.urlImagem }}
-                    resizeMode="contain"
+                    source={{ uri: questoes[indice].urlImagem }}
+                    contentFit="contain"
                   />
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity>
                   <Image
                     style={styles.imagem}
-                    source={questaoAtual.urlImagem}
-                    resizeMode="contain"
+                    source={ noImage }
+                    contentFit="contain"
                   />
                 </TouchableOpacity>
               )
@@ -189,7 +184,7 @@ export default function QuestoesLista() {
               <Modal visible={isExpanded} transparent={true} animationType="fade">
                 <View style={styles.modalContainer}>
                   <TouchableOpacity onPress={() => setIsExpanded(false)}>
-                    <Image source={{ uri: questaoAtual.urlImagem }} style={styles.fullImage} />
+                    <Image source={{ uri: questoes[indice].urlImagem }} style={styles.fullImage} />
                   </TouchableOpacity>
                 </View>
               </Modal>
@@ -209,18 +204,18 @@ export default function QuestoesLista() {
                 },
               }}
             >
-              {questaoAtual.pergunta}
+              {questoes[indice].pergunta}
             </Markdown>
           </View>
 
           <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollViewContent}>
               {/* Mapear o array de respostas */}
-              {questaoAtual.respostas.map((resposta, index) => (
+              {questoes[indice].respostas.map((resposta, index) => (
                 <TouchableOpacity
                   key={index}
                   style={[
-                    resposta === questaoAtual.respostaCorreta
+                    resposta === questoes[indice].respostaCorreta
                       ? [styles.alternativas, styles.selectLabel]
                       : styles.alternativas,
                   ]}
@@ -285,7 +280,7 @@ export default function QuestoesLista() {
               aspectRatio: 1,
             }}
             source={require("../Imagens/TranFinal.gif")}
-            resizeMode="contain"
+            contentFit="contain"
           />
         </View>
       )}

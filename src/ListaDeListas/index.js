@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, TouchableOpacity, Text, Image, Modal } from "react-native";
+import { View, TouchableOpacity, Text, Modal } from "react-native";
+import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import styles from "./styles";
 import { getFirestore, query, where, collection, getDocs, doc, getDoc, updateDoc, } from "firebase/firestore";
@@ -23,6 +24,7 @@ export default function Questoes() {
   const [indice, setIndice] = useState(0);
   const [atualizarDados, setAtualizarDados] = useState(false);
   const [questaoEstaNaLista, setQuestaoEstaNaLista] = useState(false);
+  const [totalQuestoes, setTotalQuestoes] = useState(0); // Total de questões
 
   const route = useRoute();
 
@@ -40,6 +42,20 @@ export default function Questoes() {
   const valorDescritor = route.params.questaoDescritor;
 
   const q = query(collectionRef, where(descritor, "==", valorDescritor));
+
+  useEffect(() => {
+    // Obter o número total de questões
+    const fetchQuestoes = async () => {
+
+      try {
+        const querySnapshot = await getDocs(q);
+        setTotalQuestoes(querySnapshot.size); // Define o total de questões
+      } catch (error) {
+        console.error("Erro ao buscar questões:", error);
+      }
+    };
+    fetchQuestoes();
+  }, []);
 
   async function fetchData() {
     const querySnapshot = await getDocs(q);
@@ -162,8 +178,11 @@ export default function Questoes() {
   };
 
   function continuar() {
-    setIndice(indice + 1);
-    setAtualizarDados(!atualizarDados);
+    console.log(totalQuestoes)
+    if (indice < totalQuestoes - 1) { // Garante que o índice não ultrapasse o total
+      setIndice(indice + 1);
+      setAtualizarDados(!atualizarDados);
+    }
   }
 
   function voltar() {
@@ -218,7 +237,7 @@ export default function Questoes() {
         'https://firebasestorage.googleapis.com/v0/b/portuguito-6e8c8.appspot.com/o/aluno%2Fno_Image3.png?alt=media&token=7d319861-30ab-4f76-a3be-2060cd3f68b4'
       ) {
         setHasImage(true);
-        return(question.urlImagem);
+        return (question.urlImagem);
       }
     }
 
@@ -263,15 +282,15 @@ export default function Questoes() {
                 <Image
                   style={styles.imagem}
                   source={{ uri: urlImagem }}
-                  resizeMode="contain"
+                  contentFit="contain"
                 />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity>
                 <Image
                   style={styles.imagem}
-                  source={ urlImagem }
-                  resizeMode="contain"
+                  source={urlImagem}
+                  contentFit="contain"
                 />
               </TouchableOpacity>
             )
@@ -417,7 +436,13 @@ export default function Questoes() {
                   <Text style={styles.label}>Voltar</Text>
                 </TouchableOpacity>
               )}
-              <TouchableOpacity style={styles.btnContinuar} onPress={continuar}>
+              <TouchableOpacity onPress={continuar} disabled={indice >= totalQuestoes - 1}
+                style={[
+                  styles.btnContinuar, // Estilo base do botão
+                  {
+                    backgroundColor: indice >= totalQuestoes - 1 ? "gray" : "#F54F59",
+                  },
+                ]}>
                 <Text style={styles.label}>Continuar</Text>
               </TouchableOpacity>
             </View>

@@ -58,7 +58,7 @@ export default function Perfil() {
           </View>
         </View>
         <View style={Styles.containerFilho}>
-          <View style={Styles.input}>
+          <View style={[Styles.input, Styles.campoEmail]}>
             <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""}</Text>
           </View>
         </View>
