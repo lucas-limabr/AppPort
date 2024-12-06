@@ -38,9 +38,8 @@ export default StyleSheet.create({
   },
   textBotao: {
     fontFamily: 'Inder_400Regular',
-    fontSize: 22,
+    fontSize: 23,
     color: "#FFFFFF",
-    fontWeight: "bold",
   },
   botaoPequeno: {
     backgroundColor: "#ff8c90", 
@@ -52,15 +51,13 @@ export default StyleSheet.create({
     zIndex: 1,
   },
   textBotaoPequeno: {
-    fontSize: 16,
+    fontSize: 15,
     color: "#FFFFFF",
-    fontWeight: "bold",
     fontFamily: 'Inder_400Regular',
   },
   frase: {
     fontFamily: 'Inder_400Regular',
     fontSize: 20,
-    fontWeight: "bold",
     color: "#FFFFFF",
     textAlign: "center",
     marginRight: 40,
