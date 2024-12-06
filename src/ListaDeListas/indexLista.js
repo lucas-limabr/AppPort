@@ -209,7 +209,7 @@ export default function QuestoesLista() {
           </View>
 
           <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+            <ScrollView contentContainerStyle={styles.ScrollViewContent}>
               {/* Mapear o array de respostas */}
               {questoes[indice].respostas.map((resposta, index) => (
                 <TouchableOpacity
