@@ -149,9 +149,8 @@ export const getInfoUser = async (email) => {
   return false;
 };
 
-export const updateDay = async (email) => {
+export const updateSequenceDays = async (email) => {
   const db = getFirestore(FIREBASE_APP);
-
   const dataAtual = new Date();
 
   try {
@@ -160,19 +159,34 @@ export const updateDay = async (email) => {
     const querySnapshot = await getDocs(q);
 
     if (querySnapshot.size > 0) {
-      const usuario = querySnapshot.docs[0].data();
-      const ultimoAcesso = usuario.ultimoAcesso.toDate();
+      const usuarioDoc = querySnapshot.docs[0];
+      const usuario = usuarioDoc.data();
+      const usuarioRef = doc(db, "users", usuarioDoc.id);
 
-      const diferencaEmDias = differenceInCalendarDays(dataAtual, ultimoAcesso);
+      const ultimoAcesso = usuario.ultimoAcesso ? usuario.ultimoAcesso.toDate() : null;
 
-      if (diferencaEmDias > 1) {
-        const usuarioRef = doc(db, "users", querySnapshot.docs[0].id);
-        await updateDoc(usuarioRef, {
-          ultimoAcesso: dataAtual,
-        });
+      let novaSequenciaDias = usuario.sequenciaDias || 0;
+
+      if (ultimoAcesso) {
+        const diferencaEmDias = differenceInCalendarDays(dataAtual, ultimoAcesso);
+
+        if (diferencaEmDias === 1) {
+          novaSequenciaDias += 1; // Incrementa a sequência
+        } else if (diferencaEmDias > 1) {
+          novaSequenciaDias = 0; // Reinicia a sequência
+        }
+      } else {
+        // Primeiro login ou sem data de último acesso
+        novaSequenciaDias = 0;
       }
+
+      // Atualiza o Firestore
+      await updateDoc(usuarioRef, {
+        ultimoAcesso: dataAtual,
+        sequenciaDias: novaSequenciaDias,
+      });
     }
   } catch (error) {
-    console.error("Erro ao atualizar a data:", error);
+    console.error("Erro ao atualizar a sequência de dias:", error);
   }
 };

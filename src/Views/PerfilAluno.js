@@ -1,53 +1,83 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import Styles from "../Styles.js/StylesPerfilAluno";
 import { getInfoUser } from "../FuncoesFirebase/Funcoes";
-import { useAuthentication } from "../hooks/useAutentication";
-import { onAuthStateChanged } from 'firebase/auth';
-import { FIREBASE_AUTH } from '../../FirebaseConfig';
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { onAuthStateChanged } from "firebase/auth";
+import { FIREBASE_AUTH, FIREBASE_APP } from "../../FirebaseConfig";
 import { format, differenceInCalendarDays } from "date-fns";
-import { getAuth, signOut } from "firebase/auth";
+
+import { updateSequenceDays } from "../FuncoesFirebase/Funcoes";
+import { doc, updateDoc } from "firebase/firestore"; // Importar a função updateDoc
+import { getFirestore } from "firebase/firestore"; // Importar o Firestore
 
 
 export default function PerfilAluno() {
-  const [usuario, setUsuario] = useState();
-  const [user,setUser] = useState()
+  const [user, setUser] = useState(null);
+  const [sequenciaDias, setSequenciaDias] = useState(0);
 
-  const data = new Date
-
-  const logout = () => {
-    const auth = getAuth();
-
-    signOut(auth)
-  }
-
-  
   useEffect(() => {
-        const fetchData = async (user) => {
-          try {
-            const usuario = await getInfoUser(user.email);
-            setUsuario(usuario);
-          } catch (error) {
-            console.error("Erro ao obter informações do usuário:", error);
-          }
-        };
-      
-        const unsubscribeFromAuthStateChanged = onAuthStateChanged(FIREBASE_AUTH, (user) => {
-          if (user) {
-            setUser(user);
-            fetchData(user);
+    const fetchUserData = async () => {
+      const auth = FIREBASE_AUTH;
+
+      // Ouve as mudanças de autenticação
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        if (currentUser) {
+          // Obtém os detalhes do usuário no Firestore
+          const userInfo = await getInfoUser(currentUser.email);
+          if (userInfo) {
+            setUser(userInfo);
+            setSequenciaDias(userInfo.sequenciaDias || 0); // Atualiza sequência de dias
+
+            // Atualiza a sequência de dias
+            try {
+              await updateSequenceDays(currentUser.email);
+            } catch (error) {
+              console.error("Erro ao atualizar sequência de dias:", error);
+            }
+
           } else {
-            setUser(null);
+            console.error("Usuário não encontrado no Firestore.");
           }
-        });
-      
-        return () => {
-          unsubscribeFromAuthStateChanged();
-        };
-      }, []);
+        } else {
+          setUser(null); // Nenhum usuário logado
+        }
+      });
+
+      return () => unsubscribe(); // Limpa o listener ao desmontar
+    };
+
+    fetchUserData();
+  }, []);
+
+  const logout = async () => {
+    if (!user) {
+      console.error("Usuário não autenticado.");
+      return;
+    }
+
+    try {
+      const auth = FIREBASE_AUTH;
+      const db = getFirestore(FIREBASE_APP); // Referência ao Firestore
+
+      console.log("UID do usuário:", user.userId);
+
+      // Criar referência ao documento
+      const userRef = doc(db, "users", user.userId);
+
+      // Atualiza os dados do usuário no Firestore
+      await updateDoc(userRef, {
+        sequenciaDias: 0, // Zera a sequência de dias
+        ultimoAcesso: null, // Define ultimoAcesso como null
+      });
+
+      // Realiza o logout
+      await auth.signOut();
+      console.log("Logout realizado com sucesso.");
+    } catch (error) {
+      console.error("Erro ao realizar logout:", error);
+    }
+  };
 
 
 
@@ -70,7 +100,7 @@ export default function PerfilAluno() {
 
         <View style={Styles.containerFilho}>
           <View style={Styles.viewOptions}>
-            <Text style={Styles.txtInput}>Nome: {usuario ? usuario.nome : ""} </Text>
+            <Text style={Styles.txtInput}>Nome: {user ? user.nome : ""}</Text>
           </View>
         </View>
 
@@ -83,7 +113,7 @@ export default function PerfilAluno() {
                 </View>
 
                 <View style={Styles.numberDays}>
-                  <Text style={Styles.txtnumberDays}>{usuario ? differenceInCalendarDays(data, usuario.ultimoAcesso.toDate()) : ""}</Text>
+                  <Text style={Styles.txtnumberDays}>{sequenciaDias}</Text>
                 </View>
 
                 <View style={Styles.titleView}>
@@ -97,7 +127,9 @@ export default function PerfilAluno() {
                 </View>
 
                 <View style={Styles.numberDays}>
-                  <Text style={Styles.txtDate}>{usuario ? format(usuario.dataCadastro.toDate(), "dd/MM/yy") : ""}</Text>
+                  <Text style={Styles.txtDate}>
+                    {user ? format(user.dataCadastro.toDate(), "dd/MM/yy") : ""}
+                  </Text>
                 </View>
               </View>
             </View>
@@ -106,7 +138,7 @@ export default function PerfilAluno() {
 
         <View style={Styles.containerFilho}>
           <View style={[Styles.viewOptions, Styles.campoEmail]}>
-            <Text style={Styles.txtInput}>E-mail: {usuario ? usuario.email : ""} </Text>
+            <Text style={Styles.txtInput}>E-mail: {user ? user.email : ""}</Text>
           </View>
         </View>
       </View>
