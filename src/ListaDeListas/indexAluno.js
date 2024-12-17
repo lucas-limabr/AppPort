@@ -10,6 +10,7 @@ import Styles from "../Styles.js/StylesRespostaCorretaAluno";
 import Styless from "../Styles.js/StylesRespostaIncorretaAluno";
 import StylesEnd from "../Styles.js/StylesTerminouListaAluno";
 import "firebase/firestore";
+import { BackHandler } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import Markdown from "react-native-markdown-display";
@@ -42,6 +43,19 @@ export default function QuestoesAluno() {
 
   const questoesCarregadasRef = useRef(questoesCarregadas);
 
+  useEffect(() => {
+    // Sobrescreve o botão de voltar do Android
+    const backAction = () => {
+      navigation.navigate("MenuAluno"); // Navega diretamente para a aba Listas
+      return true; // Impede o comportamento padrão (voltar para a tela anterior)
+    };
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+    // Limpa o evento ao desmontar o componente
+    return () => backHandler.remove();
+  }, [navigation]);
+  
   useEffect(() => {
     setShowInitialAnimation(true);
     codigoLista = route.params.itemId;
