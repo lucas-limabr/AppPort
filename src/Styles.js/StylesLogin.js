@@ -6,9 +6,10 @@ export default StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: "space-between", // Espaçamento uniforme vertical
+    justifyContent: "center", // Espaçamento uniforme vertical
     alignItems: "flex-end", // Centraliza horizontalmente
     paddingVertical: 20,
+    marginTop: 30,
   },
   imageNome: {
     width: 400, // Ajuste conforme necessário
@@ -68,5 +69,6 @@ export default StyleSheet.create({
     width: '100%',
     height: '40%',
     resizeMode: "contain",
+    
 }
 });

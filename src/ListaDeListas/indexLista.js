@@ -12,6 +12,7 @@ import "firebase/firestore";
 import { useNavigation } from "@react-navigation/native";
 
 import Markdown from "react-native-markdown-display";
+import { BackHandler } from "react-native";
 
 import { getFirestore, collection, where, query, getDocs, getDoc } from "firebase/firestore";
 
@@ -26,6 +27,19 @@ export default function QuestoesLista() {
   const [noImage, setNoImage] = useState(null);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    // Sobrescreve o botão de voltar do Android
+    const backAction = () => {
+      navigation.navigate("Listas"); // Navega diretamente para a aba Listas
+      return true; // Impede o comportamento padrão (voltar para a tela anterior)
+    };
+
+    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+
+    // Limpa o evento ao desmontar o componente
+    return () => backHandler.remove();
+  }, [navigation]);
 
   const obterQuestoes = useCallback(async () => {
     try {
@@ -150,7 +164,7 @@ export default function QuestoesLista() {
           style={[styles.paginationButton, styles.paginationLista]}
           onPress={() => {
             setIndice(0);
-            navigation.goBack();
+            navigation.navigate("Listas");
           }}
         >
           <Ionicons name="arrow-back" style={styles.iconStyle} />
@@ -173,7 +187,7 @@ export default function QuestoesLista() {
                 <TouchableOpacity>
                   <Image
                     style={styles.imagem}
-                    source={ noImage }
+                    source={noImage}
                     contentFit="contain"
                   />
                 </TouchableOpacity>
