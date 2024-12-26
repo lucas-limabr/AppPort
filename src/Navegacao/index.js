@@ -9,7 +9,7 @@ import { View } from "react-native";
 import { Image } from "expo-image";
 import { useAuthentication } from "../hooks/useAutentication";
 import { userVerification } from "../FuncoesFirebase/Funcoes";
-import { updateDay } from "../FuncoesFirebase/Funcoes";
+import { updateSequenceDays } from "../FuncoesFirebase/Funcoes";
 
 export default function Navegacao() {
   //retorna o usuário atualmente autenticado (ou null se não estiver logado)
@@ -23,7 +23,7 @@ export default function Navegacao() {
       const result = await userVerification(user?.email);
       setIsProfessor(result);
       //chama a função para atualizar(se for o caso) a última data de login
-      updateDay(user.email)
+      await updateSequenceDays(user?.email);
       console.log(`É professor: ${result}`);
       console.log(`Usuário: ${user?.email}`);
     };

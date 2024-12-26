@@ -28,7 +28,7 @@ export default StyleSheet.create({
 
     numberDays: {
         alignItems: "center",
-        height:"auto",
+        height: "auto",
         borderRadius: 20,
     },
 
@@ -39,7 +39,7 @@ export default StyleSheet.create({
         fontSize: 30,
 
     },
-    
+
     txtTitleView: {
         color: '#ff8c90',
         padding: 2,
@@ -53,19 +53,21 @@ export default StyleSheet.create({
         padding: 2,
         fontFamily: 'Inder_400Regular',
         fontSize: 20,
-        marginTop:10
+        marginTop: 10
 
     },
 
     titleView: {
         alignItems: "center",
-        height:"auto",
+        height: "auto",
         borderRadius: 20,
     },
 
     image: {
-        height: 180,
-        resizeMode: "contain",
+        width: null,
+        height: 'auto',
+        flex: 1,
+        resizeMode: "cover"
     },
 
     ViewDados: {
@@ -74,19 +76,15 @@ export default StyleSheet.create({
         width: 140,
         borderRadius: 10,
         alignItems: "center",
-        padding:8,
+        padding: 8,
     },
 
     backgroundUser: {
-        backgroundColor: '#fff',
-        width: 200,
+        width: 200, 
         height: 200,
         borderRadius: 100,
-        alignItems: 'center',
-        justifyContent: 'center',
-        textAlign: 'center',
-        borderColor: '#FFB9BD',
-        borderWidth: 5,
+        overflow: 'hidden', 
+        backgroundColor: '#00000000',
     },
 
     botao: {
@@ -131,7 +129,7 @@ export default StyleSheet.create({
         padding: 10
     },
 
-    campoEmail:{
+    campoEmail: {
         paddingTop: 10,
         paddingBottom: 10
     },

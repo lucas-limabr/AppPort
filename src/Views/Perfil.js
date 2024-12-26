@@ -47,7 +47,7 @@ export default function Perfil() {
       style={Styles.gradient} >
       <View style={Styles.container}>
         <View style={Styles.backgroundUser}>
-          <Image style={Styles.image} source={require('../Imagens/defaultIconPlayer1.png')} />
+          <Image style={Styles.image} source={require('../Imagens/portuguita_profile.jpg')} />
         </View>
         <TouchableOpacity style={[Styles.botao, Styles.sombra]} onPress={() => logout()}>
           <Text style={Styles.txtBotao}>Sair</Text>
