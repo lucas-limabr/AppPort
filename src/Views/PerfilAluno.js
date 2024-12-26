@@ -57,7 +57,7 @@ export default function PerfilAluno() {
         <View style={Styles.backgroundUser}>
           <Image
             style={Styles.image}
-            source={require("../Imagens/defaultIconPlayer1.png")}
+            source={require("../Imagens/portuguita_profile.jpg")}
           />
         </View>
 
