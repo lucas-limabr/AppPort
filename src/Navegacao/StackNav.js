@@ -14,6 +14,8 @@ import Questoes from "../ListaDeListas/index";
 import QuestoesLista from "../ListaDeListas/indexLista"
 import PerfilAluno from "../Views/PerfilAluno";
 import MenuAluno from "../Views/MenuAluno";
+import EstatisticasAluno, { ResultadoAlunos } from "../Views/TelaEstatisticasAluno"
+import EstatisticasQuestoes from "../Views/TelaEstatisticasQuestoes"
 
 
 import {useTabDisplay} from "../hooks/useTabDisplay"
@@ -60,6 +62,8 @@ export default function StackNav({navigation, route}) {
       <Stack.Screen name="QuestoesLista" component={QuestoesLista} />
       <Stack.Screen name="MenuAluno" component={MenuAluno} />
       <Stack.Screen name="PerfilAluno" component={PerfilAluno} />
+      <Stack.Screen name="EstatisticasAluno" component={EstatisticasAluno} />
+      <Stack.Screen name="EstatisticasQuestoes" component={EstatisticasQuestoes} />
     </Stack.Navigator>
   );
 }
