@@ -2,52 +2,50 @@ import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
     gradient: {
-        ...StyleSheet.absoluteFillObject,        
+        ...StyleSheet.absoluteFillObject,
     },
-    container:{
-        flex:1,
-        marginTop:100,
-        alignItems: 'center',        
+    container: {
+        flex: 1,
+        marginTop: 100,
+        alignItems: 'center',
 
     },
-    containerFilho:{
+    containerFilho: {
         marginTop: 10,
     },
-    image:{  
-            height:180,
-            resizeMode: "contain",
+    image: {
+        width: null,
+        height: 'auto',
+        flex: 1,
+        resizeMode: "cover"
     },
-    backgroundUser:{
-        backgroundColor: '#fff',
-        width:200,
-        height:200,
+    backgroundUser: {
+        width: 200,
+        height: 200,
         borderRadius: 100,
-        alignItems:'center',
-        justifyContent: 'center',
-        textAlign:'center',
-        borderColor: '#FFB9BD',
-        borderWidth: 5, 
+        overflow: 'hidden',
+        backgroundColor: '#00000000',
     },
-    botao:{
-        backgroundColor:'#ff8c90',
+    botao: {
+        backgroundColor: '#ff8c90',
         width: 120,
-        height:30,
-        justifyContent:'center',
-        alignItems:'center',
-        borderRadius:10,
-        marginTop: 20,  
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        marginTop: 20,
     },
-    sombra:{
-        shadowColor:'#000',
-        elevation:10,
+    sombra: {
+        shadowColor: '#000',
+        elevation: 10,
     },
-    txtBotao:{
+    txtBotao: {
         color: '#fff',
         textAlign: 'center',
-        fontSize:15,
+        fontSize: 15,
         fontFamily: 'Inder_400Regular',
     },
-    input:{
+    input: {
         backgroundColor: '#EFEFFE',
         marginTop: 5,
         width: 300,
@@ -55,13 +53,13 @@ export default StyleSheet.create({
         justifyContent: "center",
         padding: 10
     },
-    campoEmail:{
+    campoEmail: {
         paddingTop: 10,
         paddingBottom: 10
     },
-    txtInput:{
+    txtInput: {
         color: '#ff8c90',
-        padding:2,
+        padding: 2,
         fontFamily: 'Inder_400Regular',
 
     }
