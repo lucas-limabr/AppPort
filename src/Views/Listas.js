@@ -275,12 +275,30 @@ export default function Listas() {
             <View style={{ alignItems: "center" }}>
               <View style={{ justifyContent: "center", height: 185 }}>
                 {itemFinalizado ? (
-                  <TouchableOpacity
-                    style={style.botaoEditar}
-                    onPress={() => { setVisibleEdit(false); setVisibleCodigo(true) }}
-                  >
-                    <Text style={style.txtEditar}>Exibir código</Text>
-                  </TouchableOpacity>
+                  <>
+                    <TouchableOpacity
+                      style={style.botaoEditar}
+                      onPress={() => { navigation.navigate('StackNav', { screen: 'EstatisticasAlunos'});
+                      }}
+                    >
+                      <Text style={style.txtEditar}>Exibir estatísticas dos alunos</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={style.botaoEditar}
+                      onPress={() => { navigation.navigate('StackNav', { screen: 'EstatisticasQuestoes'});
+                      }}
+                    >
+                      <Text style={style.txtEditar}>Exibir estatísticas das questões</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={style.botaoEditar}
+                      onPress={() => { setVisibleEdit(false); setVisibleCodigo(true) }}
+                    >
+                      <Text style={style.txtEditar}>Exibir código</Text>
+                    </TouchableOpacity>          
+                  </>
                 ) : (
                   <>
                     <TouchableOpacity

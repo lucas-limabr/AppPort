@@ -8,10 +8,12 @@ export default StyleSheet.create({
     },
     boxGeral:{
         backgroundColor: '#FF8D94',
-        height: 300,
+        height: 350,
         borderRadius: 10,
-        padding: 10
-        
+        padding: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     titulo:{
         fontFamily: 'Inder_400Regular',
@@ -55,7 +57,7 @@ export default StyleSheet.create({
     botaoEditar:{
         alignItems: 'center',
         width: '100vw',
-        marginTop: 70,
+        marginBottom: 40,
         backgroundColor:'#F54F59',
         borderRadius:10,
         paddingHorizontal: 10,
